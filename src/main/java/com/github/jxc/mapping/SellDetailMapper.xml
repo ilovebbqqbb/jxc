@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper   
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.github.jxc.dao.SellDetailDao">
+	<resultMap type="com.github.jxc.pojo.SellDetail" id="BaseResultMap">
+		<id column="sell_detail_id" property="sellDetailId" jdbcType="INTEGER"/>
+		<result column="sell_id" property="sellId" jdbcType="VARCHAR"/>
+		<result column="goods_id" property="GoodsId" jdbcType="INTEGER"/>
+		<result column="goods_num" property="goodsNum" jdbcType="INTEGER"/>
+		<result column="remarks" property="remarks" jdbcType="VARCHAR"/>
+	</resultMap>
+	<sql id="Base_Column_List">
+		sell_detail_id,sell_id,goods_id,goods_num,remarks
+	</sql>
+	
+	<insert id="insertSelective" parameterType="com.github.jxc.pojo.SellDetail">
+		insert into sell_detail
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+	     <if test="sellId != null">
+	     	sell_id,
+	     </if>
+	     <if test="goodsId != null">
+	      	goods_id,
+	     </if>	     
+	     <if test="goodsNum != null">
+	        goods_num,
+	     </if>
+	     <if test="remarks != null">
+	        remarks,
+	     </if>
+	   </trim>
+	   <trim prefix="values (" suffix=")" suffixOverrides=",">
+	     <if test="sellId != null">
+	       #{sellId,jdbcType=VARCHAR},
+	     </if>
+	     <if test="goodsId != null">
+	       #{goodsId,jdbcType=INTEGER},
+	     </if>	     
+	     <if test="goodsNum != null">
+	       #{goodsNum,jdbcType=INTEGER},
+	     </if>
+	     <if test="remarks != null">
+	       #{remarks,jdbcType=VARCHAR},
+	     </if>
+	   </trim>
+	</insert>
+	
+	<delete id="deleteBySellId" parameterType="java.lang.String">
+		delete from sell_detail
+		where sell_id = #{sellId,jdbcType=VARCHAR}
+	</delete>
+	
+	<select id="selectBySellId" resultMap="BaseResultMap" parameterType="java.lang.String">
+		select
+		<include refid="Base_Column_List" />
+		from sell_detail
+		where sell_id = #{sellId,jdbcType=VARCHAR}
+	</select>
+</mapper>

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper   
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.github.jxc.dao.WarehouseDao">
+	<resultMap type="com.github.jxc.pojo.Warehouse" id="BaseResultMap">
+			<id column="warehouse_id" property="warehouseId" jdbcType="INTEGER"/>
+			<result column="warehouse_name" property="warehouseName" jdbcType="VARCHAR"/>
+			<result column="linkman" property="linkman" jdbcType="VARCHAR"/>
+			<result column="phone_number" property="phoneNumber" jdbcType="VARCHAR"/>
+			<result column="warehouse_address" property="warehouseAddress" jdbcType="VARCHAR"/>
+			<result column="stock_min" property="stockMin" jdbcType="VARCHAR"/>
+			<result column="stock_max" property="stockMax" jdbcType="VARCHAR"/>
+			<result column="created_at" property="createdAt" jdbcType="TIMESTAMP"/>
+			<result column="updated_at" property="updatedAt" jdbcType="TIMESTAMP"/>
+	</resultMap>
+	<sql id="Base_Column_List">
+		warehouse_id,warehouse_name,linkman,phone_number,warehouse_address,stock_min,stock_max,created_at,updated_at
+	</sql>
+	
+	<select id="selectAll" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from warehouse
+	</select>
+	
+	<select id="selectByStoreName" resultMap="BaseResultMap" parameterType="java.lang.String">
+		select
+		<include refid="Base_Column_List" />
+		from warehouse
+		where wareshou_name = #{warehouseName,jdbcType=VARCHAR}
+	</select>
+</mapper>

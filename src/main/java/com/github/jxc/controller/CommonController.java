@@ -27,4 +27,6 @@ public class CommonController {
     public String toIndexPage() {
         return "index";
     }
+    
+    
 }

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper   
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.github.jxc.dao.GoodsDao">
+	<resultMap type="com.github.jxc.pojo.Goods" id="BaseResultMap">
+			<id column="GoodsId" property="goodsId" jdbcType="INTEGER"/>
+			<result column="GoodsName" property="goodsName" jdbcType="VARCHAR"/>
+			<result column="GoodsBarcode" property="goodsBarcode" jdbcType="VARCHAR"/>
+			<result column="GoodsTypeName" property="goodsTypeName" jdbcType="VARCHAR"/>
+			<result column="BrandName" property="brandName" jdbcType="VARCHAR"/>
+			<result column="BuyingPrice" property="buyingPrice" jdbcType="FLOAT"/>
+			<result column="SupplyPrice" property="supplyPrice" jdbcType="FLOAT"/>
+			<result column="SalePrice" property="salePrice" jdbcType="FLOAT"/>
+			<result column="GoodsDate" property="goodsDate" jdbcType="TIMESTAMP"/>
+			<result column="Uint" property="uint" jdbcType="VARCHAR"/>
+			<result column="Spec" property="spec" jdbcType="VARCHAR"/>
+			<result column="GoodsStatus" property="goodsStatus" jdbcType="VARCHAR"/>
+			<result column="GoodsPic" property="goodsPic" jdbcType="VARCHAR"/>
+			<result column="Manufacturer" property="manufacturer" jdbcType="VARCHAR"/>
+			<result column="GoodsSource" property="goodsSource" jdbcType="VARCHAR"/>
+			<result column="Details" property="details" jdbcType="VARCHAR"/>
+	</resultMap>
+	<sql id="Base_Column_List">
+		GoodsId,GoodsName,GoodsBarcode,GoodsTypeName,BrandName,BuyingPrice,SupplyPrice,SalePrice,GoodsDate,Uint,Spec,GoodsStatus,GoodsPic,Manufacturer,GoodsSource,Details
+	</sql>
+	
+	<select id="selectAll" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from tb_goods
+	</select>
+	
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+		select
+		<include refid="Base_Column_List" />
+		from tb_goods
+		where GoodsId = #{goodsId,jdbcType=INTEGER}
+	</select>
+</mapper>

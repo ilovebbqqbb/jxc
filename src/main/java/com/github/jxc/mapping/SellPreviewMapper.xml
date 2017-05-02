@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper   
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.github.jxc.dao.SellPreviewDao">
+	<resultMap id="BaseResultMap" type="com.github.jxc.pojo.SellPreview">
+		<id column="sell_id" property="sellId" jdbcType="VARCHAR" />
+		<result column="sell_time" property="sellTime" jdbcType="TIMESTAMP"/>
+		<result column="warehouse_id" property="warehouseId" jdbcType="INTEGER"/>
+		<result column="store_id" property="storeId" jdbcType="INTEGER"/>
+		<result column="sell_num" property="sellNum" jdbcType="INTEGER"/>
+		<result column="sell_money" property="sellMoney" jdbcType="FLOAT"/>
+		<result column="operater" property="operater" jdbcType="INTEGER"/>
+		<result column="sell_status" property="sellStatus" jdbcType="VARCHAR"/>
+	</resultMap>
+	<sql id="Base_Column_List">
+		sell_id,sell_time,warehouse_id,store_id,sell_num,sell_money,operater,sell_status
+	</sql>
+	
+	<insert id="insertSelective" parameterType="com.github.jxc.pojo.SellPreview">
+		insert into sell_preview
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+	     <if test="sellId != null">
+	     	sell_id,
+	     </if>
+	     <if test="sellTime == null">
+	       sell_time,
+	     </if>
+	     <if test="warehouseId != null">
+	       warehouse_id,
+	     </if>	     
+	     <if test="storeId != null">
+	       store_id,
+	     </if>
+	     <if test="sellNum != null">
+	       sell_num,
+	     </if>
+	     <if test="sellMoney != null">
+	       sell_money,
+	     </if>
+	     <if test="operater != null">
+	       operater,
+	     </if>
+	     <if test="sellStatus != null">
+	       sell_status,
+	     </if>
+	   </trim>
+	   <trim prefix="values (" suffix=")" suffixOverrides=",">
+	     <if test="sellId != null">
+	       #{sellId,jdbcType=VARCHAR},
+	     </if>
+	     <if test="sellTime == null">
+	       sysdate(),
+	     </if>
+	     <if test="warehouseId != null">
+	       #{warehouseId,jdbcType=INTEGER},
+	     </if>	     
+	     <if test="storeId != null">
+	       #{storeId,jdbcType=INTEGER},
+	     </if>
+	     <if test="sellNum != null">
+	       #{sellNum,jdbcType=INTEGER},
+	     </if>
+	     <if test="sellMoney != null">
+	       #{sellMoney,jdbcType=FLOAT},
+	     </if>
+	     <if test="operater != null">
+	       #{operater,jdbcType=INTEGER},
+	     </if>
+	     <if test="sellStatus != null">
+	       #{sellStatus,jdbcType=VARCHAR},
+	     </if>
+	   </trim>
+	</insert>
+	
+	<delete id="deleteByPrimartKey" parameterType="java.lang.String">
+		delete from sell_preview
+		where sell_id = #{sellId,jdbcType=VARCHAR}
+	</delete>
+	
+	<update id="updateByPrimaryKeySelective" parameterType="com.github.jxc.pojo.SellPreview">
+		update sell_preview
+		<set>
+		 <if test="sellStatus != null">
+	       sell_status = #{sellStatus,jdbcType=VARCHAR}
+	     </if>	     
+		</set>
+		where sell_id = #{sellId,jdbcType=VARCHAR}
+	</update>
+	
+	<select id="selectAll" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from sell_previewc
+		order by sell_time desc
+	</select>
+	
+	<select id="selectByStatus" resultMap="BaseResultMap" parameterType="java.lang.String">
+		select
+		<include refid="Base_Column_List" />
+		from sell_preview
+		where sell_status = #{sellStatus,jdbcType=VARCHAR}
+		order by sell_time desc
+	</select>
+	
+	<select id="selectByTwoStatus" resultMap="BaseResultMap" parameterType="java.lang.String">
+		select
+		<include refid="Base_Column_List" />
+		from sell_preview
+		where sell_status = (#{0} OR #{1})
+		order by sell_time desc
+	</select>
+	
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String">
+		select
+		<include refid="Base_Column_List" />
+		from sell_preview
+		where sell_id = #{sellId,jdbcType=VARCHAR}
+	</select>
+	
+</mapper>
