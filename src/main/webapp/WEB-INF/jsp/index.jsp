@@ -9,7 +9,7 @@
     <link href="../jxc/js/layui/css/layui.css" rel="stylesheet">
     <link href="../jxc/css/app.css" rel="stylesheet">
 </head>	
-<body id="body">
+<body class="loginBody">
 	<div id="loginDiv">
 		<div class="layui-form-item">
 	    	<label class="layui-form-label">账号</label>
@@ -59,7 +59,10 @@
             	success : function(data) {
             		if(data.resultMsg == "success") {
             			layer.msg("登入成功",{icon:1});
-            			window.open("<%=basePath%>common/toIndex","_self");
+            			setTimeout(function(){
+            				window.open("<%=basePath%>common/toIndex","_self");
+            			},1000);
+            			
             		} else {
             			layer.msg(data.resultMsg,{icon:2});
             		}
