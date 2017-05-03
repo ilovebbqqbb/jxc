@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.github.jxc.dao.PowerManageDao">
+  <resultMap id="BaseResultMap" type="com.github.jxc.pojo.PowerManage">
+    <id column="role_id" jdbcType="INTEGER" property="roleId" />
+    <id column="power_id" jdbcType="INTEGER" property="powerId" />
+    <result column="created_at" jdbcType="TIMESTAMP" property="createdAt" />
+    <result column="updated_at" jdbcType="TIMESTAMP" property="updatedAt" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    role_id, power_id, created_at, updated_at
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="com.github.jxc.pojo.PowerManageKey" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from power_manage
+    where role_id = #{roleId,jdbcType=INTEGER}
+      and power_id = #{powerId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="com.github.jxc.pojo.PowerManageKey">
+    delete from power_manage
+    where role_id = #{roleId,jdbcType=INTEGER}
+      and power_id = #{powerId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.github.jxc.pojo.PowerManage">
+    insert into power_manage (role_id, power_id, created_at, 
+      updated_at)
+    values (#{roleId,jdbcType=INTEGER}, #{powerId,jdbcType=INTEGER}, #{createdAt,jdbcType=TIMESTAMP}, 
+      #{updatedAt,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.github.jxc.pojo.PowerManage">
+    insert into power_manage
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="roleId != null">
+        role_id,
+      </if>
+      <if test="powerId != null">
+        power_id,
+      </if>
+      <if test="createdAt != null">
+        created_at,
+      </if>
+      <if test="updatedAt != null">
+        updated_at,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="roleId != null">
+        #{roleId,jdbcType=INTEGER},
+      </if>
+      <if test="powerId != null">
+        #{powerId,jdbcType=INTEGER},
+      </if>
+      <if test="createdAt != null">
+        #{createdAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedAt != null">
+        #{updatedAt,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.github.jxc.pojo.PowerManage">
+    update power_manage
+    <set>
+      <if test="createdAt != null">
+        created_at = #{createdAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedAt != null">
+        updated_at = #{updatedAt,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where role_id = #{roleId,jdbcType=INTEGER}
+      and power_id = #{powerId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.github.jxc.pojo.PowerManage">
+    update power_manage
+    set created_at = #{createdAt,jdbcType=TIMESTAMP},
+      updated_at = #{updatedAt,jdbcType=TIMESTAMP}
+    where role_id = #{roleId,jdbcType=INTEGER}
+      and power_id = #{powerId,jdbcType=INTEGER}
+  </update>
+</mapper>

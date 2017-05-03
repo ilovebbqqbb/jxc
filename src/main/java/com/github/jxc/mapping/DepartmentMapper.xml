@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.github.jxc.dao.DepartmentDao">
+  <resultMap id="BaseResultMap" type="com.github.jxc.pojo.Department">
+    <id column="department_id" jdbcType="INTEGER" property="departmentId" />
+    <result column="depart_name" jdbcType="VARCHAR" property="departName" />
+    <result column="parent_id" jdbcType="INTEGER" property="parentId" />
+    <result column="created_at" jdbcType="TIMESTAMP" property="createdAt" />
+    <result column="updated_at" jdbcType="TIMESTAMP" property="updatedAt" />
+    <result column="department_english_name" jdbcType="VARCHAR" property="departmentEnglishName" />
+    <result column="head" jdbcType="VARCHAR" property="head" />
+    <result column="telephone_number" jdbcType="INTEGER" property="telephoneNumber" />
+    <result column="address" jdbcType="VARCHAR" property="address" />
+    <result column="detail" jdbcType="VARCHAR" property="detail" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    department_id, depart_name, parent_id, created_at, updated_at, department_english_name, 
+    head, telephone_number, address, detail
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from department
+    where department_id = #{departmentId,jdbcType=INTEGER}
+  </select>
+  
+  <select id="selectAllDepartment"  resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from department
+  
+  </select>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from department
+    where department_id = #{departmentId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.github.jxc.pojo.Department">
+    insert into department (department_id, depart_name, parent_id, 
+      created_at, updated_at, department_english_name, 
+      head, telephone_number, address, 
+      detail)
+    values (#{departmentId,jdbcType=INTEGER}, #{departName,jdbcType=VARCHAR}, #{parentId,jdbcType=INTEGER}, 
+      #{createdAt,jdbcType=TIMESTAMP}, #{updatedAt,jdbcType=TIMESTAMP}, #{departmentEnglishName,jdbcType=VARCHAR}, 
+      #{head,jdbcType=VARCHAR}, #{telephoneNumber,jdbcType=INTEGER}, #{address,jdbcType=VARCHAR}, 
+      #{detail,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.github.jxc.pojo.Department">
+    insert into department
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="departmentId != null">
+        department_id,
+      </if>
+      <if test="departName != null">
+        depart_name,
+      </if>
+      <if test="parentId != null">
+        parent_id,
+      </if>
+      <if test="createdAt != null">
+        created_at,
+      </if>
+      <if test="updatedAt != null">
+        updated_at,
+      </if>
+      <if test="departmentEnglishName != null">
+        department_english_name,
+      </if>
+      <if test="head != null">
+        head,
+      </if>
+      <if test="telephoneNumber != null">
+        telephone_number,
+      </if>
+      <if test="address != null">
+        address,
+      </if>
+      <if test="detail != null">
+        detail,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="departmentId != null">
+        #{departmentId,jdbcType=INTEGER},
+      </if>
+      <if test="departName != null">
+        #{departName,jdbcType=VARCHAR},
+      </if>
+      <if test="parentId != null">
+        #{parentId,jdbcType=INTEGER},
+      </if>
+      <if test="createdAt != null">
+        #{createdAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedAt != null">
+        #{updatedAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="departmentEnglishName != null">
+        #{departmentEnglishName,jdbcType=VARCHAR},
+      </if>
+      <if test="head != null">
+        #{head,jdbcType=VARCHAR},
+      </if>
+      <if test="telephoneNumber != null">
+        #{telephoneNumber,jdbcType=INTEGER},
+      </if>
+      <if test="address != null">
+        #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="detail != null">
+        #{detail,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.github.jxc.pojo.Department">
+    update department
+    <set>
+      <if test="departName != null">
+        depart_name = #{departName,jdbcType=VARCHAR},
+      </if>
+      <if test="parentId != null">
+        parent_id = #{parentId,jdbcType=INTEGER},
+      </if>
+      <if test="createdAt != null">
+        created_at = #{createdAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedAt != null">
+        updated_at = #{updatedAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="departmentEnglishName != null">
+        department_english_name = #{departmentEnglishName,jdbcType=VARCHAR},
+      </if>
+      <if test="head != null">
+        head = #{head,jdbcType=VARCHAR},
+      </if>
+      <if test="telephoneNumber != null">
+        telephone_number = #{telephoneNumber,jdbcType=INTEGER},
+      </if>
+      <if test="address != null">
+        address = #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="detail != null">
+        detail = #{detail,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where department_id = #{departmentId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.github.jxc.pojo.Department">
+    update department
+    set depart_name = #{departName,jdbcType=VARCHAR},
+      parent_id = #{parentId,jdbcType=INTEGER},
+      created_at = #{createdAt,jdbcType=TIMESTAMP},
+      updated_at = #{updatedAt,jdbcType=TIMESTAMP},
+      department_english_name = #{departmentEnglishName,jdbcType=VARCHAR},
+      head = #{head,jdbcType=VARCHAR},
+      telephone_number = #{telephoneNumber,jdbcType=INTEGER},
+      address = #{address,jdbcType=VARCHAR},
+      detail = #{detail,jdbcType=VARCHAR}
+    where department_id = #{departmentId,jdbcType=INTEGER}
+  </update>
+  <select id="selectByName" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from department
+    where department_name = #{departmentName,jdbcType=VARCHAR}
+  </select>
+</mapper>
