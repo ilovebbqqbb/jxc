@@ -57,14 +57,14 @@
 function iframeShowSell(sellId){
 	layui.use('layer', function(){
 		  var layer = layui.layer;
-		  var showrul = "<%=basePath%>sell/iframeShowSell/" + sellId;
+		  var showrul = "<%=basePath%>sell/iframeShowCheckSell?sellId=" + sellId;
 		 	
 		  layer.open({
 			  type: 2,
 			  title: '订单详情',
 			  shadeClose: true,
 			  shade: 0.8,
-			  area: ['800px', '90%'],
+			  area: ['1000px', '90%'],
 			  content: showrul
 			}); 
 		});  

@@ -6,6 +6,8 @@ public class SellDetail {
 	Integer goodsId;
 	Integer goodsNum;
 	String remarks;
+	Goods goods;
+	
 	public Integer getSellDetailId() {
 		return sellDetailId;
 	}
@@ -17,6 +19,12 @@ public class SellDetail {
 	}
 	public void setSellId(String sellId) {
 		this.sellId = sellId;
+	}
+	public Goods getGoods() {
+		return goods;
+	}
+	public void setGoods(Goods goods) {
+		this.goods = goods;
 	}
 	public Integer getGoodsId() {
 		return goodsId;
@@ -35,7 +43,5 @@ public class SellDetail {
 	}
 	public void setRemarks(String remarks) {
 		this.remarks = remarks;
-	}
-	
-	
+	}	
 }

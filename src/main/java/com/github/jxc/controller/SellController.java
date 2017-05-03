@@ -223,8 +223,8 @@ public class SellController {
 		return "redirect:/sell/sellMain";
 	}
 	
-	@RequestMapping(value = "iframeShowSell/{sellId}", method = RequestMethod.GET)
-	public String iframeShowSell(HttpServletRequest request,HttpServletResponse response,Model model,@PathVariable String sellId){
+	@RequestMapping("iframeShowCheckSell")
+	public String iframeShowCheckSell(HttpServletRequest request,HttpServletResponse response,Model model,String sellId){
 		
 		try{
 			List<SellDetail> detailList = sellDetailService.selectBySellId(sellId);
@@ -238,7 +238,7 @@ public class SellController {
 			e.printStackTrace();
 		}
 		
-		return "iframeShowSell";
+		return "iframeShowCheckSell";
 	}
 		
 	@RequestMapping("ajaxInsertNewSell")

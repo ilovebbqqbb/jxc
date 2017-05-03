@@ -1,0 +1,4 @@
+eclipse.preferences.version=1
+validator.Checked=src/main/webapp/jxc/js/jquery-3.2.0.min.js,src/main/webapp/jxc/js/layui/layui.js,src/main/webapp/jxc/js/layui/lay/modules,src/main/webapp/jxc/js/layui/lay/dest/layui.all.js
+validator.Revalidate=true
+validator.Unchecked=
