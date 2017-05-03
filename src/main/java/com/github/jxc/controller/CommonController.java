@@ -10,8 +10,13 @@
 
 package com.github.jxc.controller;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+
+import com.github.jxc.pojo.UserAccount;
+import com.github.jxc.utils.Constant;
 
 /** 
  * @Description 
@@ -24,7 +29,11 @@ public class CommonController {
     
     
     @RequestMapping("/toIndex")
-    public String toIndexPage() {
+    public String toIndexPage(HttpServletRequest request) {
+    	UserAccount loginUser = (UserAccount)request.getSession().getAttribute(Constant.USER_LOGIN_SESSION_KEY);
+		if(loginUser != null) {
+			return "home";
+		}
         return "index";
     }
     

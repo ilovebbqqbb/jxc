@@ -25,6 +25,7 @@ import com.github.jxc.service.DepartmentService;
 import com.github.jxc.service.RoleService;
 import com.github.jxc.service.UserAccountService;
 import com.github.jxc.service.UserInfoService;
+import com.github.jxc.utils.Constant;
 
 @Controller
 @RequestMapping("user")
@@ -44,14 +45,8 @@ public class UserController {
 	
 	@RequestMapping("login")
 	@ResponseBody
-	public Map<String,String> userLogin(HttpServletRequest httpServletRequest,HttpServletResponse httpServletResponse,UserAccount userAccount) {
-		
+	public Map<String,String> userLogin(HttpServletRequest request,HttpServletResponse response,UserAccount userAccount) {
 		Map<String,String> resultMap = new HashMap<String,String>();
-		/*Cookie[] cookies = httpServletRequest.getCookies();
-		for(Cookie cookie : cookies) {
-			
-		}*/
-		
 		try {
 			
 			if(userAccount != null && !StringUtils.isEmpty(userAccount.getPetName()) && !StringUtils.isEmpty(userAccount.getPassword())) {
@@ -59,8 +54,8 @@ public class UserController {
 				if(existAccount != null) {
 					if(userAccount.getPassword().equals(existAccount.getPassword())) {
 						resultMap.put("resultMsg", "success");
-						HttpSession session=httpServletRequest.getSession();
-						session.setAttribute("userAccount", userAccount);
+						HttpSession session=request.getSession();
+						session.setAttribute(Constant.USER_LOGIN_SESSION_KEY, userAccount);
 						 
 					} else {
 						resultMap.put("resultMsg", "您输入的密码不正确");

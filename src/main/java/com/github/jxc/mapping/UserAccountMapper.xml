@@ -6,14 +6,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 <mapper namespace="com.github.jxc.dao.UserAccountDao">
 	<resultMap id="BaseResultMap" type="com.github.jxc.pojo.UserAccount" >
 		<id column="user_account_id" property="userAccountId" jdbcType="INTEGER"/>
-		<result column="user_name" property="userName" jdbcType="VARCHAR"/>
+		<result column="pet_name" property="petName" jdbcType="VARCHAR"/>
 		<result column="user_info_id" property="userInfoId" jdbcType="INTEGER"/>
 		<result column="password" property="password" jdbcType="VARCHAR"/>
 		<result column="created_at" property="createdAt" jdbcType="TIMESTAMP"/>
 		<result column="updated_at" property="updatedAt" jdbcType="TIMESTAMP"/>
 	</resultMap>
 	<sql id="Base_Column_List">
-		user_account_id,user_name,user_info_id,password,created_at,updated_at
+		user_account_id,pet_name,user_info_id,password,created_at,updated_at
 	</sql>
 	
 	<insert id="insertSelective" parameterType="com.github.jxc.pojo.UserAccount">
@@ -22,8 +22,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	     <if test="userAccountId != null">
 	       user_account_id,
 	     </if>
-	     <if test="userName != null">
-	       user_name,
+	     <if test="petName != null">
+	       pet_name,
 	     </if>
 	     
 	     <if test="userInfoId != null">
@@ -44,8 +44,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	     <if test="userAccountId != null">
 	       #{userAccountId,jdbcType=INTEGER},
 	     </if>
-	     <if test="userName != null">
-	       #{userName,jdbcType=VARCHAR},
+	     <if test="petName != null">
+	       #{petName,jdbcType=VARCHAR},
 	     </if>
 	     
 	     <if test="userInfoId != null">
@@ -67,8 +67,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<update id="updateByPrimaryKeySelective" parameterType="com.github.jxc.pojo.UserAccount">
 		update user_account
 		<set>
-			<if test="userName != null">
-				user_name = #{userName,jdbcType=VARCHAR},
+			<if test="petName != null">
+				pet_name = #{petName,jdbcType=VARCHAR},
 			</if>
 			<if test="userInfoId != null">
 	       		user_info_id = #{userInfoId,jdbcType=INTEGER},
@@ -100,7 +100,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		select
 		<include refid="Base_Column_List" /> 
 		from user_account
-		where user_name = #{userName,jdbcType=VARCHAR}
+		where pet_name = #{petName,jdbcType=VARCHAR}
 		
 	</select>
 	
