@@ -14,15 +14,14 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.fastjson.JSON;
 import com.github.jxc.pojo.Goods;
 import com.github.jxc.pojo.SellDetail;
 import com.github.jxc.pojo.SellPreview;
+import com.github.jxc.pojo.StockDetailKey;
 import com.github.jxc.pojo.Store;
 import com.github.jxc.pojo.Warehouse;
 import com.github.jxc.service.GoodsService;
@@ -93,6 +92,24 @@ public class SellController {
 		return "checkSell";
 	}
 	
+	@RequestMapping("iframeShowCheckSell")
+	public String iframeShowCheckSell(HttpServletRequest request,HttpServletResponse response,Model model,String sellId){
+		
+		try{
+			List<SellDetail> detailList = sellDetailService.selectBySellId(sellId);
+			SellPreview sellPreview = sellPreviewService.selectByPrimaryKey(sellId);
+			if(detailList != null) {
+				
+				model.addAttribute("sellPreview", sellPreview);
+				model.addAttribute("detailList", detailList);
+			}
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		
+		return "iframeShowCheckSell";
+	}
+	
 	@RequestMapping("prepareSell")
 	public String prepareSell(HttpServletRequest request,HttpServletResponse response,Model model) {
 		
@@ -106,6 +123,24 @@ public class SellController {
 		}
 		
 		return "prepareSell";
+	}
+	
+	@RequestMapping("iframeShowPrepareSell")
+	public String iframeShowPrepareSell(HttpServletRequest request,HttpServletResponse response,Model model,String sellId){
+		
+		try{
+			SellPreview sellPreview = sellPreviewService.selectByPrimaryKey(sellId);
+			List<SellDetail> detailList = sellDetailService.selectByWarehouseIdAndSellId(sellPreview);
+			if(detailList != null) {
+				
+				model.addAttribute("sellPreview", sellPreview);
+				model.addAttribute("detailList", detailList);
+			}
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		
+		return "iframeShowPrepareSell";
 	}
 	
 	@RequestMapping("sendSell")
@@ -188,13 +223,16 @@ public class SellController {
 		return "showAllSell";
 	}
 	
-	@RequestMapping(value = "updateSell/{sellId}/{sellStatusNum}", method = RequestMethod.GET)
-	public String updateSell(@PathVariable String sellId,@PathVariable Integer sellStatusNum,
+	@RequestMapping("ajaxUpdate")
+	@ResponseBody
+	public Map<String,String> ajaxUpdate(String sellId,Integer updateType,
 			HttpServletRequest request, HttpServletResponse response){
+		
+		Map<String,String> resultMap = new HashMap<String, String>();
 		
 		String sellStatus = "状态异常";
 		
-		switch(sellStatusNum){
+		switch(updateType){
 		case 1:
 			sellStatus = "审核通过，库房备货中";
 			break;
@@ -206,40 +244,37 @@ public class SellController {
 			break;
 		}
 		
-		SellPreview sellPath  = sellPreviewService.selectByPrimaryKey(sellId);
-		sellPath.setSellStatus(sellStatus);
-		sellPreviewService.updateByPrimaryKeySelective(sellPath);
-		
-		return "redirect:/sell/sellMain";
-	}
-	
-	@RequestMapping(value = "delete/{sellId}", method = RequestMethod.GET)
-	public String deleteSell(@PathVariable String sellId,
-			HttpServletRequest request,HttpServletResponse response){
-		
-		sellPreviewService.deleteByPrimartKey(sellId);
-		sellDetailService.deleteBySellId(sellId);
-		
-		return "redirect:/sell/sellMain";
-	}
-	
-	@RequestMapping("iframeShowCheckSell")
-	public String iframeShowCheckSell(HttpServletRequest request,HttpServletResponse response,Model model,String sellId){
-		
-		try{
-			List<SellDetail> detailList = sellDetailService.selectBySellId(sellId);
-			SellPreview sellPreview = sellPreviewService.selectByPrimaryKey(sellId);
-			if(detailList != null) {
-				
-				model.addAttribute("sellPreview", sellPreview);
-				model.addAttribute("detailList", detailList);
-			}
-		} catch(Exception e) {
+		try {
+			SellPreview sellPath = sellPreviewService.selectByPrimaryKey(sellId);
+			sellPath.setSellStatus(sellStatus);
+			sellPreviewService.updateByPrimaryKeySelective(sellPath);
+			resultMap.put("resultMsg", "success");
+		} catch (Exception e) {
 			e.printStackTrace();
+			resultMap.put("resultMsg", "系统错误!!!");
 		}
 		
-		return "iframeShowCheckSell";
+		return resultMap;
 	}
+	
+	@RequestMapping("ajaxDelete")
+	@ResponseBody
+	public Map<String,String> ajaxDelete(String sellId,HttpServletRequest request,HttpServletResponse response){
+		
+		Map<String,String> resultMap = new HashMap<String, String>();
+		
+		try {
+			sellPreviewService.deleteByPrimartKey(sellId);
+			sellDetailService.deleteBySellId(sellId);
+			resultMap.put("resultMsg", "success");
+		} catch (Exception e) {
+			e.printStackTrace();
+			resultMap.put("resultMsg", "系统错误!!!");
+		}
+		return resultMap;
+	}
+	
+
 		
 	@RequestMapping("ajaxInsertNewSell")
 	@ResponseBody

@@ -28,6 +28,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			<result column="GoodsSource" property="goodsSource" jdbcType="VARCHAR"/>
 			<result column="Details" property="details" jdbcType="VARCHAR"/>
 		</association>
+		<association property="stockDetail" javaType="com.github.jxc.pojo.StockDetail">
+		    <id column="warehouse_id" jdbcType="INTEGER" property="warehouseId" />
+		    <id column="goods_id" jdbcType="INTEGER" property="goodsId" />
+		    <result column="goods_stock" jdbcType="INTEGER" property="goodsStock" />
+  	    </association>
 	</resultMap>
 	<sql id="Base_Column_List">
 		sell_detail_id,sell_id,goods_id,goods_num,remarks
@@ -72,7 +77,17 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	
 	<select id="selectBySellId" resultMap="BaseResultMap" parameterType="java.lang.String">
 		select *
-		from sell_detail d ,tb_goods g 
-		where d.goods_id = g.GoodsId and d.sell_id = #{sellId,jdbcType=VARCHAR}
+		from sell_detail sd ,tb_goods g
+		where sd.goods_id = g.GoodsId and sd.sell_id = #{sellId,jdbcType=VARCHAR} 
+	</select>
+	
+	<select id="selectByWarehouseIdAndSellId" resultMap="BaseResultMap" parameterType="com.github.jxc.pojo.SellPreview">
+		select *
+		from sell_detail sd ,tb_goods g ,stock_detail std
+		where 
+		sd.goods_id = g.GoodsId 
+		and sd.goods_id = std.goods_id 
+		and std.warehouse_id = #{warehouseId,jdbcType=INTEGER} 
+		and sd.sell_id = #{sellId,jdbcType=VARCHAR}
 	</select>
 </mapper>

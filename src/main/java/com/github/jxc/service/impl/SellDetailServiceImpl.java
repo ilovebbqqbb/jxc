@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.github.jxc.dao.SellDetailDao;
 import com.github.jxc.pojo.SellDetail;
+import com.github.jxc.pojo.SellPreview;
 import com.github.jxc.service.SellDetailService;
 
 @Service("SellDetailService")
@@ -26,5 +27,9 @@ public class SellDetailServiceImpl implements SellDetailService{
 	
 	public int deleteBySellId(String sellId){
 		return sellDetailDao.deleteBySellId(sellId);
+	}
+	
+	public List<SellDetail> selectByWarehouseIdAndSellId(SellPreview sellPreview){
+		return sellDetailDao.selectByWarehouseIdAndSellId(sellPreview);
 	}
 }

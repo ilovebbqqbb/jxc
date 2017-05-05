@@ -32,17 +32,16 @@
 		  <tbody>
 		    <c:forEach items="${sellList}" var="sell">
 		    	<tr>
-		    		<td>${sell.sellId}</td>
-		    		<td>${sell.warehouseId}</td>
-		    		<td>${sell.storeId}</td>
+		    		<td  onclick="iframeShowPrepareSell(${sell.sellId})">${sell.sellId}</td>
+		    		<td>${sell.warehouse.warehouseName}</td>
+		    		<td>${sell.store.storeName}</td>
 		    		<td>${sell.sellNum}</td>
 		    		<td>${sell.sellMoney}</td>
 		    		<td>${sell.operater}</td>
 		    		<td>${sell.sellStatus}</td>
 		    		<td>${sell.sellTime}</td>
 		    		<td>
-		    		<a href="updateSell/${sell.sellId}/2" class="layui-btn">发货</a>
-		    		<a href="delete/${sell.sellId}" class="layui-btn layui-btn-danger">删除</a>
+		    		<button class="layui-btn layui-btn-danger" onclick="ajaxDelete(${sell.sellId})">删除</button>
 		    		</td>
 		    	</tr>
 		    </c:forEach>
@@ -52,6 +51,28 @@
 
 	<script type="text/javascript" src="../jxc/js/jquery-3.2.0.min.js" charset="utf-8"></script>
     <script type="text/javascript" src="../jxc/js/layui/layui.js" charset="utf-8"></script>
+	<script type="text/javascript" src="../jxc/js/sellUtil.js" charset="utf-8"></script>
+	
+<script type="text/javascript">
+function iframeShowPrepareSell(sellId){
+	layui.use('layer', function(){
+		  var layer = layui.layer;
+		  var showrul = "<%=basePath%>sell/iframeShowPrepareSell?sellId=" + sellId;
+		 	
+		  layer.open({
+			  type: 2,
+			  title: '订单详情',
+			  shadeClose: true,
+			  shade: 0.8,
+			  area: ['1000px', '90%'],
+			  content: showrul ,
+			  end: function(){
+				  window.location.reload();
+			  }
+			}); 
+		});  
+}
+</script>
 
 </body>
 </html>

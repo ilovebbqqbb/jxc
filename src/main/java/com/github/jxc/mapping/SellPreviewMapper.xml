@@ -13,6 +13,28 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		<result column="sell_money" property="sellMoney" jdbcType="FLOAT"/>
 		<result column="operater" property="operater" jdbcType="INTEGER"/>
 		<result column="sell_status" property="sellStatus" jdbcType="VARCHAR"/>
+		<association property="warehouse" javaType="com.github.jxc.pojo.Warehouse">
+			<id column="warehouse_id" property="warehouseId" jdbcType="INTEGER"/>
+			<result column="warehouse_name" property="warehouseName" jdbcType="VARCHAR"/>
+			<result column="linkman" property="linkman" jdbcType="VARCHAR"/>
+			<result column="phone_number" property="phoneNumber" jdbcType="VARCHAR"/>
+			<result column="warehouse_address" property="warehouseAddress" jdbcType="VARCHAR"/>
+			<result column="stock_min" property="stockMin" jdbcType="VARCHAR"/>
+			<result column="stock_max" property="stockMax" jdbcType="VARCHAR"/>
+			<result column="created_at" property="createdAt" jdbcType="TIMESTAMP"/>
+			<result column="updated_at" property="updatedAt" jdbcType="TIMESTAMP"/>
+		</association>
+		<association property="store" javaType="com.github.jxc.pojo.Store">
+			<id column="store_id" property="storeId" jdbcType="INTEGER"/>
+			<result column="store_name" property="storeName" jdbcType="VARCHAR"/>
+			<result column="linkman" property="linkman" jdbcType="VARCHAR"/>
+			<result column="phone_number" property="phoneNumber" jdbcType="VARCHAR"/>
+			<result column="store_address" property="storeAddress" jdbcType="VARCHAR"/>
+			<result column="stock_min" property="stockMin" jdbcType="VARCHAR"/>
+			<result column="stock_max" property="stockMax" jdbcType="VARCHAR"/>
+			<result column="created_at" property="createdAt" jdbcType="TIMESTAMP"/>
+			<result column="updated_at" property="updatedAt" jdbcType="TIMESTAMP"/>
+		</association>
 	</resultMap>
 	<sql id="Base_Column_List">
 		sell_id,sell_time,warehouse_id,store_id,sell_num,sell_money,operater,sell_status
@@ -90,33 +112,30 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</update>
 	
 	<select id="selectAll" resultMap="BaseResultMap">
-		select
-		<include refid="Base_Column_List" />
-		from sell_previewc
+		select *		
+		from sell_preview sp ,warehouse w ,store s
+		where  sp.warehouse_id = w.warehouse_id and sp.store_id = s.store_id
 		order by sell_time desc
 	</select>
 	
 	<select id="selectByStatus" resultMap="BaseResultMap" parameterType="java.lang.String">
-		select
-		<include refid="Base_Column_List" />
-		from sell_preview
-		where sell_status = #{sellStatus,jdbcType=VARCHAR}
+		select *
+		from sell_preview sp ,warehouse w ,store s
+		where sp.sell_status = #{sellStatus,jdbcType=VARCHAR} and sp.warehouse_id = w.warehouse_id and sp.store_id = s.store_id
 		order by sell_time desc
 	</select>
 	
 	<select id="selectByTwoStatus" resultMap="BaseResultMap" parameterType="java.lang.String">
-		select
-		<include refid="Base_Column_List" />
-		from sell_preview
-		where sell_status = (#{0} OR #{1})
+		select *
+		from sell_preview sp ,warehouse w ,store s
+		where sp.sell_status = (#{0} OR #{1}) and sp.warehouse_id = w.warehouse_id and sp.store_id = s.store_id
 		order by sell_time desc
 	</select>
 	
 	<select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String">
-		select
-		<include refid="Base_Column_List" />
-		from sell_preview
-		where sell_id = #{sellId,jdbcType=VARCHAR}
+		select *
+		from sell_preview sp, warehouse w, store s
+		where sp.sell_id = #{sellId,jdbcType=VARCHAR} and sp.warehouse_id = w.warehouse_id and sp.store_id = s.store_id
 	</select>
 	
 </mapper>

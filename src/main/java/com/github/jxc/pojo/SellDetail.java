@@ -7,12 +7,19 @@ public class SellDetail {
 	Integer goodsNum;
 	String remarks;
 	Goods goods;
+	StockDetail stockDetail;
 	
 	public Integer getSellDetailId() {
 		return sellDetailId;
 	}
 	public void setSellDetailId(Integer sellDetailId) {
 		this.sellDetailId = sellDetailId;
+	}
+	public StockDetail getStockDetail() {
+		return stockDetail;
+	}
+	public void setStockDetail(StockDetail stockDetail) {
+		this.stockDetail = stockDetail;
 	}
 	public String getSellId() {
 		return sellId;
