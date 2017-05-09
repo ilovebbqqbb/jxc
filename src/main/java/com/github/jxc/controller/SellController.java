@@ -21,12 +21,19 @@ import com.alibaba.fastjson.JSON;
 import com.github.jxc.pojo.Goods;
 import com.github.jxc.pojo.SellDetail;
 import com.github.jxc.pojo.SellPreview;
+import com.github.jxc.pojo.SellStatistics;
+import com.github.jxc.pojo.StockDetail;
 import com.github.jxc.pojo.StockDetailKey;
 import com.github.jxc.pojo.Store;
+import com.github.jxc.pojo.StoreDetail;
+import com.github.jxc.pojo.StoreDetailKey;
 import com.github.jxc.pojo.Warehouse;
 import com.github.jxc.service.GoodsService;
 import com.github.jxc.service.SellDetailService;
 import com.github.jxc.service.SellPreviewService;
+import com.github.jxc.service.SellStatisticsService;
+import com.github.jxc.service.StockDetailService;
+import com.github.jxc.service.StoreDetailService;
 import com.github.jxc.service.StoreService;
 import com.github.jxc.service.WarehouseService;
 
@@ -44,6 +51,12 @@ public class SellController {
 	private GoodsService goodsService;
 	@Resource
 	private SellDetailService sellDetailService;
+	@Resource
+	private StockDetailService stockDetailService;
+	@Resource
+	private StoreDetailService storeDetailService;
+	@Resource
+	private SellStatisticsService sellStatisticsService;
 	
 	@RequestMapping("sellMain")
 	public String sellMain(HttpServletRequest request,HttpServletResponse response,Model model) {
@@ -159,6 +172,24 @@ public class SellController {
 		return "sendSell";
 	}
 	
+	@RequestMapping("iframeShowSendSell")
+	public String iframeShowSendSell(HttpServletRequest request,HttpServletResponse response,Model model,String sellId){
+		
+		try{
+			List<SellDetail> detailList = sellDetailService.selectBySellId(sellId);
+			SellPreview sellPreview = sellPreviewService.selectByPrimaryKey(sellId);
+			if(detailList != null) {
+				
+				model.addAttribute("sellPreview", sellPreview);
+				model.addAttribute("detailList", detailList);
+			}
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		
+		return "iframeShowSendSell";
+	}
+	
 	@RequestMapping("receiptSell")
 	public String receiptSell(HttpServletRequest request,HttpServletResponse response,Model model) {
 		
@@ -173,6 +204,24 @@ public class SellController {
 		}
 		
 		return "receiptSell";
+	}
+	
+	@RequestMapping("iframeShowReceiptSell")
+	public String iframeShowReceiptSell(HttpServletRequest request,HttpServletResponse response,Model model,String sellId){
+		
+		try{
+			List<SellDetail> detailList = sellDetailService.selectBySellId(sellId);
+			SellPreview sellPreview = sellPreviewService.selectByPrimaryKey(sellId);
+			if(detailList != null) {
+				
+				model.addAttribute("sellPreview", sellPreview);
+				model.addAttribute("detailList", detailList);
+			}
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		
+		return "iframeShowReceiptSell";
 	}
 	
 	@RequestMapping("iframeAddGoods")
@@ -208,6 +257,33 @@ public class SellController {
 		return resultMap;
 	}
 	
+	@RequestMapping("sellStatistics")
+	public String sellStatistics(HttpServletRequest request,HttpServletResponse response,Model model){
+		
+		try {
+			List<SellStatistics> sellStatisticsList = sellStatisticsService.selectAll();
+			model.addAttribute("sellStatisticsList",sellStatisticsList);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return "sellStatistics";
+	}
+	
+	@RequestMapping("showStoreStatistics")
+	public String showStoreStatistics(HttpServletRequest request,HttpServletResponse response,Model model,Integer storeId){
+		
+		try {
+			SellStatistics sellStatistics = sellStatisticsService.selectByStoreId(storeId);
+			List<SellPreview> sellList = sellPreviewService.selectByStoreId(storeId);
+			model.addAttribute("sellStatistics",sellStatistics);
+			model.addAttribute("sellList",sellList);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return "showStoreStatistics";
+	}
+	
 	@RequestMapping("showAllSell")
 	public String showAllSell(HttpServletRequest request,HttpServletResponse response,Model model) {
 		//Map<String,String> dataMap = new HashMap<String,String>();
@@ -228,27 +304,59 @@ public class SellController {
 	public Map<String,String> ajaxUpdate(String sellId,Integer updateType,
 			HttpServletRequest request, HttpServletResponse response){
 		
-		Map<String,String> resultMap = new HashMap<String, String>();
-		
-		String sellStatus = "状态异常";
-		
-		switch(updateType){
-		case 1:
-			sellStatus = "审核通过，库房备货中";
-			break;
-		case 2:
-			sellStatus = "已发货，请注意签收";
-			break;
-		case 3:
-			sellStatus = "确认收货，订单已完成";
-			break;
-		}
+		Map<String,String> resultMap = new HashMap<String, String>();		
 		
 		try {
+			String sellStatus = "状态异常";
 			SellPreview sellPath = sellPreviewService.selectByPrimaryKey(sellId);
-			sellPath.setSellStatus(sellStatus);
-			sellPreviewService.updateByPrimaryKeySelective(sellPath);
-			resultMap.put("resultMsg", "success");
+			
+			switch(updateType){
+			case 1:
+				sellStatus = "审核通过，库房备货中";
+				sellPath.setSellStatus(sellStatus);
+				sellPreviewService.updateByPrimaryKeySelective(sellPath);
+				resultMap.put("resultMsg", "success");
+				break;
+			case 2:
+				sellStatus = "已发货，请注意签收";
+				List<SellDetail> sellDetailList_2 = sellDetailService.selectByWarehouseIdAndSellId(sellPath);
+				for (SellDetail sellDetail : sellDetailList_2){
+					StockDetail stockDetail = new StockDetail();
+					stockDetail.setWarehouseId(sellPath.getWarehouseId());
+					stockDetail.setGoodsId(sellDetail.getGoodsId());
+					stockDetail.setGoodsStock(sellDetail.getStockDetail().getGoodsStock() - sellDetail.getGoodsNum());
+					stockDetailService.updateByPrimaryKeySelective(stockDetail);
+				}
+				sellPath.setSellStatus(sellStatus);
+				sellPreviewService.updateByPrimaryKeySelective(sellPath);
+				resultMap.put("resultMsg", "success");
+				break;
+			case 3:
+				sellStatus = "确认收货，订单已完成";
+				List<SellDetail> sellDetailList_3 = sellDetailService.selectBySellId(sellId);
+				for (SellDetail sellDetail : sellDetailList_3){
+					StoreDetailKey storeDetailKey = new StoreDetailKey();
+					storeDetailKey.setStoreId(sellPath.getStoreId());
+					storeDetailKey.setGoodsId(sellDetail.getGoodsId());
+					StoreDetail storeDetail = storeDetailService.selectByPrimaryKey(storeDetailKey);
+					if (storeDetail == null){
+						StoreDetail newStoreDetail = new StoreDetail();
+						newStoreDetail.setStoreId(sellPath.getStoreId());
+						newStoreDetail.setGoodsId(sellDetail.getGoodsId());
+						newStoreDetail.setGoodsStock(sellDetail.getGoodsNum());
+						storeDetailService.insertSelective(newStoreDetail);
+					} else {
+						storeDetail.setGoodsStock(storeDetail.getGoodsStock() + sellDetail.getGoodsNum());
+						storeDetailService.updateByPrimaryKeySelective(storeDetail);
+					}
+				}				
+				sellPath.setSellStatus(sellStatus);
+				sellPreviewService.updateByPrimaryKeySelective(sellPath);
+				resultMap.put("resultMsg", "success");
+				break;
+			}
+			
+
 		} catch (Exception e) {
 			e.printStackTrace();
 			resultMap.put("resultMsg", "系统错误!!!");

@@ -9,7 +9,7 @@ function ajaxUpdate(sellId,updateType){
 			  	success : function(data) {
 			
 			  		if(data.resultMsg == "success") {		
-			  			layer.msg('审核成功',{time: 2000},function(){window.location.reload();});
+			  			layer.msg('操作成功',{time: 2000},function(){window.location.reload();});
 			  		} else {
 			  			layer.msg(data.resultMsg,{time: 2000},function(){window.location.reload();});
 			  		}
@@ -37,7 +37,7 @@ function iframeAjaxUpdate(sellId,updateType){
 			  	success : function(data) {
 			
 			  		if(data.resultMsg == "success") {		
-			  			layer.msg('审核成功',{time: 2000},function(){parent.layer.close(index);});
+			  			layer.msg('操作成功',{time: 2000},function(){parent.layer.close(index);});
 			  		} else {
 			  			layer.msg(data.resultMsg,{time: 2000},function(){parent.layer.close(index);});
 			  		}

@@ -132,6 +132,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		order by sell_time desc
 	</select>
 	
+	<select id="selectByStoreId" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+		select *
+		from sell_preview sp,warehouse w,store s
+		where sp.store_id = #{storeId,jdbcType=INTEGER}
+		  and sp.store_id = s.store_id
+		  and sp.warehouse_id = w.warehouse_id
+		order by sell_time desc
+	</select>
+	
 	<select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String">
 		select *
 		from sell_preview sp, warehouse w, store s

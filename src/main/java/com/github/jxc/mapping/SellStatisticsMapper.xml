@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper   
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.github.jxc.dao.SellStatisticsDao">
+	<resultMap type="com.github.jxc.pojo.SellStatistics" id="BaseResultMap">
+		<id column="store_id" property="storeId" jdbcType="INTEGER" />
+		<result column="sell_num_statistics" property="sellNumStatistics" jdbcType="INTEGER"/>
+		<result column="sell_money_statistics" property="sellMoneyStatistics" jdbcType="FLOAT"/>
+		<association property="store" javaType="com.github.jxc.pojo.Store">
+			<id column="store_id" property="storeId" jdbcType="INTEGER"/>
+			<result column="store_name" property="storeName" jdbcType="VARCHAR"/>
+			<result column="linkman" property="linkman" jdbcType="VARCHAR"/>
+			<result column="phone_number" property="phoneNumber" jdbcType="VARCHAR"/>
+			<result column="store_address" property="storeAddress" jdbcType="VARCHAR"/>
+			<result column="stock_min" property="stockMin" jdbcType="VARCHAR"/>
+			<result column="stock_max" property="stockMax" jdbcType="VARCHAR"/>
+			<result column="created_at" property="createdAt" jdbcType="TIMESTAMP"/>
+			<result column="updated_at" property="updatedAt" jdbcType="TIMESTAMP"/>
+		</association>		
+	</resultMap>
+	
+	<select id="selectByStoreId" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+		select 
+		sp.store_id,store_name,sum(sell_num) as sell_num_statistics,sum(sell_money) as sell_money_statistics
+		from sell_preview sp,store s
+		where sp.store_id = #{storeId,jdbcType=INTEGER} and sp.store_id = s.store_id
+	</select>
+	
+	<select id="selectAll" resultMap="BaseResultMap">
+		select 
+		sp.store_id,s.store_name,sum(sell_num) as sell_num_statistics,sum(sell_money) as sell_money_statistics
+		from sell_preview sp left join store s on sp.store_id = s.store_id
+		group by sp.store_id
+	</select>
+</mapper>

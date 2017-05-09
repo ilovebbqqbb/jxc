@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.github.jxc.dao.StoreDetailDao">
+  <resultMap id="BaseResultMap" type="com.github.jxc.pojo.StoreDetail">
+    <id column="store_id" jdbcType="INTEGER" property="storeId" />
+    <id column="goods_id" jdbcType="INTEGER" property="goodsId" />
+    <result column="goods_stock" jdbcType="INTEGER" property="goodsStock" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    store_id, goods_id, goods_stock
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="com.github.jxc.pojo.StoreDetailKey" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from store_detail
+    where store_id = #{storeId,jdbcType=INTEGER}
+      and goods_id = #{goodsId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="com.github.jxc.pojo.StoreDetailKey">
+    delete from store_detail
+    where store_id = #{storeId,jdbcType=INTEGER}
+      and goods_id = #{goodsId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.github.jxc.pojo.StoreDetail">
+    insert into store_detail (store_id, goods_id, goods_stock
+      )
+    values (#{storeId,jdbcType=INTEGER}, #{goodsId,jdbcType=INTEGER}, #{goodsStock,jdbcType=INTEGER}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.github.jxc.pojo.StoreDetail">
+    insert into store_detail
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="storeId != null">
+        store_id,
+      </if>
+      <if test="goodsId != null">
+        goods_id,
+      </if>
+      <if test="goodsStock != null">
+        goods_stock,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="storeId != null">
+        #{storeId,jdbcType=INTEGER},
+      </if>
+      <if test="goodsId != null">
+        #{goodsId,jdbcType=INTEGER},
+      </if>
+      <if test="goodsStock != null">
+        #{goodsStock,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.github.jxc.pojo.StoreDetail">
+    update store_detail
+    <set>
+      <if test="goodsStock != null">
+        goods_stock = #{goodsStock,jdbcType=INTEGER},
+      </if>
+    </set>
+    where store_id = #{storeId,jdbcType=INTEGER}
+      and goods_id = #{goodsId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.github.jxc.pojo.StoreDetail">
+    update store_detail
+    set goods_stock = #{goodsStock,jdbcType=INTEGER}
+    where store_id = #{storeId,jdbcType=INTEGER}
+      and goods_id = #{goodsId,jdbcType=INTEGER}
+  </update>
+</mapper>

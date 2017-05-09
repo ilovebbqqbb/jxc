@@ -18,5 +18,7 @@ public interface SellPreviewService {
 	
 	List<SellPreview> selectByTwoStatus(String sellStatus1,String SellStatus2);
 	
+	List<SellPreview> selectByStoreId(Integer storeId);
+	
 	SellPreview selectByPrimaryKey(String sellId);	
 }

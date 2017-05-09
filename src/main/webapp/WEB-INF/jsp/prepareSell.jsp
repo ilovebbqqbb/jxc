@@ -9,6 +9,7 @@
 <title>库房备货</title>
 </head>
 <body>
+		<label>* 点击订单编号查看详情</label>
 	<div>
 		<table class="layui-table">
 		  <colgroup>

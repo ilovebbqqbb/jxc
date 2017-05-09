@@ -9,6 +9,7 @@
 <title>审核订单</title>
 </head>
 <body>
+			<label>* 点击订单编号查看详情</label>
 	<div>
 		<table class="layui-table">
 		  <colgroup>

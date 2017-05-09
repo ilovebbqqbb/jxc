@@ -37,9 +37,11 @@
 		  			<li class="layui-nav-item layui-this">
 		    			<a href="javascript:;">产品</a>
 					    <dl class="layui-nav-child">
-					      <dd><a href="">选项1</a></dd>
-					      <dd><a href="">选项2</a></dd>
-					      <dd><a href="">选项3</a></dd>
+					      <dd><a onclick="contentLoad('sell/addNewSell')">添加销售单</a></dd>
+					      <dd><a onclick="contentLoad('sell/checkSell')">审核订单</a></dd>
+					      <dd><a onclick="contentLoad('sell/prepareSell')">库房备货</a></dd>
+					      <dd><a onclick="contentLoad('sell/sendSell')">库房发货</a></dd>
+					      <dd><a onclick="contentLoad('sell/receiptSell')">确认收货</a></dd>
 					    </dl>
 		  			</li>
 		  			<li class="layui-nav-item"><a href="">大数据</a></li>
@@ -101,5 +103,12 @@
 		</div>
 		
 	</div>
+	
+<script type="text/javascript">
+function contentLoad(controllerPath){
+	controllerPath = '<%=basePath%>' + controllerPath;
+	$("#content").load(controllerPath);
+}
+</script>
 </body>
 </html>

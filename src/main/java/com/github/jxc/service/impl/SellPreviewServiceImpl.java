@@ -40,6 +40,10 @@ public class SellPreviewServiceImpl implements SellPreviewService {
 		return this.sellPreviewDao.selectByTwoStatus(sellStatus1, SellStatus2);
 	}
 	
+	public List<SellPreview> selectByStoreId(Integer storeId){
+		return this.sellPreviewDao.selectByStoreId(storeId);
+	}
+	
 	public SellPreview selectByPrimaryKey(String sellId){
 		return this.sellPreviewDao.selectByPrimaryKey(sellId);
 	}
