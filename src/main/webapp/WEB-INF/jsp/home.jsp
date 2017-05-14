@@ -37,9 +37,11 @@
 		  			<li class="layui-nav-item layui-this">
 		    			<a href="javascript:;">产品</a>
 					    <dl class="layui-nav-child">
-					      <dd><a href="">选项1</a></dd>
-					      <dd><a href="">选项2</a></dd>
-					      <dd><a href="">选项3</a></dd>
+					      <dd><a onclick="contentLoad('sell/addNewSell')">添加销售单</a></dd>
+					      <dd><a onclick="contentLoad('sell/checkSell')">审核订单</a></dd>
+					      <dd><a onclick="contentLoad('sell/prepareSell')">库房备货</a></dd>
+					      <dd><a onclick="contentLoad('sell/sendSell')">库房发货</a></dd>
+					      <dd><a onclick="contentLoad('sell/receiptSell')">确认收货</a></dd>
 					    </dl>
 		  			</li>
 		  			<li class="layui-nav-item"><a href="">大数据</a></li>
@@ -76,30 +78,41 @@
 				<ul class="layui-nav layui-nav-tree layui-nav-side" lay-filter="test">
 				<!-- 侧边导航: <ul class="layui-nav layui-nav-tree layui-nav-side"> -->
 	 					<li class="layui-nav-item layui-nav-itemed">
-	    				<a href="javascript:;">默认展开</a>
+	    				<a href="javascript:;">销售单管理</a>
 					    <dl class="layui-nav-child">
-					      <dd><a href="javascript:;">选项1</a></dd>
-					      <dd><a href="javascript:;">选项2</a></dd>
-					      <dd><a href="">跳转</a></dd>
+					      <dd><a href="javascript:contentLoad('sell/addNewSell');">添加销售单</a></dd>
+					      <dd><a href="javascript:contentLoad('sell/checkSell');">审核订单</a></dd>
+					      <dd><a href="javascript:contentLoad('sell/prepareSell');">库房备货</a></dd>
+					      <dd><a href="javascript:contentLoad('sell/sendSell');">库房发货</a></dd>
+					      <dd><a href="javascript:contentLoad('sell/receiptSell');">确认收货</a></dd>
 					    </dl>
 	 					</li>
-					<li class="layui-nav-item">
-					  <a href="javascript:;">解决方案</a>
-						  <dl class="layui-nav-child">
+						<li class="layui-nav-item">
+					  	<a href="javascript:;">退货单管理</a>
+						<dl class="layui-nav-child">
+						  <dd><a href="javascript:contentLoad('sell/addNewReturn');">添加退货单</a></dd>
+						  <dd><a href="javascript:contentLoad('sell/checkReturn');">审核退货单</a></dd>
 					      <dd><a href="">移动模块</a></dd>
 					      <dd><a href="">后台模版</a></dd>
 					      <dd><a href="">电商平台</a></dd>
-					  </dl>
-					</li>
+					  	</dl>
+						</li>
 				    <li class="layui-nav-item"><a href="">产品</a></li>
 				    <li class="layui-nav-item"><a href="">大数据</a></li>
 				</ul>
 				
 		</div>
-		<div style="float: left" id="content" >
+		<iframe style="float: left;" width="1166px" height="562px" id="content" src="">
 			这里是要加载的页面
-		</div>
+		</iframe>
 		
 	</div>
+	
+<script type="text/javascript">
+function contentLoad(controllerPath){
+	controllerPath = '<%=basePath%>' + controllerPath;
+	$("#content").attr("src",controllerPath);
+}
+</script>
 </body>
 </html>

@@ -3,16 +3,16 @@
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.github.jxc.dao.SellPreviewDao">
-	<resultMap id="BaseResultMap" type="com.github.jxc.pojo.SellPreview">
-		<id column="sell_id" property="sellId" jdbcType="VARCHAR" />
-		<result column="sell_time" property="sellTime" jdbcType="TIMESTAMP"/>
+<mapper namespace="com.github.jxc.dao.ReturnPreviewDao">
+	<resultMap type="com.github.jxc.pojo.ReturnPreview" id="BaseResultMap">
+		<id column="return_id" property="returnId" jdbcType="VARCHAR" />
+		<result column="return_time" property="returnTime" jdbcType="TIMESTAMP"/>
 		<result column="warehouse_id" property="warehouseId" jdbcType="INTEGER"/>
 		<result column="store_id" property="storeId" jdbcType="INTEGER"/>
-		<result column="sell_num" property="sellNum" jdbcType="INTEGER"/>
-		<result column="sell_money" property="sellMoney" jdbcType="FLOAT"/>
+		<result column="return_num" property="returnNum" jdbcType="INTEGER"/>
+		<result column="return_money" property="returnMoney" jdbcType="FLOAT"/>
 		<result column="operater" property="operater" jdbcType="INTEGER"/>
-		<result column="sell_status" property="sellStatus" jdbcType="VARCHAR"/>
+		<result column="return_status" property="returnStatus" jdbcType="VARCHAR"/>
 		<association property="warehouse" javaType="com.github.jxc.pojo.Warehouse">
 			<id column="warehouse_id" property="warehouseId" jdbcType="INTEGER"/>
 			<result column="warehouse_name" property="warehouseName" jdbcType="VARCHAR"/>
@@ -37,17 +37,17 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		</association>
 	</resultMap>
 	<sql id="Base_Column_List">
-		sell_id,sell_time,warehouse_id,store_id,sell_num,sell_money,operater,sell_status
+		return_id,return_time,warehouse_id,store_id,return_num,return_money,operater,return_status
 	</sql>
 	
-	<insert id="insertSelective" parameterType="com.github.jxc.pojo.SellPreview">
-		insert into sell_preview
+	<insert id="insertSelective" parameterType="com.github.jxc.pojo.ReturnPreview">
+		insert into return_preview
 		<trim prefix="(" suffix=")" suffixOverrides=",">
-	     <if test="sellId != null">
-	     	sell_id,
+	     <if test="returnId != null">
+	     	return_id,
 	     </if>
-	     <if test="sellTime == null">
-	       sell_time,
+	     <if test="returnTime == null">
+	       return_time,
 	     </if>
 	     <if test="warehouseId != null">
 	       warehouse_id,
@@ -55,24 +55,24 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	     <if test="storeId != null">
 	       store_id,
 	     </if>
-	     <if test="sellNum != null">
-	       sell_num,
+	     <if test="returnNum != null">
+	       return_num,
 	     </if>
-	     <if test="sellMoney != null">
-	       sell_money,
+	     <if test="returnMoney != null">
+	       return_money,
 	     </if>
 	     <if test="operater != null">
 	       operater,
 	     </if>
-	     <if test="sellStatus != null">
-	       sell_status,
+	     <if test="returnStatus != null">
+	       return_status,
 	     </if>
 	   </trim>
 	   <trim prefix="values (" suffix=")" suffixOverrides=",">
-	     <if test="sellId != null">
-	       #{sellId,jdbcType=VARCHAR},
+	     <if test="returnId != null">
+	       #{returnId,jdbcType=VARCHAR},
 	     </if>
-	     <if test="sellTime == null">
+	     <if test="returnTime == null">
 	       sysdate(),
 	     </if>
 	     <if test="warehouseId != null">
@@ -81,70 +81,41 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	     <if test="storeId != null">
 	       #{storeId,jdbcType=INTEGER},
 	     </if>
-	     <if test="sellNum != null">
-	       #{sellNum,jdbcType=INTEGER},
+	     <if test="returnNum != null">
+	       #{returnNum,jdbcType=INTEGER},
 	     </if>
-	     <if test="sellMoney != null">
-	       #{sellMoney,jdbcType=FLOAT},
+	     <if test="returnMoney != null">
+	       #{returnMoney,jdbcType=FLOAT},
 	     </if>
 	     <if test="operater != null">
 	       #{operater,jdbcType=INTEGER},
 	     </if>
-	     <if test="sellStatus != null">
-	       #{sellStatus,jdbcType=VARCHAR},
+	     <if test="returnStatus != null">
+	       #{returnStatus,jdbcType=VARCHAR},
 	     </if>
 	   </trim>
 	</insert>
 	
-	<delete id="deleteByPrimartKey" parameterType="java.lang.String">
-		delete from sell_preview
-		where sell_id = #{sellId,jdbcType=VARCHAR}
-	</delete>
-	
-	<update id="updateByPrimaryKeySelective" parameterType="com.github.jxc.pojo.SellPreview">
-		update sell_preview
-		<set>
-		 <if test="sellStatus != null">
-	       sell_status = #{sellStatus,jdbcType=VARCHAR}
-	     </if>	     
-		</set>
-		where sell_id = #{sellId,jdbcType=VARCHAR}
-	</update>
-	
-	<select id="selectAll" resultMap="BaseResultMap">
-		select *		
-		from sell_preview sp ,warehouse w ,store s
-		where  sp.warehouse_id = w.warehouse_id and sp.store_id = s.store_id
-		order by sell_time desc
-	</select>
-	
 	<select id="selectByStatus" resultMap="BaseResultMap" parameterType="java.lang.String">
 		select *
-		from sell_preview sp ,warehouse w ,store s
-		where sp.sell_status = #{sellStatus,jdbcType=VARCHAR} and sp.warehouse_id = w.warehouse_id and sp.store_id = s.store_id
-		order by sell_time desc
-	</select>
-	
-	<select id="selectByTwoStatus" resultMap="BaseResultMap" parameterType="java.lang.String">
-		select *
-		from sell_preview sp ,warehouse w ,store s
-		where sp.sell_status = (#{0} OR #{1}) and sp.warehouse_id = w.warehouse_id and sp.store_id = s.store_id
-		order by sell_time desc
-	</select>
-	
-	<select id="selectByStoreId" resultMap="BaseResultMap" parameterType="java.lang.Integer">
-		select *
-		from sell_preview sp,warehouse w,store s
-		where sp.store_id = #{storeId,jdbcType=INTEGER}
-		  and sp.store_id = s.store_id
-		  and sp.warehouse_id = w.warehouse_id
-		order by sell_time desc
+		from return_preview rp ,warehouse w ,store s
+		where rp.return_status = #{returnStatus,jdbcType=VARCHAR} and rp.warehouse_id = w.warehouse_id and rp.store_id = s.store_id
+		order by return_time desc
 	</select>
 	
 	<select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String">
 		select *
-		from sell_preview sp, warehouse w, store s
-		where sp.sell_id = #{sellId,jdbcType=VARCHAR} and sp.warehouse_id = w.warehouse_id and sp.store_id = s.store_id
+		from return_preview rp, warehouse w, store s
+		where rp.return_id = #{returnId,jdbcType=VARCHAR} and rp.warehouse_id = w.warehouse_id and rp.store_id = s.store_id
 	</select>
 	
+	<update id="updateByPrimaryKeySelective" parameterType="com.github.jxc.pojo.ReturnPreview">
+		update return_preview
+		<set>
+		 <if test="returnStatus != null">
+	       return_status = #{returnStatus,jdbcType=VARCHAR}
+	     </if>	     
+		</set>
+		where return_id = #{returnId,jdbcType=VARCHAR}
+	</update>
 </mapper>

@@ -12,7 +12,21 @@ public class SellPreview {
 	float sellMoney;
 	Integer operater;
 	String sellStatus;
+	Store store;
+	Warehouse warehouse;
 	
+	public Store getStore() {
+		return store;
+	}
+	public void setStore(Store store) {
+		this.store = store;
+	}
+	public Warehouse getWarehouse() {
+		return warehouse;
+	}
+	public void setWarehouse(Warehouse warehouse) {
+		this.warehouse = warehouse;
+	}
 	public String getSellId() {
 		return sellId;
 	}

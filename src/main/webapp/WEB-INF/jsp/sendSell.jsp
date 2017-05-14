@@ -9,7 +9,8 @@
 <title>库房发货</title>
 </head>
 <body>
-
+<div style="margin: 20px 20px 20px 20px">	
+	<label>* 点击订单编号查看详情</label>
 	<div>
 		<table class="layui-table">
 		  <colgroup>
@@ -33,9 +34,9 @@
 		  <tbody>
 		    <c:forEach items="${sellList}" var="sell">
 		    	<tr>
-		    		<td>${sell.sellId}</td>
-		    		<td>${sell.warehouseId}</td>
-		    		<td>${sell.storeId}</td>
+		    		<td   onclick="iframeShowSendSell(${sell.sellId})">${sell.sellId}</td>
+		    		<td>${sell.warehouse.warehouseName}</td>
+		    		<td>${sell.store.storeName}</td>
 		    		<td>${sell.sellNum}</td>
 		    		<td>${sell.sellMoney}</td>
 		    		<td>${sell.operater}</td>
@@ -44,7 +45,7 @@
 		    		<td>
 		    		<c:choose>
 		    		<c:when  test="${sell.sellStatus == '已发货，请注意签收'}">
-		    		<a href="delete/${sell.sellId}" class="layui-btn layui-btn-danger">删除</a>
+		    		<button class="layui-btn layui-btn-danger" onclick="ajaxDelete(${sell.sellId})">删除</button>
 		    		</c:when>
 		    		<c:otherwise>
 		    		<button class="layui-btn layui-btn-disabled">删除</button>
@@ -56,9 +57,31 @@
 		  </tbody>
 		</table>		
 	</div>
-
+</div>
 	<script type="text/javascript" src="../jxc/js/jquery-3.2.0.min.js" charset="utf-8"></script>
     <script type="text/javascript" src="../jxc/js/layui/layui.js" charset="utf-8"></script>
+	<script type="text/javascript" src="../jxc/js/sellUtil.js" charset="utf-8"></script>
+	
+<script type="text/javascript">
+function iframeShowSendSell(sellId){
+	layui.use('layer', function(){
+		  var layer = layui.layer;
+		  var showrul = "<%=basePath%>sell/iframeShowSendSell?sellId=" + sellId;
+		 	
+		  layer.open({
+			  type: 2,
+			  title: '订单详情',
+			  shadeClose: true,
+			  shade: 0.8,
+			  area: ['1000px', '90%'],
+			  content: showrul ,
+			  end: function(){
+				  window.location.reload();
+			  }
+			}); 
+		});  
+}
+</script>
 
 </body>
 </html>

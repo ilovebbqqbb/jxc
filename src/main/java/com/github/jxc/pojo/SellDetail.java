@@ -7,12 +7,26 @@ public class SellDetail {
 	Integer goodsNum;
 	String remarks;
 	Goods goods;
+	StockDetail stockDetail;
+	StoreDetail storeDetail;
 	
+	public StoreDetail getStoreDetail() {
+		return storeDetail;
+	}
+	public void setStoreDetail(StoreDetail storeDetail) {
+		this.storeDetail = storeDetail;
+	}
 	public Integer getSellDetailId() {
 		return sellDetailId;
 	}
 	public void setSellDetailId(Integer sellDetailId) {
 		this.sellDetailId = sellDetailId;
+	}
+	public StockDetail getStockDetail() {
+		return stockDetail;
+	}
+	public void setStockDetail(StockDetail stockDetail) {
+		this.stockDetail = stockDetail;
 	}
 	public String getSellId() {
 		return sellId;

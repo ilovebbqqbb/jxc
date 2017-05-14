@@ -3,10 +3,10 @@
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.github.jxc.dao.SellDetailDao">
-	<resultMap type="com.github.jxc.pojo.SellDetail" id="BaseResultMap">
-		<id column="sell_detail_id" property="sellDetailId" jdbcType="INTEGER"/>
-		<result column="sell_id" property="sellId" jdbcType="VARCHAR"/>
+<mapper namespace="com.github.jxc.dao.ReturnDetailDao">
+	<resultMap type="com.github.jxc.pojo.ReturnDetail" id="BaseResultMap">
+		<id column="return_detail_id" property="returnDetailId" jdbcType="INTEGER"/>
+		<result column="return_id" property="returnId" jdbcType="VARCHAR"/>
 		<result column="goods_id" property="goodsId" jdbcType="INTEGER"/>
 		<result column="goods_num" property="goodsNum" jdbcType="INTEGER"/>
 		<result column="remarks" property="remarks" jdbcType="VARCHAR"/>
@@ -28,21 +28,21 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			<result column="GoodsSource" property="goodsSource" jdbcType="VARCHAR"/>
 			<result column="Details" property="details" jdbcType="VARCHAR"/>
 		</association>
-		<association property="stockDetail" javaType="com.github.jxc.pojo.StockDetail">
-		    <id column="warehouse_id" jdbcType="INTEGER" property="warehouseId" />
+		<association property="storeDetail" javaType="com.github.jxc.pojo.StoreDetail">
+		    <id column="store_id" jdbcType="INTEGER" property="storeId" />
 		    <id column="goods_id" jdbcType="INTEGER" property="goodsId" />
 		    <result column="goods_stock" jdbcType="INTEGER" property="goodsStock" />
   	    </association>
 	</resultMap>
 	<sql id="Base_Column_List">
-		sell_detail_id,sell_id,goods_id,goods_num,remarks
+		return_detail_id,return_id,goods_id,goods_num,remarks
 	</sql>
 	
-	<insert id="insertSelective" parameterType="com.github.jxc.pojo.SellDetail">
-		insert into sell_detail
+	<insert id="insertSelective" parameterType="com.github.jxc.pojo.ReturnDetail">
+		insert into return_detail
 		<trim prefix="(" suffix=")" suffixOverrides=",">
-	     <if test="sellId != null">
-	     	sell_id,
+	     <if test="returnId != null">
+	     	return_id,
 	     </if>
 	     <if test="goodsId != null">
 	      	goods_id,
@@ -55,8 +55,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	     </if>
 	   </trim>
 	   <trim prefix="values (" suffix=")" suffixOverrides=",">
-	     <if test="sellId != null">
-	       #{sellId,jdbcType=VARCHAR},
+	     <if test="returnId != null">
+	       #{returnId,jdbcType=VARCHAR},
 	     </if>
 	     <if test="goodsId != null">
 	       #{goodsId,jdbcType=INTEGER},
@@ -70,24 +70,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	   </trim>
 	</insert>
 	
-	<delete id="deleteBySellId" parameterType="java.lang.String">
-		delete from sell_detail
-		where sell_id = #{sellId,jdbcType=VARCHAR}
-	</delete>
-	
-	<select id="selectBySellId" resultMap="BaseResultMap" parameterType="java.lang.String">
+	<select id="selectByReturnId" resultMap="BaseResultMap" parameterType="java.lang.String">
 		select *
-		from sell_detail sd ,tb_goods g
-		where sd.goods_id = g.GoodsId and sd.sell_id = #{sellId,jdbcType=VARCHAR} 
-	</select>
-	
-	<select id="selectByWarehouseIdAndSellId" resultMap="BaseResultMap" parameterType="com.github.jxc.pojo.SellPreview">
-		select *
-		from sell_detail sd ,tb_goods g ,stock_detail std
-		where 
-		sd.goods_id = g.GoodsId 
-		and sd.goods_id = std.goods_id 
-		and std.warehouse_id = #{warehouseId,jdbcType=INTEGER} 
-		and sd.sell_id = #{sellId,jdbcType=VARCHAR}
+		from return_detail rd ,tb_goods g
+		where rd.goods_id = g.GoodsId and rd.return_id = #{returnId,jdbcType=VARCHAR} 
 	</select>
 </mapper>

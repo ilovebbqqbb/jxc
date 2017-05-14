@@ -62,8 +62,14 @@
    </div>
 </fieldset>
    <div style="width:200px;margin:10px auto auto auto">
-   	<button class="layui-btn" onclick="iframeAjaxUpdate(${sellPreview.sellId},1)">审核通过</button>
-	<button class="layui-btn layui-btn-danger" onclick="iframeAjaxDelete(${sellPreview.sellId})">删除</button>
+   <c:choose>
+		<c:when  test="${sellPreview.sellStatus == '已发货，请注意签收'}">
+			<button class="layui-btn layui-btn-danger" onclick="iframeAjaxDelete(${sellPreview.sellId})">删除</button>
+		</c:when>
+		<c:otherwise>
+			<button class="layui-btn layui-btn-disabled">删除</button>
+		</c:otherwise>
+	</c:choose>
    </div>
 
 <script type="text/javascript" src="../jxc/js/jquery-3.2.0.min.js" charset="utf-8"></script>

@@ -1,13 +1,13 @@
 package com.github.jxc.pojo;
 
 public class StockDetail extends StockDetailKey {
-    private Integer goodsNum;
+    private Integer goodsStock;
 
-    public Integer getGoodsNum() {
-        return goodsNum;
+    public Integer getGoodsStock() {
+        return goodsStock;
     }
 
-    public void setGoodsNum(Integer goodsNum) {
-        this.goodsNum = goodsNum;
+    public void setGoodsStock(Integer goodsStock) {
+        this.goodsStock = goodsStock;
     }
 }
