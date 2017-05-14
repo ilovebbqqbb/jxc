@@ -9,7 +9,8 @@
 <title>审核订单</title>
 </head>
 <body>
-			<label>* 点击订单编号查看详情</label>
+<div style="margin: 20px 20px 20px 20px">
+	<label>* 点击订单编号查看详情</label>
 	<div>
 		<table class="layui-table">
 		  <colgroup>
@@ -42,14 +43,17 @@
 		    		<td>${sell.sellStatus}</td>
 		    		<td>${sell.sellTime}</td>
 		    		<td>
-		    		<button class="layui-btn" onclick="ajaxUpdate(${sell.sellId},1)">审核通过</button>
-		    		<button class="layui-btn layui-btn-danger" onclick="ajaxDelete(${sell.sellId})">删除</button>
+		    		<div class="layui-btn-group">
+			    		<button class="layui-btn" onclick="ajaxUpdate(${sell.sellId},1)">审核通过</button>
+			    		<button class="layui-btn layui-btn-danger" onclick="ajaxDelete(${sell.sellId})">删除</button>
+		    		</div>
 		    		</td>
 		    	</tr>
 		    </c:forEach>
 		  </tbody>
 		</table>		
 	</div>
+</div>
 
 	<script type="text/javascript" src="../jxc/js/jquery-3.2.0.min.js" charset="utf-8"></script>
     <script type="text/javascript" src="../jxc/js/layui/layui.js" charset="utf-8"></script>

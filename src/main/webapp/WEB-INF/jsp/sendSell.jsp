@@ -9,6 +9,7 @@
 <title>库房发货</title>
 </head>
 <body>
+<div style="margin: 20px 20px 20px 20px">	
 	<label>* 点击订单编号查看详情</label>
 	<div>
 		<table class="layui-table">
@@ -56,7 +57,7 @@
 		  </tbody>
 		</table>		
 	</div>
-
+</div>
 	<script type="text/javascript" src="../jxc/js/jquery-3.2.0.min.js" charset="utf-8"></script>
     <script type="text/javascript" src="../jxc/js/layui/layui.js" charset="utf-8"></script>
 	<script type="text/javascript" src="../jxc/js/sellUtil.js" charset="utf-8"></script>

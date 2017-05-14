@@ -9,7 +9,8 @@
 <title>确认订单</title>
 </head>
 <body>
-			<label>* 点击订单编号查看详情</label>
+<div style="margin: 20px 20px 20px 20px">	
+	<label>* 点击订单编号查看详情</label>
 	<div>
 		<table class="layui-table">
 		  <colgroup>
@@ -42,27 +43,29 @@
 		    		<td>${sell.sellStatus}</td>
 		    		<td>${sell.sellTime}</td>
 		    		<td>
-		    		<c:choose>
-		    		<c:when test="${sell.sellStatus == '已发货，请注意签收'}">
-		    		<button class="layui-btn" onclick="ajaxUpdate(${sell.sellId},3)">确认收货</button>
-		    		<button class="layui-btn layui-btn-danger" onclick="ajaxDelete(${sell.sellId})">删除</button>
-		    		</c:when>
-		    		<c:when test="${sell.sellStatus == '确认收货，订单已完成'}">
-		    		<button class="layui-btn layui-btn-disabled">已收货</button>
-		    		<button class="layui-btn layui-btn-disabled">删除</button>
-		    		</c:when>
-		    		<c:otherwise>
-		    		<button class="layui-btn layui-btn-disabled">处理中</button>
-		    		<button class="layui-btn layui-btn-danger" onclick="ajaxDelete(${sell.sellId})">删除</button>		    		
-		    		</c:otherwise>
-		    		</c:choose>
+		    		<div class="layui-btn-group">
+			    		<c:choose>
+			    		<c:when test="${sell.sellStatus == '已发货，请注意签收'}">
+			    		<button class="layui-btn" onclick="ajaxUpdate(${sell.sellId},3)">确认收货</button>
+			    		<button class="layui-btn layui-btn-danger" onclick="ajaxDelete(${sell.sellId})">删除</button>
+			    		</c:when>
+			    		<c:when test="${sell.sellStatus == '确认收货，订单已完成'}">
+			    		<button class="layui-btn layui-btn-disabled">已收货</button>
+			    		<button class="layui-btn layui-btn-disabled">删除</button>
+			    		</c:when>
+			    		<c:otherwise>
+			    		<button class="layui-btn layui-btn-disabled">处理中</button>
+			    		<button class="layui-btn layui-btn-danger" onclick="ajaxDelete(${sell.sellId})">删除</button>		    		
+			    		</c:otherwise>
+			    		</c:choose>
+		    		</div>
 		    		</td>
 		    	</tr>
 		    </c:forEach>
 		  </tbody>
 		</table>		
 	</div>
-
+</div>
 	<script type="text/javascript" src="../jxc/js/jquery-3.2.0.min.js" charset="utf-8"></script>
     <script type="text/javascript" src="../jxc/js/layui/layui.js" charset="utf-8"></script>
 	<script type="text/javascript" src="../jxc/js/sellUtil.js" charset="utf-8"></script>
