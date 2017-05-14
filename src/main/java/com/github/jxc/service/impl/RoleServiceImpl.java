@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 import com.github.jxc.dao.RoleDao;
 import com.github.jxc.pojo.Role;
 import com.github.jxc.service.RoleService;
-@Service("roleService")
+@Service("RoleService")
 public class RoleServiceImpl implements RoleService{
 
 	@Resource
@@ -45,8 +45,17 @@ public class RoleServiceImpl implements RoleService{
 		return this.roleDao.updateByPrimaryKey(record);
 	}
 
+
+	
+	@Override
+	public List<Role> selectRoleById(Integer roleId) {
+		return this.roleDao.selectRoleById(roleId);
+	}
+
 	@Override
 	public List<Role> selectAllRoles() {
 		return this.roleDao.selectAllRoles();
 	}
+
+	
 }

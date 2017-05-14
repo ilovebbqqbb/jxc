@@ -19,6 +19,14 @@ public class Goods {
 	String manufacturer;
 	String goodsSource;
 	String details;
+	int supplierid;
+	
+	public int getSupplierid() {
+		return supplierid;
+	}
+	public void setSupplierid(int supplierid) {
+		this.supplierid = supplierid;
+	}
 	public Integer getGoodsId() {
 		return goodsId;
 	}
@@ -115,6 +123,8 @@ public class Goods {
 	public void setDetails(String details) {
 		this.details = details;
 	}
+	
+	
 	
 	
 }

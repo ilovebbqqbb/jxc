@@ -18,6 +18,13 @@
     where role_id = #{roleId,jdbcType=INTEGER}
   </select>
   
+  <select id="selectRoleById" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from role
+    where role_id = #{roleId,jdbcType=INTEGER}
+  </select>
+  
   <select id="selectAllRoles"  resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />

@@ -69,6 +69,8 @@ public class SellController {
 					model.addAttribute("storeList", storeList);
 					model.addAttribute("warehouseList", warehouseList);
 					model.addAttribute("randomId", str);
+					
+					
 				}
 			}
 		} catch(Exception e) {

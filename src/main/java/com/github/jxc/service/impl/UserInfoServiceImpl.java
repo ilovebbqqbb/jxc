@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 import com.github.jxc.dao.UserInfoDao;
 import com.github.jxc.pojo.UserInfo;
 import com.github.jxc.service.UserInfoService;
-@Service("userInfoService")
+@Service("UserInfoService")
 public class UserInfoServiceImpl implements UserInfoService{
 	@Resource
 	UserInfoDao userInfoDao;

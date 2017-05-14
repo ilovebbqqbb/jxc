@@ -18,5 +18,7 @@ public interface RoleService {
 
 	    int updateByPrimaryKey(Role record);
 	    
+	    List<Role> selectRoleById(Integer roleId);
+	    
 	    List<Role> selectAllRoles();
 }

@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.github.jxc.dao.OrderPreviewDao">
+  <resultMap id="BaseResultMap" type="com.github.jxc.pojo.OrderPreview">
+    <id column="order_id" jdbcType="VARCHAR" property="orderId" />
+    <result column="order_type" jdbcType="VARCHAR" property="orderType" />
+    <result column="order_time" jdbcType="DATE" property="orderTime" />
+    <result column="supplier_id" jdbcType="INTEGER" property="supplierId" />
+    <result column="warehouse_id" jdbcType="INTEGER" property="warehouseId" />
+    <result column="operator_id" jdbcType="INTEGER" property="operatorId" />
+    <result column="order_num" jdbcType="INTEGER" property="orderNum" />
+    <result column="order_status" jdbcType="VARCHAR" property="orderStatus" />
+    <result column="created_at" jdbcType="TIMESTAMP" property="createdAt" />
+    <result column="updated_at" jdbcType="TIMESTAMP" property="updatedAt" />
+    <result column="order_money" jdbcType="REAL" property="orderMoney" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    order_id, order_type, order_time, supplier_id, warehouse_id, operator_id, order_num, 
+    order_status, created_at, updated_at, order_money
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from order_preview
+    where order_id = #{orderId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from order_preview
+    where order_id = #{orderId,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.github.jxc.pojo.OrderPreview">
+    insert into order_preview (order_id, order_type, order_time, 
+      supplier_id, warehouse_id, operator_id, 
+      order_num, order_status, created_at, 
+      updated_at, order_money)
+    values (#{orderId,jdbcType=VARCHAR}, #{orderType,jdbcType=VARCHAR}, #{orderTime,jdbcType=DATE}, 
+      #{supplierId,jdbcType=INTEGER}, #{warehouseId,jdbcType=INTEGER}, #{operatorId,jdbcType=INTEGER}, 
+      #{orderNum,jdbcType=INTEGER}, #{orderStatus,jdbcType=VARCHAR}, #{createdAt,jdbcType=TIMESTAMP}, 
+      #{updatedAt,jdbcType=TIMESTAMP}, #{orderMoney,jdbcType=REAL})
+  </insert>
+  <insert id="insertSelective" parameterType="com.github.jxc.pojo.OrderPreview">
+    insert into order_preview
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="orderId != null">
+        order_id,
+      </if>
+      <if test="orderType != null">
+        order_type,
+      </if>
+      <if test="orderTime != null">
+        order_time,
+      </if>
+      <if test="supplierId != null">
+        supplier_id,
+      </if>
+      <if test="warehouseId != null">
+        warehouse_id,
+      </if>
+      <if test="operatorId != null">
+        operator_id,
+      </if>
+      <if test="orderNum != null">
+        order_num,
+      </if>
+      <if test="orderStatus != null">
+        order_status,
+      </if>
+      <if test="createdAt != null">
+        created_at,
+      </if>
+      <if test="updatedAt != null">
+        updated_at,
+      </if>
+      <if test="orderMoney != null">
+        order_money,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="orderId != null">
+        #{orderId,jdbcType=VARCHAR},
+      </if>
+      <if test="orderType != null">
+        #{orderType,jdbcType=VARCHAR},
+      </if>
+      <if test="orderTime != null">
+        #{orderTime,jdbcType=DATE},
+      </if>
+      <if test="supplierId != null">
+        #{supplierId,jdbcType=INTEGER},
+      </if>
+      <if test="warehouseId != null">
+        #{warehouseId,jdbcType=INTEGER},
+      </if>
+      <if test="operatorId != null">
+        #{operatorId,jdbcType=INTEGER},
+      </if>
+      <if test="orderNum != null">
+        #{orderNum,jdbcType=INTEGER},
+      </if>
+      <if test="orderStatus != null">
+        #{orderStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="createdAt != null">
+        #{createdAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedAt != null">
+        #{updatedAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="orderMoney != null">
+        #{orderMoney,jdbcType=REAL},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.github.jxc.pojo.OrderPreview">
+    update order_preview
+    <set>
+      <if test="orderType != null">
+        order_type = #{orderType,jdbcType=VARCHAR},
+      </if>
+      <if test="orderTime != null">
+        order_time = #{orderTime,jdbcType=DATE},
+      </if>
+      <if test="supplierId != null">
+        supplier_id = #{supplierId,jdbcType=INTEGER},
+      </if>
+      <if test="warehouseId != null">
+        warehouse_id = #{warehouseId,jdbcType=INTEGER},
+      </if>
+      <if test="operatorId != null">
+        operator_id = #{operatorId,jdbcType=INTEGER},
+      </if>
+      <if test="orderNum != null">
+        order_num = #{orderNum,jdbcType=INTEGER},
+      </if>
+      <if test="orderStatus != null">
+        order_status = #{orderStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="createdAt != null">
+        created_at = #{createdAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedAt != null">
+        updated_at = #{updatedAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="orderMoney != null">
+        order_money = #{orderMoney,jdbcType=REAL},
+      </if>
+    </set>
+    where order_id = #{orderId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.github.jxc.pojo.OrderPreview">
+    update order_preview
+    set order_type = #{orderType,jdbcType=VARCHAR},
+      order_time = #{orderTime,jdbcType=DATE},
+      supplier_id = #{supplierId,jdbcType=INTEGER},
+      warehouse_id = #{warehouseId,jdbcType=INTEGER},
+      operator_id = #{operatorId,jdbcType=INTEGER},
+      order_num = #{orderNum,jdbcType=INTEGER},
+      order_status = #{orderStatus,jdbcType=VARCHAR},
+      created_at = #{createdAt,jdbcType=TIMESTAMP},
+      updated_at = #{updatedAt,jdbcType=TIMESTAMP},
+      order_money = #{orderMoney,jdbcType=REAL}
+    where order_id = #{orderId,jdbcType=VARCHAR}
+  </update>
+  <select id="selectAllEntry"  resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from order_preview 
+    where
+    order_type ="入库单"
+    and
+    order_status="入库单待审核"
+  </select>
+</mapper>

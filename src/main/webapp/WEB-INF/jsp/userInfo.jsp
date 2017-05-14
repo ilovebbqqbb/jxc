@@ -319,7 +319,7 @@
              			 uaId=UserAccountData.userAccountId;
              			 $("#userAccountId").val(UserAccountData.userAccountId);
             			 console.log(data.data);
-            			
+           
             			 var UserInfoData=JSON.parse(data.datas);
             			 $("#userName").val(UserInfoData.userName);
             			 $("#sex").val(UserInfoData.sex);

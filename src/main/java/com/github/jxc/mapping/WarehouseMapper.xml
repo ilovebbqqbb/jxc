@@ -5,30 +5,159 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 <mapper namespace="com.github.jxc.dao.WarehouseDao">
 	<resultMap type="com.github.jxc.pojo.Warehouse" id="BaseResultMap">
-			<id column="warehouse_id" property="warehouseId" jdbcType="INTEGER"/>
-			<result column="warehouse_name" property="warehouseName" jdbcType="VARCHAR"/>
-			<result column="linkman" property="linkman" jdbcType="VARCHAR"/>
-			<result column="phone_number" property="phoneNumber" jdbcType="VARCHAR"/>
-			<result column="warehouse_address" property="warehouseAddress" jdbcType="VARCHAR"/>
-			<result column="stock_min" property="stockMin" jdbcType="VARCHAR"/>
-			<result column="stock_max" property="stockMax" jdbcType="VARCHAR"/>
-			<result column="created_at" property="createdAt" jdbcType="TIMESTAMP"/>
-			<result column="updated_at" property="updatedAt" jdbcType="TIMESTAMP"/>
+		<id column="warehouse_id" property="warehouseId" jdbcType="INTEGER" />
+		<result column="warehouse_name" property="warehouseName"
+			jdbcType="VARCHAR" />
+		<result column="linkman" property="linkman" jdbcType="VARCHAR" />
+		<result column="phone_number" property="phoneNumber" jdbcType="VARCHAR" />
+		<result column="warehouse_address" property="warehouseAddress"
+			jdbcType="VARCHAR" />
+		<result column="stock_min" property="stockMin" jdbcType="VARCHAR" />
+		<result column="stock_max" property="stockMax" jdbcType="VARCHAR" />
+		<result column="created_at" property="createdAt" jdbcType="TIMESTAMP" />
+		<result column="updated_at" property="updatedAt" jdbcType="TIMESTAMP" />
 	</resultMap>
 	<sql id="Base_Column_List">
 		warehouse_id,warehouse_name,linkman,phone_number,warehouse_address,stock_min,stock_max,created_at,updated_at
 	</sql>
-	
+
 	<select id="selectAll" resultMap="BaseResultMap">
 		select
 		<include refid="Base_Column_List" />
 		from warehouse
 	</select>
-	
-	<select id="selectByStoreName" resultMap="BaseResultMap" parameterType="java.lang.String">
+
+	<select id="selectByStoreName" resultMap="BaseResultMap"
+		parameterType="java.lang.String">
 		select
 		<include refid="Base_Column_List" />
 		from warehouse
 		where wareshou_name = #{warehouseName,jdbcType=VARCHAR}
 	</select>
+	<select id="selectByPrimaryKey" parameterType="java.lang.Integer"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from warehouse
+		where warehouse_id = #{warehouseId,jdbcType=INTEGER}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+		delete from warehouse
+		where warehouse_id = #{warehouseId,jdbcType=INTEGER}
+	</delete>
+	<insert id="insert" parameterType="com.github.jxc.pojo.Warehouse">
+		insert into warehouse (warehouse_id, warehouse_name, linkman,
+		phone_number, warehouse_address, stock_min,
+		stock_max, created_at, updated_at
+		)
+		values (#{warehouseId,jdbcType=INTEGER}, #{warehouseName,jdbcType=VARCHAR},
+		#{linkman,jdbcType=VARCHAR},
+		#{phoneNumber,jdbcType=VARCHAR}, #{warehouseAddress,jdbcType=VARCHAR}, #{stockMin,jdbcType=VARCHAR},
+		#{stockMax,jdbcType=VARCHAR}, #{createdAt,jdbcType=TIMESTAMP},
+		#{updatedAt,jdbcType=TIMESTAMP}
+		)
+	</insert>
+	<insert id="insertSelective" parameterType="com.github.jxc.pojo.Warehouse">
+		insert into warehouse
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="warehouseId != null">
+				warehouse_id,
+			</if>
+			<if test="warehouseName != null">
+				warehouse_name,
+			</if>
+			<if test="linkman != null">
+				linkman,
+			</if>
+			<if test="phoneNumber != null">
+				phone_number,
+			</if>
+			<if test="warehouseAddress != null">
+				warehouse_address,
+			</if>
+			<if test="stockMin != null">
+				stock_min,
+			</if>
+			<if test="stockMax != null">
+				stock_max,
+			</if>
+			<if test="createdAt != null">
+				created_at,
+			</if>
+			<if test="updatedAt != null">
+				updated_at,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="warehouseId != null">
+				#{warehouseId,jdbcType=INTEGER},
+			</if>
+			<if test="warehouseName != null">
+				#{warehouseName,jdbcType=VARCHAR},
+			</if>
+			<if test="linkman != null">
+				#{linkman,jdbcType=VARCHAR},
+			</if>
+			<if test="phoneNumber != null">
+				#{phoneNumber,jdbcType=VARCHAR},
+			</if>
+			<if test="warehouseAddress != null">
+				#{warehouseAddress,jdbcType=VARCHAR},
+			</if>
+			<if test="stockMin != null">
+				#{stockMin,jdbcType=VARCHAR},
+			</if>
+			<if test="stockMax != null">
+				#{stockMax,jdbcType=VARCHAR},
+			</if>
+			<if test="createdAt != null">
+				#{createdAt,jdbcType=TIMESTAMP},
+			</if>
+			<if test="updatedAt != null">
+				#{updatedAt,jdbcType=TIMESTAMP},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective" parameterType="com.github.jxc.pojo.Warehouse">
+		update warehouse
+		<set>
+			<if test="warehouseName != null">
+				warehouse_name = #{warehouseName,jdbcType=VARCHAR},
+			</if>
+			<if test="linkman != null">
+				linkman = #{linkman,jdbcType=VARCHAR},
+			</if>
+			<if test="phoneNumber != null">
+				phone_number = #{phoneNumber,jdbcType=VARCHAR},
+			</if>
+			<if test="warehouseAddress != null">
+				warehouse_address = #{warehouseAddress,jdbcType=VARCHAR},
+			</if>
+			<if test="stockMin != null">
+				stock_min = #{stockMin,jdbcType=VARCHAR},
+			</if>
+			<if test="stockMax != null">
+				stock_max = #{stockMax,jdbcType=VARCHAR},
+			</if>
+			<if test="createdAt != null">
+				created_at = #{createdAt,jdbcType=TIMESTAMP},
+			</if>
+			<if test="updatedAt != null">
+				updated_at = #{updatedAt,jdbcType=TIMESTAMP},
+			</if>
+		</set>
+		where warehouse_id = #{warehouseId,jdbcType=INTEGER}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.github.jxc.pojo.Warehouse">
+		update warehouse
+		set warehouse_name = #{warehouseName,jdbcType=VARCHAR},
+		linkman = #{linkman,jdbcType=VARCHAR},
+		phone_number = #{phoneNumber,jdbcType=VARCHAR},
+		warehouse_address = #{warehouseAddress,jdbcType=VARCHAR},
+		stock_min = #{stockMin,jdbcType=VARCHAR},
+		stock_max = #{stockMax,jdbcType=VARCHAR},
+		created_at = #{createdAt,jdbcType=TIMESTAMP},
+		updated_at = #{updatedAt,jdbcType=TIMESTAMP}
+		where warehouse_id = #{warehouseId,jdbcType=INTEGER}
+	</update>
 </mapper>

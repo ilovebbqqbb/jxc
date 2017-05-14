@@ -139,7 +139,7 @@ public class UserController {
 	public Map<String,String> selectRole(Integer id){
 		Map<String,String> dataMap = new HashMap<String,String>();
 		try {
-			List<Role> list=roleService.selectAllRoles();
+			List<Role> list=roleService.selectRoleById(id);
 			dataMap.put("resultMsg", "success");
 			String json = JSON.toJSONString(list.get(0));
 			System.out.println(json);

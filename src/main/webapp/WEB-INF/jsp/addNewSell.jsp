@@ -151,14 +151,14 @@ function addSell() {
     	success : function(data) {
 
     		if(data.resultMsg == "success") {
-    			layer.msg('插入成功',{time: 2000},function(){ window.location.href="sellMain";});
+    			layer.msg('插入成功',{time: 2000});
 
     		} else {
-    			layer.msg(data.resultMsg,{time: 2000},function(){ window.location.href="sellMain";});
+    			layer.msg(data.resultMsg,{time: 2000});
     		}
     	},
     	error : function(xhr,status,err) {
-    		layer.msg('插入错误'+err,{time: 2000},function(){ window.location.href="sellMain";});
+    		layer.msg('插入错误'+err,{time: 2000});
     	}
     	
     });
@@ -206,11 +206,11 @@ function ajaxInsertSellDetail(sellId,goodsId,goodsNum,remarks){
 	  		if(data.resultMsg == "success") {		
 	  			
 	  		} else {
-	  			layer.msg(data.resultMsg,{time: 2000},function(){ window.location.href="addNewSell";});
+	  			layer.msg(data.resultMsg,{time: 2000});
 	  		}
 	  	},
 	  	error : function(xhr,status,err) {
-	  		layer.msg('插入错误'+err,{time: 2000},function(){ window.location.href="addNewSell";});
+	  		layer.msg('插入错误'+err,{time: 2000});
 	  	}
 	  	
 	  });

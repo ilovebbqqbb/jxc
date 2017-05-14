@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 import com.github.jxc.dao.UserAccountDao;
 import com.github.jxc.pojo.UserAccount;
 import com.github.jxc.service.UserAccountService;
-@Service("userAccountService")
+@Service("UserAccountService")
 public class UserAccountServiceImpl implements UserAccountService{
 
 	@Resource

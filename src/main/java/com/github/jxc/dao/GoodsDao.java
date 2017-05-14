@@ -8,5 +8,9 @@ public interface GoodsDao {
 	
 	List<Goods> selectAll();
 	
-	Goods selectByPrimaryKey(Integer goodsId);
+    Goods selectByPrimaryKey(Integer goodsId);
+    
+    List<Goods> selectBySupplierId(Integer supplierid);
+    
+    Goods selectByGoodsIdAndSupplierId(Goods goods);
 }

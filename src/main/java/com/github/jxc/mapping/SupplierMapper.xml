@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.github.jxc.dao.SupplierDao">
+  <resultMap id="BaseResultMap" type="com.github.jxc.pojo.Supplier">
+    <id column="SupplierId" jdbcType="INTEGER" property="supplierid" />
+    <result column="SupplierName" jdbcType="VARCHAR" property="suppliername" />
+    <result column="SupplierTel" jdbcType="VARCHAR" property="suppliertel" />
+    <result column="SupplierFax" jdbcType="VARCHAR" property="supplierfax" />
+    <result column="SupplierAdd" jdbcType="VARCHAR" property="supplieradd" />
+    <result column="City" jdbcType="VARCHAR" property="city" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    SupplierId, SupplierName, SupplierTel, SupplierFax, SupplierAdd, City
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from tb_supplier
+    where SupplierId = #{supplierid,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from tb_supplier
+    where SupplierId = #{supplierid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.github.jxc.pojo.Supplier">
+    insert into tb_supplier (SupplierId, SupplierName, SupplierTel, 
+      SupplierFax, SupplierAdd, City
+      )
+    values (#{supplierid,jdbcType=INTEGER}, #{suppliername,jdbcType=VARCHAR}, #{suppliertel,jdbcType=VARCHAR}, 
+      #{supplierfax,jdbcType=VARCHAR}, #{supplieradd,jdbcType=VARCHAR}, #{city,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.github.jxc.pojo.Supplier">
+    insert into tb_supplier
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="supplierid != null">
+        SupplierId,
+      </if>
+      <if test="suppliername != null">
+        SupplierName,
+      </if>
+      <if test="suppliertel != null">
+        SupplierTel,
+      </if>
+      <if test="supplierfax != null">
+        SupplierFax,
+      </if>
+      <if test="supplieradd != null">
+        SupplierAdd,
+      </if>
+      <if test="city != null">
+        City,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="supplierid != null">
+        #{supplierid,jdbcType=INTEGER},
+      </if>
+      <if test="suppliername != null">
+        #{suppliername,jdbcType=VARCHAR},
+      </if>
+      <if test="suppliertel != null">
+        #{suppliertel,jdbcType=VARCHAR},
+      </if>
+      <if test="supplierfax != null">
+        #{supplierfax,jdbcType=VARCHAR},
+      </if>
+      <if test="supplieradd != null">
+        #{supplieradd,jdbcType=VARCHAR},
+      </if>
+      <if test="city != null">
+        #{city,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.github.jxc.pojo.Supplier">
+    update tb_supplier
+    <set>
+      <if test="suppliername != null">
+        SupplierName = #{suppliername,jdbcType=VARCHAR},
+      </if>
+      <if test="suppliertel != null">
+        SupplierTel = #{suppliertel,jdbcType=VARCHAR},
+      </if>
+      <if test="supplierfax != null">
+        SupplierFax = #{supplierfax,jdbcType=VARCHAR},
+      </if>
+      <if test="supplieradd != null">
+        SupplierAdd = #{supplieradd,jdbcType=VARCHAR},
+      </if>
+      <if test="city != null">
+        City = #{city,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where SupplierId = #{supplierid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.github.jxc.pojo.Supplier">
+    update tb_supplier
+    set SupplierName = #{suppliername,jdbcType=VARCHAR},
+      SupplierTel = #{suppliertel,jdbcType=VARCHAR},
+      SupplierFax = #{supplierfax,jdbcType=VARCHAR},
+      SupplierAdd = #{supplieradd,jdbcType=VARCHAR},
+      City = #{city,jdbcType=VARCHAR}
+    where SupplierId = #{supplierid,jdbcType=INTEGER}
+  </update>
+  <select id="selectAllSupplier"  resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from tb_supplier
+   </select>
+</mapper>

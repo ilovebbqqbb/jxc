@@ -1,112 +1,114 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE mapper   
-PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  
-"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.github.jxc.dao.UserAccountDao">
-	<resultMap id="BaseResultMap" type="com.github.jxc.pojo.UserAccount" >
-		<id column="user_account_id" property="userAccountId" jdbcType="INTEGER"/>
-		<result column="pet_name" property="petName" jdbcType="VARCHAR"/>
-		<result column="user_info_id" property="userInfoId" jdbcType="INTEGER"/>
-		<result column="password" property="password" jdbcType="VARCHAR"/>
-		<result column="created_at" property="createdAt" jdbcType="TIMESTAMP"/>
-		<result column="updated_at" property="updatedAt" jdbcType="TIMESTAMP"/>
-	</resultMap>
-	<sql id="Base_Column_List">
-		user_account_id,pet_name,user_info_id,password,created_at,updated_at
-	</sql>
-	
-	<insert id="insertSelective" parameterType="com.github.jxc.pojo.UserAccount">
-		insert into user_account
-	   <trim prefix="(" suffix=")" suffixOverrides=",">
-	     <if test="userAccountId != null">
-	       user_account_id,
-	     </if>
-	     <if test="petName != null">
-	       pet_name,
-	     </if>
-	     
-	     <if test="userInfoId != null">
-	       user_info_id,
-	     </if>
-	     
-	     <if test="password != null">
-	       password,
-	     </if>
-	     <if test="createdAt == null">
-	       created_at,
-	     </if>
-	     <if test="updatedAt != null">
-	       updated_at,
-	     </if>
-	   </trim>
-	   <trim prefix="values (" suffix=")" suffixOverrides=",">
-	     <if test="userAccountId != null">
-	       #{userAccountId,jdbcType=INTEGER},
-	     </if>
-	     <if test="petName != null">
-	       #{petName,jdbcType=VARCHAR},
-	     </if>
-	     
-	     <if test="userInfoId != null">
-	       #{userInfoId,jdbcType=INTEGER},
-	     </if>
-	     <if test="password != null">
-	       #{password,jdbcType=VARCHAR},
-	     </if>
-	     
-	     <if test="createdAt == null">
-	       sysdate(),
-	     </if>
-	     <if test="updatedAt != null">
-	       #{updatedAt,jdbcType=TIMESTAMP},
-	     </if>
-	   </trim>
-	</insert>
-
-	<update id="updateByPrimaryKeySelective" parameterType="com.github.jxc.pojo.UserAccount">
-		update user_account
-		<set>
-			<if test="petName != null">
-				pet_name = #{petName,jdbcType=VARCHAR},
-			</if>
-			<if test="userInfoId != null">
-	       		user_info_id = #{userInfoId,jdbcType=INTEGER},
-	     	</if>
-			<if test="password != null">
-				password = #{password,jdbcType=VARCHAR},
-			</if>
-			
-			<if test="createdAt != null">
-				created_at = #{createdAt,jdbcType=TIMESTAMP},
-			</if>
-			
-			<if test="updatedAt == null">
-				updated_at = sysdate(),
-			</if>
-			
-		</set>
-	</update>
-	
-	<select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
-		select
-		<include refid="Base_Column_List" /> 
-		from user_account
-		where user_account_id = #{userAccountId,jdbcType=INTEGER}
-		
-	</select>
-	
-	<select id="selectByName" parameterType="java.lang.String" resultMap="BaseResultMap">
-		select
-		<include refid="Base_Column_List" /> 
-		from user_account
-		where pet_name = #{petName,jdbcType=VARCHAR}
-		
-	</select>
-	
-	<delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-		delete from user_account
-		where user_account_id = #{userAccountId,jdbcType=INTEGER}
-	</delete>
-	
+  <resultMap id="BaseResultMap" type="com.github.jxc.pojo.UserAccount">
+    <id column="user_account_id" jdbcType="INTEGER" property="userAccountId" />
+    <result column="pet_name" jdbcType="VARCHAR" property="petName" />
+    <result column="user_info_id" jdbcType="INTEGER" property="userInfoId" />
+    <result column="password" jdbcType="VARCHAR" property="password" />
+    <result column="created_at" jdbcType="TIMESTAMP" property="createdAt" />
+    <result column="updated_at" jdbcType="TIMESTAMP" property="updatedAt" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    user_account_id, pet_name, user_info_id, password, created_at, updated_at
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from user_account
+    where user_account_id = #{userAccountId,jdbcType=INTEGER}
+  </select>
+  
+  <select id="selectByName" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from user_account
+    where pet_name = #{petName,jdbcType=VARCHAR}
+  </select>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from user_account
+    where user_account_id = #{userAccountId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.github.jxc.pojo.UserAccount">
+    insert into user_account (user_account_id, pet_name, user_info_id, 
+      password, created_at, updated_at
+      )
+    values (#{userAccountId,jdbcType=INTEGER}, #{petName,jdbcType=VARCHAR}, #{userInfoId,jdbcType=INTEGER}, 
+      #{password,jdbcType=VARCHAR}, #{createdAt,jdbcType=TIMESTAMP}, #{updatedAt,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.github.jxc.pojo.UserAccount">
+    insert into user_account
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="userAccountId != null">
+        user_account_id,
+      </if>
+      <if test="petName != null">
+        pet_name,
+      </if>
+      <if test="userInfoId != null">
+        user_info_id,
+      </if>
+      <if test="password != null">
+        password,
+      </if>
+      <if test="createdAt != null">
+        created_at,
+      </if>
+      <if test="updatedAt != null">
+        updated_at,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="userAccountId != null">
+        #{userAccountId,jdbcType=INTEGER},
+      </if>
+      <if test="petName != null">
+        #{petName,jdbcType=VARCHAR},
+      </if>
+      <if test="userInfoId != null">
+        #{userInfoId,jdbcType=INTEGER},
+      </if>
+      <if test="password != null">
+        #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="createdAt != null">
+        #{createdAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedAt != null">
+        #{updatedAt,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.github.jxc.pojo.UserAccount">
+    update user_account
+    <set>
+      <if test="petName != null">
+        pet_name = #{petName,jdbcType=VARCHAR},
+      </if>
+      <if test="userInfoId != null">
+        user_info_id = #{userInfoId,jdbcType=INTEGER},
+      </if>
+      <if test="password != null">
+        password = #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="createdAt != null">
+        created_at = #{createdAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedAt != null">
+        updated_at = #{updatedAt,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where user_account_id = #{userAccountId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.github.jxc.pojo.UserAccount">
+    update user_account
+    set pet_name = #{petName,jdbcType=VARCHAR},
+      user_info_id = #{userInfoId,jdbcType=INTEGER},
+      password = #{password,jdbcType=VARCHAR},
+      created_at = #{createdAt,jdbcType=TIMESTAMP},
+      updated_at = #{updatedAt,jdbcType=TIMESTAMP}
+    where user_account_id = #{userAccountId,jdbcType=INTEGER}
+  </update>
 </mapper>

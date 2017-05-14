@@ -23,4 +23,20 @@ public class GoodsServiceImpl implements GoodsService {
 	public Goods selectByPrimaryKey(Integer goodsId){
 		return goodsDao.selectByPrimaryKey(goodsId);
 	}
+
+
+	@Override
+	public List<Goods> selectBySupplierId(Integer supplierid) {
+		return this.goodsDao.selectBySupplierId(supplierid);
+	}
+
+	@Override
+	public Goods selectByGoodsIdAndSupplierId(Goods goods) {
+		return this.goodsDao.selectByGoodsIdAndSupplierId(goods);
+	}
+
+	
+
+	
+	
 }

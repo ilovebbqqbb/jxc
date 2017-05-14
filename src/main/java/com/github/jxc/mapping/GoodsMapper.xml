@@ -38,4 +38,19 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		from tb_goods
 		where GoodsId = #{goodsId,jdbcType=INTEGER}
 	</select>
+	<select id="selectBySupplierId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from tb_goods
+    where SupplierId = #{supplierid,jdbcType=VARCHAR}
+    </select>
+    <select id="selectByGoodsIdAndSupplierId" parameterType="com.github.jxc.pojo.Goods" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from tb_goods
+    where SupplierId = #{supplierid,jdbcType=VARCHAR}
+    and
+    GoodsId = #{goodsId,jdbcType=VARCHAR}
+    </select>
+
 </mapper>
