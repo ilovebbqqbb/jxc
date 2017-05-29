@@ -75,4 +75,19 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		from return_detail rd ,tb_goods g
 		where rd.goods_id = g.GoodsId and rd.return_id = #{returnId,jdbcType=VARCHAR} 
 	</select>
+	
+	<select id="selectByStoreIdAndReturnId" resultMap="BaseResultMap" parameterType="com.github.jxc.pojo.ReturnPreview">
+		select *
+		from return_detail rd ,tb_goods g ,store_detail sd 
+		where 
+		rd.goods_id = g.GoodsId
+		and g.GoodsId = sd.goods_id 
+		and sd.store_id = #{storeId,jdbcType=INTEGER})
+		and rd.return_id = #{returnId,jdbcType=VARCHAR}
+	</select>
+	
+	<delete id="deleteByReturnId" parameterType="java.lang.String">
+		delete from return_detail
+		where return_id = #{returnId,jdbcType=VARCHAR}
+	</delete>
 </mapper>

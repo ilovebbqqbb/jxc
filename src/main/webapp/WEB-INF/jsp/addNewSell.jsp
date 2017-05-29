@@ -117,14 +117,22 @@ function addGoods(){
 	layui.use('layer', function(){
 		  var layer = layui.layer;
 		  
-		  layer.open({
+		  var warehouseId = $("#warehouseId").val();
+		  if(warehouseId != "" && warehouseId != null){
+		  	  var url = "<%=basePath%>sell/iframeAddGoods?warehouseId=" + warehouseId;
+			  
+			  layer.open({
 			  type: 2,
 			  title: '添加商品',
 			  shadeClose: true,
 			  shade: 0.8,
 			  area: ['800px', '90%'],
-			  content: '<%=basePath%>sell/iframeAddGoods'
-			}); 
+			  content: url
+			  });
+			  
+		  }else{
+			  layer.msg('请选择仓库', {time: 3000});
+		  }
 		});  
 }
 </script>

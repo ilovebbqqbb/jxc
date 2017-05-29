@@ -8,14 +8,7 @@ public class SellDetail {
 	String remarks;
 	Goods goods;
 	StockDetail stockDetail;
-	StoreDetail storeDetail;
 	
-	public StoreDetail getStoreDetail() {
-		return storeDetail;
-	}
-	public void setStoreDetail(StoreDetail storeDetail) {
-		this.storeDetail = storeDetail;
-	}
 	public Integer getSellDetailId() {
 		return sellDetailId;
 	}

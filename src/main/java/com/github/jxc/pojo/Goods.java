@@ -20,7 +20,14 @@ public class Goods {
 	String goodsSource;
 	String details;
 	int supplierid;
+	StockDetail stockDetail;
 	
+	public StockDetail getStockDetail() {
+		return stockDetail;
+	}
+	public void setStockDetail(StockDetail stockDetail) {
+		this.stockDetail = stockDetail;
+	}
 	public int getSupplierid() {
 		return supplierid;
 	}

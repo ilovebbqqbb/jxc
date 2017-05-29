@@ -7,7 +7,14 @@ public class ReturnDetail {
 	Integer goodsNum;
 	String remarks;
 	Goods goods;
+	StoreDetail storeDetail;
 	
+	public StoreDetail getStoreDetail() {
+		return storeDetail;
+	}
+	public void setStoreDetail(StoreDetail storeDetail) {
+		this.storeDetail = storeDetail;
+	}
 	public Integer getReturnDetailId() {
 		return returnDetailId;
 	}
@@ -44,18 +51,5 @@ public class ReturnDetail {
 	public void setGoods(Goods goods) {
 		this.goods = goods;
 	}
-	public StockDetail getStockDetail() {
-		return stockDetail;
-	}
-	public void setStockDetail(StockDetail stockDetail) {
-		this.stockDetail = stockDetail;
-	}
-	public StoreDetail getStoreDetail() {
-		return storeDetail;
-	}
-	public void setStoreDetail(StoreDetail storeDetail) {
-		this.storeDetail = storeDetail;
-	}
-	StockDetail stockDetail;
-	StoreDetail storeDetail;
+
 }

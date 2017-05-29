@@ -13,4 +13,8 @@ public interface ReturnPreviewService {
 	ReturnPreview selectByPrimaryKey(String returnId);
 	
 	int updateByPrimaryKeySelective(ReturnPreview returnPreview);
+	
+	int deleteByPrimartKey(String returnId);
+	
+	List<ReturnPreview> selectByNotStatus(String returnStatus);
 }

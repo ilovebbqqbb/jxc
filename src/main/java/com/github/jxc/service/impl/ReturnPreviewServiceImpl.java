@@ -32,4 +32,12 @@ public class ReturnPreviewServiceImpl implements ReturnPreviewService {
 	public int updateByPrimaryKeySelective(ReturnPreview returnPreview){
 		return returnPreviewDao.updateByPrimaryKeySelective(returnPreview);
 	}
+	
+	public int deleteByPrimartKey(String returnId){
+		return returnPreviewDao.deleteByPrimartKey(returnId);
+	}
+	
+	public List<ReturnPreview> selectByNotStatus(String returnStatus){
+		return returnPreviewDao.selectByNotStatus(returnStatus);
+	}
 }

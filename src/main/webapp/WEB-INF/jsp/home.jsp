@@ -16,7 +16,7 @@
 			    var element = layui.element();
 				
 			});
-			var contentWidth = $(".layui-nav-tree").width();
+			var contentWidth  = $(".layui-nav-tree").width();
 			$("#content").css({"margin-left": contentWidth});
 			//$(".layui-header").css({"margin-left":$(".layui-nav-tree").width()});
 			$(".layui-nav-tree").css({"margin-top" :$(".layui-header").height()});
@@ -74,7 +74,8 @@
 			</div>
 			
 		</div>
-		<div style="float: left" class="site" >
+		
+		<div style="float: left;" class="site">
 				<ul class="layui-nav layui-nav-tree layui-nav-side" lay-filter="test">
 				<!-- 侧边导航: <ul class="layui-nav layui-nav-tree layui-nav-side"> -->
 	 					<li class="layui-nav-item layui-nav-itemed">
@@ -92,13 +93,11 @@
 						<dl class="layui-nav-child">
 						  <dd><a href="javascript:contentLoad('sell/addNewReturn');">添加退货单</a></dd>
 						  <dd><a href="javascript:contentLoad('sell/checkReturn');">审核退货单</a></dd>
-					      <dd><a href="">移动模块</a></dd>
-					      <dd><a href="">后台模版</a></dd>
-					      <dd><a href="">电商平台</a></dd>
+					      <dd><a href="javascript:contentLoad('sell/prepareReturn');">商家备货</a></dd>
+					      <dd><a href="javascript:contentLoad('sell/sendReturn');">退货单列表（商店）</a></dd>
+					      <dd><a href="javascript:contentLoad('sell/receiptReturn');">退货单列表（总部）</a></dd>
 					  	</dl>
 						</li>
-				    <li class="layui-nav-item"><a href="">产品</a></li>
-				    <li class="layui-nav-item"><a href="">大数据</a></li>
 				</ul>
 				
 		</div>

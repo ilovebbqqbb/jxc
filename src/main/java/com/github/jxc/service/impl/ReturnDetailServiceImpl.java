@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.github.jxc.dao.ReturnDetailDao;
 import com.github.jxc.pojo.ReturnDetail;
+import com.github.jxc.pojo.ReturnPreview;
 import com.github.jxc.service.ReturnDetailService;
 
 @Service("ReturnDetailService")
@@ -22,5 +23,13 @@ public class ReturnDetailServiceImpl implements ReturnDetailService {
 	
 	public List<ReturnDetail> selectByReturnId(String returnId){
 		return returnDetailDao.selectByReturnId(returnId);
+	}
+	
+	public List<ReturnDetail> selectByStoreIdAndReturnId(ReturnPreview returnPreview){
+		return returnDetailDao.selectByStoreIdAndReturnId(returnPreview);
+	}
+	
+	public int deleteByReturnId(String returnId){
+		return returnDetailDao.deleteByReturnId(returnId);
 	}
 }
