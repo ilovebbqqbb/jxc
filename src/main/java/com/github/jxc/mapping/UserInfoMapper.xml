@@ -16,6 +16,33 @@
     <result column="role_id" jdbcType="INTEGER" property="roleId" />
     <result column="created_at" jdbcType="TIMESTAMP" property="createdAt" />
     <result column="updated_at" jdbcType="TIMESTAMP" property="updatedAt" />
+	<association property="userAccount" javaType="com.github.jxc.pojo.UserAccount">
+	    <id column="user_account_id" jdbcType="INTEGER" property="userAccountId" />
+	    <result column="pet_name" jdbcType="VARCHAR" property="petName" />
+	    <result column="user_info_id" jdbcType="INTEGER" property="userInfoId" />
+	    <result column="password" jdbcType="VARCHAR" property="password" />
+	    <result column="created_at" jdbcType="TIMESTAMP" property="createdAt" />
+	    <result column="updated_at" jdbcType="TIMESTAMP" property="updatedAt" />
+  	</association>
+  	<association property="role" javaType="com.github.jxc.pojo.Role">
+		<id column="role_id" jdbcType="INTEGER" property="roleId" />
+	    <result column="role_name" jdbcType="VARCHAR" property="roleName" />
+	    <result column="role_type" jdbcType="VARCHAR" property="roleType" />
+	    <result column="created_at" jdbcType="TIMESTAMP" property="createdAt" />
+	    <result column="updated_at" jdbcType="TIMESTAMP" property="updatedAt" />
+  	</association>
+  	<association property="department" javaType="com.github.jxc.pojo.Department">
+		<id column="department_id" jdbcType="INTEGER" property="departmentId" />
+	    <result column="depart_name" jdbcType="VARCHAR" property="departName" />
+	    <result column="parent_id" jdbcType="INTEGER" property="parentId" />
+	    <result column="created_at" jdbcType="TIMESTAMP" property="createdAt" />
+	    <result column="updated_at" jdbcType="TIMESTAMP" property="updatedAt" />
+	    <result column="department_english_name" jdbcType="VARCHAR" property="departmentEnglishName" />
+	    <result column="head" jdbcType="VARCHAR" property="head" />
+	    <result column="telephone_number" jdbcType="INTEGER" property="telephoneNumber" />
+	    <result column="address" jdbcType="VARCHAR" property="address" />
+	    <result column="detail" jdbcType="VARCHAR" property="detail" />
+  	</association>
   </resultMap>
   <sql id="Base_Column_List">
     user_info_id, user_name, sex, phone_number, email, department_id, job, salary, birthday, 
@@ -23,9 +50,20 @@
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 
-    <include refid="Base_Column_List" />
-    from user_info
-    where user_info_id = #{userInfoId,jdbcType=INTEGER}
+    *
+    from user_info ui,department d,role r,user_account ua
+    where ui.user_info_id = #{userInfoId,jdbcType=INTEGER} and ui.department_id=d.department_id and ui.role_id =r.role_id and ui.user_info_id=ua.user_info_id
+  </select>
+  <select id="queryAllUserInfo" resultMap="BaseResultMap">
+    select 
+    *
+    from user_info ui,user_account ua,role r,department d
+    where ui.user_info_id=ua.user_info_id and ui.department_id=d.department_id and ui.role_id=r.role_id
+  </select>
+  <select id="selectAllUser" resultMap="BaseResultMap">
+    select 
+    *
+    from user_info 
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from user_info
@@ -43,7 +81,7 @@
       #{degree,jdbcType=VARCHAR}, #{entryTime,jdbcType=TIMESTAMP}, #{roleId,jdbcType=INTEGER}, 
       #{createdAt,jdbcType=TIMESTAMP}, #{updatedAt,jdbcType=TIMESTAMP})
   </insert>
-  <insert id="insertSelective" parameterType="com.github.jxc.pojo.UserInfo">
+  <insert id="insertSelective" parameterType="com.github.jxc.pojo.UserInfo" useGeneratedKeys="true" keyProperty="userInfoId">
     insert into user_info
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="userInfoId != null">

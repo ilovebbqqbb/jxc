@@ -8,10 +8,22 @@ public class Warehouse {
 	String linkman;
 	String phoneNumber;
 	String warehouseAddress;
-	String stockMin;
-	String stockMax;
+	Integer stockMin;
+	Integer stockMax;
 	Date createdAt;
 	Date updatedAt;
+	public Integer getStockMin() {
+		return stockMin;
+	}
+	public void setStockMin(Integer stockMin) {
+		this.stockMin = stockMin;
+	}
+	public Integer getStockMax() {
+		return stockMax;
+	}
+	public void setStockMax(Integer stockMax) {
+		this.stockMax = stockMax;
+	}
 	public Integer getWarehouseId() {
 		return warehouseId;
 	}
@@ -42,18 +54,7 @@ public class Warehouse {
 	public void setWarehouseAddress(String warehouseAddress) {
 		this.warehouseAddress = warehouseAddress;
 	}
-	public String getStockMin() {
-		return stockMin;
-	}
-	public void setStockMin(String stockMin) {
-		this.stockMin = stockMin;
-	}
-	public String getStockMax() {
-		return stockMax;
-	}
-	public void setStockMax(String stockMax) {
-		this.stockMax = stockMax;
-	}
+	
 	public Date getCreatedAt() {
 		return createdAt;
 	}

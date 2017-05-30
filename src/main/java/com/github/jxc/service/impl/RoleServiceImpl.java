@@ -57,5 +57,10 @@ public class RoleServiceImpl implements RoleService{
 		return this.roleDao.selectAllRoles();
 	}
 
+	@Override
+	public Role selectByName(String roleName) {
+		return this.roleDao.selectByName(roleName);
+	}
+
 	
 }

@@ -16,5 +16,13 @@ public interface DepartmentDao {
 
     int updateByPrimaryKey(Department record);
     
+    List<Department> selectAllParentDepartment();
+    
     List<Department> selectAllDepartment();
+  
+    List<Department> selectByParentId(Integer parentId);
+    
+    int deleteByParentId(Integer parentId);
+    
+    Department selectDepartByName(String departName);
 }

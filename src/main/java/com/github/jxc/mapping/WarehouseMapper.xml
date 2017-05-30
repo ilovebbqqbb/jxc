@@ -12,8 +12,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		<result column="phone_number" property="phoneNumber" jdbcType="VARCHAR" />
 		<result column="warehouse_address" property="warehouseAddress"
 			jdbcType="VARCHAR" />
-		<result column="stock_min" property="stockMin" jdbcType="VARCHAR" />
-		<result column="stock_max" property="stockMax" jdbcType="VARCHAR" />
+		<result column="stock_min" property="stockMin" jdbcType="INTEGER" />
+		<result column="stock_max" property="stockMax" jdbcType="INTEGER" />
 		<result column="created_at" property="createdAt" jdbcType="TIMESTAMP" />
 		<result column="updated_at" property="updatedAt" jdbcType="TIMESTAMP" />
 	</resultMap>
@@ -41,6 +41,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		from warehouse
 		where warehouse_id = #{warehouseId,jdbcType=INTEGER}
 	</select>
+	<select id="selectByWarehouseName" parameterType="java.lang.String"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from warehouse
+		where warehouse_name = #{warehouseName,jdbcType=VARCHAR}
+	</select>
 	<delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
 		delete from warehouse
 		where warehouse_id = #{warehouseId,jdbcType=INTEGER}
@@ -52,8 +59,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		)
 		values (#{warehouseId,jdbcType=INTEGER}, #{warehouseName,jdbcType=VARCHAR},
 		#{linkman,jdbcType=VARCHAR},
-		#{phoneNumber,jdbcType=VARCHAR}, #{warehouseAddress,jdbcType=VARCHAR}, #{stockMin,jdbcType=VARCHAR},
-		#{stockMax,jdbcType=VARCHAR}, #{createdAt,jdbcType=TIMESTAMP},
+		#{phoneNumber,jdbcType=VARCHAR}, #{warehouseAddress,jdbcType=VARCHAR}, #{stockMin,jdbcType=INTEGER},
+		#{stockMax,jdbcType=INTEGER}, #{createdAt,jdbcType=TIMESTAMP},
 		#{updatedAt,jdbcType=TIMESTAMP}
 		)
 	</insert>
@@ -105,10 +112,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 				#{warehouseAddress,jdbcType=VARCHAR},
 			</if>
 			<if test="stockMin != null">
-				#{stockMin,jdbcType=VARCHAR},
+				#{stockMin,jdbcType=INTEGER},
 			</if>
 			<if test="stockMax != null">
-				#{stockMax,jdbcType=VARCHAR},
+				#{stockMax,jdbcType=INTEGER},
 			</if>
 			<if test="createdAt != null">
 				#{createdAt,jdbcType=TIMESTAMP},
@@ -134,10 +141,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 				warehouse_address = #{warehouseAddress,jdbcType=VARCHAR},
 			</if>
 			<if test="stockMin != null">
-				stock_min = #{stockMin,jdbcType=VARCHAR},
+				stock_min = #{stockMin,jdbcType=INTEGER},
 			</if>
 			<if test="stockMax != null">
-				stock_max = #{stockMax,jdbcType=VARCHAR},
+				stock_max = #{stockMax,jdbcType=INTEGER},
 			</if>
 			<if test="createdAt != null">
 				created_at = #{createdAt,jdbcType=TIMESTAMP},
@@ -154,8 +161,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		linkman = #{linkman,jdbcType=VARCHAR},
 		phone_number = #{phoneNumber,jdbcType=VARCHAR},
 		warehouse_address = #{warehouseAddress,jdbcType=VARCHAR},
-		stock_min = #{stockMin,jdbcType=VARCHAR},
-		stock_max = #{stockMax,jdbcType=VARCHAR},
+		stock_min = #{stockMin,jdbcType=INTEGER},
+		stock_max = #{stockMax,jdbcType=INTEGER},
 		created_at = #{createdAt,jdbcType=TIMESTAMP},
 		updated_at = #{updatedAt,jdbcType=TIMESTAMP}
 		where warehouse_id = #{warehouseId,jdbcType=INTEGER}

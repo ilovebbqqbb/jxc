@@ -12,6 +12,9 @@
 	<script type="text/javascript" src="../jxc/js/layui/layui.js" charset="utf-8"></script>
 	<script type="text/javascript">
 		$(document).ready(function() {
+			$(".site").hide();
+			$("#left1").show();
+			contentLoad('user/systemIntroduction');
 			layui.use('element', function(){
 			    var element = layui.element();
 				
@@ -20,7 +23,8 @@
 			$("#content").css({"margin-left": contentWidth});
 			//$(".layui-header").css({"margin-left":$(".layui-nav-tree").width()});
 			$(".layui-nav-tree").css({"margin-top" :$(".layui-header").height()});
-			$(".layui-main").css({"margin-left" : $("#logoDiv").width() + 50 + "px"});
+			$(".layui-main").css({"margin-left" : $("#logoDiv").width() + 50 + "px"}); 
+			
 		});
 	</script>
 </head>
@@ -29,94 +33,94 @@
 	<div class="layui-layout layui-layout-admin">
 		<div class="layui-header">
 			<div id="logoDiv" style="float: left">
-				<a class="logo" href="#">sfsgdrrgdgdgd</a>
+				<a class="logo" href="#">进销存管理系统</a>
 			</div>
 			<div style="float: left" class="layui-main" >
 				<ul class="layui-nav to-menu">
-		  			<li class="layui-nav-item"><a href="">最新活动</a></li>
-		  			<li class="layui-nav-item layui-this">
-		    			<a href="javascript:;">产品</a>
-					    <dl class="layui-nav-child">
-					      <dd><a onclick="contentLoad('sell/addNewSell')">添加销售单</a></dd>
-					      <dd><a onclick="contentLoad('sell/checkSell')">审核订单</a></dd>
-					      <dd><a onclick="contentLoad('sell/prepareSell')">库房备货</a></dd>
-					      <dd><a onclick="contentLoad('sell/sendSell')">库房发货</a></dd>
-					      <dd><a onclick="contentLoad('sell/receiptSell')">确认收货</a></dd>
-					    </dl>
-		  			</li>
-		  			<li class="layui-nav-item"><a href="">大数据</a></li>
-		  			<li class="layui-nav-item">
-			    		<a href="javascript:;">解决方案</a>
-			    		<dl class="layui-nav-child">
-					      	<dd><a href="">移动模块</a></dd>
-					      	<dd><a href="">后台模版</a></dd>
-					      	<dd class="layui-this"><a href="">选中项</a></dd>
-			      			<dd><a href="">电商平台</a></dd>
-			    		</dl>
-		  			</li>
-		  			<li class="layui-nav-item"><a href="">注销</a></li>
+		  			<li class="layui-nav-item" onclick="switchLeft(1)"><a >首页</a></li>
+		  			<c:forEach items="${ powers}" var="power">
+		  				<li class="layui-nav-item" onclick="switchLeft(${power.powerId})"><a>${power.powerName }</a></li>
+		  			</c:forEach>
+		  			<li class="layui-nav-item" onclick="switchLeft(7)"><a >个人信息</a></li>
 				</ul>
-				
 			</div>
 			<div style="float: right">
 			
 				<ul class="layui-nav operate">
 					<li class="layui-nav-item">
-			    		<a href="javascript:;">解决方案</a>
-			    		<dl class="layui-nav-child">
-					      	<dd><a href="">移动模块</a></dd>
-					      	<dd><a href="">后台模版</a></dd>
-					      	<dd class="layui-this"><a href="">选中项</a></dd>
-			      			<dd><a href="">电商平台</a></dd>
-			    		</dl>
+			    		<a href="<%=basePath %>user/logout">注销</a>
 		  			</li>
 				</ul>
 			</div>
 			
 		</div>
-		
-		<div style="float: left;" class="site">
-				<ul class="layui-nav layui-nav-tree layui-nav-side" lay-filter="test">
-				<!-- 侧边导航: <ul class="layui-nav layui-nav-tree layui-nav-side"> -->
-	 					<li class="layui-nav-item layui-nav-itemed">
-	    				<a href="javascript:;">销售单管理</a>
-					    <dl class="layui-nav-child">
-					      <dd><a href="javascript:contentLoad('sell/addNewSell');">添加销售单</a></dd>
-					      <dd><a href="javascript:contentLoad('sell/checkSell');">审核订单</a></dd>
-					      <dd><a href="javascript:contentLoad('sell/prepareSell');">库房备货</a></dd>
-					      <dd><a href="javascript:contentLoad('sell/sendSell');">库房发货</a></dd>
-					      <dd><a href="javascript:contentLoad('sell/receiptSell');">确认收货</a></dd>
-					    </dl>
-	 					</li>
-						<li class="layui-nav-item">
-					  	<a href="javascript:;">退货单管理</a>
-						<dl class="layui-nav-child">
-						  <dd><a href="javascript:contentLoad('sell/addNewReturn');">添加退货单</a></dd>
-						  <dd><a href="javascript:contentLoad('sell/checkReturn');">审核退货单</a></dd>
-					      <dd><a href="javascript:contentLoad('sell/prepareReturn');">商家备货</a></dd>
-					      <dd><a href="javascript:contentLoad('sell/sendReturn');">退货单列表（商店）</a></dd>
-					      <dd><a href="javascript:contentLoad('sell/receiptReturn');">退货单列表（总部）</a></dd>
-					  	</dl>
-						</li>
-						<li class="layui-nav-item">
-					  	<a href="javascript:;">差异报告单管理</a>
-						<dl class="layui-nav-child">
-						  <dd><a href="javascript:contentLoad('sell/addNewDifference');">添加差异报告单</a></dd>
-						  <dd><a href="javascript:contentLoad('sell/checkDifference');">审核差异报告单</a></dd>
-					      <dd><a href="javascript:contentLoad('sell/prepareDifference');">仓库备货</a></dd>
-					      <dd><a href="javascript:contentLoad('sell/sendDifference');">仓库发货</a></dd>
-					      <dd><a href="javascript:contentLoad('sell/receiptDifference');">管理差异报告单</a></dd>
-					  	</dl>
-						</li>
-						<li class="layui-nav-item">
-					  	<a href="javascript:;">销售统计</a>
-						<dl class="layui-nav-child">
-						  <dd><a href="javascript:contentLoad('sell/sellStatistics');">商店销售统计</a></dd>
-						  <dd><a href="javascript:contentLoad('sell/goodsStatistics');">商品销售统计</a></dd>
-					  	</dl>
-						</li>
-				</ul>
-				
+		<div id="left1" style="float: left" class="site" >
+			<ul class="layui-nav layui-nav-tree layui-nav-side" lay-filter="test">
+				 <li class="layui-nav-item layui-nav-itemed">
+  					 <li class="layui-nav-item"><a href="javascript:contentLoad('user/systemIntroduction');">系统介绍</a></li>
+				</li>
+			</ul>
+		</div>
+		<div id="left2" style="float: left" class="site" >
+			<ul class="layui-nav layui-nav-tree layui-nav-side" lay-filter="test">
+				 <li class="layui-nav-item layui-nav-itemed">
+  					 <li class="layui-nav-item"><a href="javascript:contentLoad('godownEntry/toGodownEntry');">入库单管理</a></li>
+  					 <li class="layui-nav-item"><a href="javascript:contentLoad('lossOrder/showLossOrder');">报损单管理</a></li>
+  					 <li class="layui-nav-item"><a href="javascript:contentLoad('returnLoss/showReturns');">退货单管理</a></li>
+  					 <li class="layui-nav-item"><a href="javascript:contentLoad('allotOrder/toAllotOrder');">调拨单管理</a></li>
+  					 <li class="layui-nav-item"><a href="javascript:contentLoad('godownEntry/toEntryManage');">入库单统计</a></li>
+  					 <li class="layui-nav-item"><a href="javascript:contentLoad('warehouse/toWarehouse');">仓库管理</a></li>
+  					 <li class="layui-nav-item"><a href="javascript:contentLoad('godownEntry/toStockManage');">库存管理</a></li>
+				</li>
+			</ul>
+		</div>
+		<div id="left3" style="float: left" class="site" >
+			<ul class="layui-nav layui-nav-tree layui-nav-side" lay-filter="test">
+			 <li class="layui-nav-item layui-nav-itemed">
+ 					 <li class="layui-nav-item"><a href="javascript:contentLoad('user/toUserInfo');">用户管理</a></li>
+ 					 <li class="layui-nav-item"><a href="javascript:contentLoad('department/toDepartment');">部门管理</a></li>
+ 					 <li class="layui-nav-item"><a href="javascript:contentLoad('user/toRole');">角色管理</a></li>
+ 					 <li class="layui-nav-item"><a href="javascript:contentLoad('user/toPower');">权限管理</a></li>
+			 </li>
+			</ul>
+		</div>
+		<div id="left4" style="float: left" class="site" >
+			<ul class="layui-nav layui-nav-tree layui-nav-side" lay-filter="test">
+			 <li class="layui-nav-item layui-nav-itemed">
+ 					 <li class="layui-nav-item"><a href="">启程1</a></li>
+ 					 <li class="layui-nav-item"><a href="">启程2</a></li>
+ 					 <li class="layui-nav-item"><a href="">启程3</a></li>
+ 					 <li class="layui-nav-item"><a href="">启程4</a></li>
+			 </li>
+			</ul>
+		</div>
+		<div id="left5" style="float: left" class="site" >
+			<ul class="layui-nav layui-nav-tree layui-nav-side" lay-ilter="test">
+			 <li class="layui-nav-item layui-nav-itemed">
+ 					 <li class="layui-nav-item"><a href="">启程5</a></li>
+ 					 <li class="layui-nav-item"><a href="">启程6</a></li>
+ 					 <li class="layui-nav-item"><a href="">启程7</a></li>
+ 					 <li class="layui-nav-item"><a href="">启程8</a></li>
+			 </li>
+			</ul>
+		</div>
+		<div id="left6" style="float: left" class="site" >
+			<ul class="layui-nav layui-nav-tree layui-nav-side" lay-ilter="test">
+			 <li class="layui-nav-item layui-nav-itemed">
+ 					 <li class="layui-nav-item"><a href="">黄冀1</a></li>
+ 					 <li class="layui-nav-item"><a href="">黄冀2</a></li>
+ 					 <li class="layui-nav-item"><a href="">黄冀3</a></li>
+ 					 <li class="layui-nav-item"><a href="">黄冀4</a></li>
+			 </li>
+			</ul>
+		</div>
+		<div id="left7" style="float: left" class="site" >
+			<ul class="layui-nav layui-nav-tree layui-nav-side" lay-filter="test">
+				 <li class="layui-nav-item layui-nav-itemed">
+  					 <li class="layui-nav-item"><a href="javascript:contentLoad('user/selectUser');">查看个人信息</a></li>
+  					 <li class="layui-nav-item"><a href="javascript:contentLoad('user/toupdateUser');">修改信息</a></li>
+				 </li>
+			</ul>
 		</div>
 		<iframe style="float: left;" width="1166px" height="562px" id="content" src="">
 			这里是要加载的页面
@@ -129,6 +133,18 @@ function contentLoad(controllerPath){
 	controllerPath = '<%=basePath%>' + controllerPath;
 	$("#content").attr("src",controllerPath);
 }
+	function switchLeft(id) {
+		$(".site").hide();
+		switch(id) {
+		case 1 : $("#left" + id).show();break;
+		case 2 : $("#left" + id).show();break;
+		case 3 : $("#left" + id).show();break;
+		case 4 : $("#left" + id).show();break;
+		case 5 : $("#left" + id).show();break;
+		case 6 : $("#left" + id).show();break;
+		case 7 : $("#left" + id).show();break;
+		}
+	}
 </script>
 </body>
 </html>

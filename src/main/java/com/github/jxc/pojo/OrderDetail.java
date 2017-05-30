@@ -11,6 +11,8 @@ public class OrderDetail {
 
     private String remarks;
     
+    private StockDetail stockDetail;
+    
     public Goods getGoods() {
 		return goods;
 	}
@@ -62,4 +64,12 @@ public class OrderDetail {
     public void setRemarks(String remarks) {
         this.remarks = remarks == null ? null : remarks.trim();
     }
+
+	public StockDetail getStockDetail() {
+		return stockDetail;
+	}
+
+	public void setStockDetail(StockDetail stockDetail) {
+		this.stockDetail = stockDetail;
+	}
 }

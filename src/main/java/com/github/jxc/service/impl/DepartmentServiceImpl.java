@@ -46,8 +46,28 @@ public class DepartmentServiceImpl implements DepartmentService{
 	}
 
 	@Override
+	public List<Department> selectAllParentDepartment() {
+		return this.departmentDao.selectAllParentDepartment();
+	}
+
+	@Override
 	public List<Department> selectAllDepartment() {
 		return this.departmentDao.selectAllDepartment();
+	}
+
+	@Override
+	public int deleteByParentId(Integer parentId) {
+		return this.departmentDao.deleteByParentId(parentId);
+	}
+
+	@Override
+	public List<Department> selectByParentId(Integer parentId) {
+		return this.departmentDao.selectByParentId(parentId);
+	}
+
+	@Override
+	public Department selectDepartByName(String departName) {
+		return this.departmentDao.selectDepartByName(departName);
 	}
 
 }

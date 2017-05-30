@@ -19,4 +19,6 @@ public interface RoleDao {
     List<Role> selectRoleById(Integer roleId);
     
     List<Role> selectAllRoles();
+    
+    Role selectByName(String roleName);
 }

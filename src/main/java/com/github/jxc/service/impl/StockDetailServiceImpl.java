@@ -1,5 +1,7 @@
 package com.github.jxc.service.impl;
 
+import java.util.List;
+
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
@@ -18,12 +20,24 @@ public class StockDetailServiceImpl implements StockDetailService {
 	public int updateByPrimaryKeySelective(StockDetail stockDetail){
 		return stockDetailDao.updateByPrimaryKeySelective(stockDetail);
 	}
-	
-	public StockDetail selectByPrimaryKey(StockDetailKey stockDetailKey){
-		return stockDetailDao.selectByPrimaryKey(stockDetailKey);
+
+	@Override
+	public int insertSelective(StockDetail stockDetail) {
+		return this.stockDetailDao.insertSelective(stockDetail);
 	}
-	
-	public int insertSelective(StockDetail stockDetail){
-		return stockDetailDao.insertSelective(stockDetail);
+
+	@Override
+	public StockDetail selectByPrimaryKey(StockDetailKey stockDetailKey) {
+		return this.stockDetailDao.selectByPrimaryKey(stockDetailKey);
+	}
+
+	@Override
+	public List<StockDetail> selectByWarehouseId(Integer warehouseId) {
+		return this.stockDetailDao.selectByWarehouseId(warehouseId);
+	}
+
+	@Override
+	public List<StockDetail> selectAllStock() {
+		return this.stockDetailDao.selectAllStock();
 	}
 }
