@@ -17,5 +17,13 @@ public interface DepartmentService {
 
     int updateByPrimaryKey(Department record);
     
-    List<Department> selectAllDepartment();
+    List<Department> selectAllParentDepartment();
+
+	List<Department> selectAllDepartment();
+	
+	int deleteByParentId(Integer parentId);
+	 
+	List<Department> selectByParentId(Integer parentId);
+	
+	Department selectDepartByName(String departName);
 }

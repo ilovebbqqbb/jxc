@@ -18,4 +18,19 @@ public interface OrderPreviewService {
     int updateByPrimaryKey(OrderPreview record);
     
     List<OrderPreview> selectAllEntry();
+    
+    List<OrderPreview> selectEntryManage();
+    
+    List<OrderPreview> selectAllLoss();
+    
+    List<OrderPreview> selectAllReturn();
+    
+    List<OrderPreview> selectAllAllot();
+    
+    List<OrderPreview> selectAllWaitReturn();
+    
+    OrderPreview selectByBeLossOrderId(String beLossOrderId);
+    
+    List<OrderPreview> selectByWarehouseIdAndSupplierId(Integer warehouseId,Integer supplierId);
+    
 }

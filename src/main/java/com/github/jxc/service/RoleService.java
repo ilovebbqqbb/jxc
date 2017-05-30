@@ -21,4 +21,6 @@ public interface RoleService {
 	    List<Role> selectRoleById(Integer roleId);
 	    
 	    List<Role> selectAllRoles();
+	    
+	    Role selectByName(String roleName);
 }

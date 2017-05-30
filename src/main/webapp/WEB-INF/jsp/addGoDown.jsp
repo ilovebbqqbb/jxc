@@ -47,19 +47,11 @@
 				        </c:forEach>
     			 	</select>
 				</td>
-				<td>入库日期</td>
-				<td>
-					<input
-						class="layui-input" id="orderTime" placeholder="请选择入职时间"
-						onclick="layui.laydate({elem: this, istime: true, format: 'YYYY-MM-DD'})">
-					
-				</td>
-				
 			</tr>
 		</tbody>
 	</table>
 	<br>
-	<div class="layui-form-item">
+	<div class="layui-form-item" id="div1">
   	<table class="layui-table">
   	  <colgroup>
       <col width="150">
@@ -82,7 +74,7 @@
      </thead>
      <tbody id="tbody-result">
       <tr onclick="selectGoodsBySupplier()" >
-      	<td colspan="10" style="text-align: center;" ><i class="layui-icon" style="font-size: 20px; color: #FF0000;">&#xe60b</i><a>请点击按钮添加商品</a></td>
+      	<td colspan="10" style="text-align: center;"  onclick="selectGoodsBySupplier()"><i class="layui-icon" style="font-size: 20px; color: #FF0000;">&#xe60b</i><a>请点击按钮添加商品</a></td>
       </tr>
      </tbody>
    </table>
@@ -103,110 +95,91 @@
     </div>
   </div>
   <div class="layui-form-item" >
-    <label class="layui-form-label">经办人编号</label>
+    <label class="layui-form-label">经办人</label>
     <div class="layui-input-block">
-      <input id="operatorId" type="text" name="operatorId" required  lay-verify="required" placeholder="请输入经办人编号" autocomplete="off" class="layui-input" style="width: 200px"> 
+      <input id="operatorName" value="${user_login_session_key.petName }" type="text" name="operatorName" required  lay-verify="required" placeholder="请输入经办人编号" autocomplete="off" class="layui-input" style="width: 200px" readonly="readonly"> 
+      <input id="operatorId" value="${user_login_session_key.userAccountId}" type="hidden" name="operatorId" required  lay-verify="required" placeholder="请输入经办人编号" autocomplete="off" class="layui-input" style="width: 200px"> 
     </div>
   </div>
    <div class="layui-form-item">
     <div class="layui-input-block">
-      <button id="submitButton" class="layui-btn" onclick="addOrder()" style="margin-left: -100px">下&nbsp;单&nbsp;</button>
+      <button id="submitButton" class="layui-btn" onclick="addGoDown()" style="margin-left: -100px">下&nbsp;单&nbsp;</button>
     </div>
   </div>
+
  <script>
-	layui.use('laydate', function(){
-	  var laydate = layui.laydate;
-			});
+ layui.use(['form', 'layedit', 'laydate','layer'], function(){
+	  var form = layui.form()
+	  ,layedit = layui.layedit
+	  ,laydate = layui.laydate
+	  , layer = layui.layer;
+ });
 </script>
 <script type="text/javascript">
-var rowsPath = 0;
-var idPath = 0;
-
 function selectGoodsBySupplier(){
-	var supplierid=$("#supplier option:selected").val(); 	  	
-	layui.use('layer', function(){
-		  var layer = layui.layer;
-		  var showgood = "<%=basePath%>godownEntry/iframeShowGoodsBySupplier?supplierid=" + supplierid;
-		  
-		  layer.open({
-			  type: 2,
-			  title: '添加商品',
-			  shadeClose: true,
-			  shade: 0.8,
-			  area: ['800px', '90%'],
-			  content: showgood
-			}); 
-		});  
+	var supplierId=$("#supplier option:selected").val(); 	
+	var myTable= document.getElementById("div1");
+	var url = "<%=basePath%>godownEntry/selectGoods?supplierId="+supplierId;
+	$(myTable).load(url,function(responseTxt,statusTxt,xhr){
+	    if(statusTxt=="success"){
+	    	$("input:checkbox[name=box]").change(function(){
+				  tbTotal(); 
+			});
+	    }	       
+	    }
+	);
 }
 
-
-function addOrder() {
+function addGoDown() {
+	debugger;
 	var orderId = $("#orderId").val();
-    var orderTime = $("#orderTime").val();
-    var warehousesId=$("#warehouses option:selected").val();
     var orderNum = $("#goodsNum").val();
     var orderMoney = $("#goodsMoney").val();
-    var supplierId=$("#supplier option:selected").val();
     var operatorId=$("#operatorId").val();
-
-    layui.use('layer', function(){
-		  var layer = layui.layer;
-    
+	var warehouseId=$("#warehouses option:selected").val();
+	var supplierId=$("#supplier option:selected").val();
+	var goodsNumPath = 0;
     $.ajax({
     	type : "POST",
     	url : "<%=basePath%>godownEntry/ajaxInsertNewOrder",
-    	data : {"orderId":orderId,"supplierId":supplierId,"warehouseId":warehousesId,"orderMoney":orderMoney,"operatorId":operatorId,"orderNum":orderNum,"time":orderTime},
+    	data : {"orderId":orderId,"orderMoney":orderMoney,"operatorId":operatorId,"orderNum":orderNum,"supplierId":supplierId,"warehouseId":warehouseId},
     	success : function(data) {
-
     		if(data.resultMsg == "success") {
-    			InsertSellDetail();
-    			layer.msg('插入成功',{time: 2000});			
-					window.open("<%=basePath%>godownEntry/toGodownEntry","_self");		
+    			InsertGodownDetail();
+				layer.msg('下单成功',{time: 2000},function(){window.open("<%=basePath%>godownEntry/toGodownEntry","_self");});
     		} else {
-    			layer.msg(data.resultMsg,{time: 2000});
+    		 	layer.msg(data.resultMsg,{time: 2000});
     		}
     	},
     	error : function(xhr,status,err) {
-    		layer.msg('插入错误'+err,{time: 2000});
+    		layer.msg('系统错误'+err,{time: 2000}); 
     	}
     	
     });
-    
-    });
+	
 }
 
-function InsertSellDetail(){
+function InsertGodownDetail(){
 	var orderIdPath = $("#orderId").val();
+	
 	var goodsIdPath = 0;
 	var goodsNumPath = 0;
 	var remarksPath = "";
-	var tbNothing = "<tr onclick='selectGoodsBySupplier()'><td colspan='10' style='text-align: center;' ><i class='layui-icon' style='font-size: 20px; color: #FF0000;'>&#xe60b</i><a>请点击按钮添加商品</a></td></tr>";
+
+	if($('#tbody-result').html() != "" || $('#tbody-result').html() != null){
+		$("input:checkbox[name=box]:checked").each(function() {
+	        var trPath = $(this).parents("tr");
+	        goodsIdPath=$(trPath).find("td[name=goodsId]").text();
+	        goodsNumPath=$(trPath).find("input[name=goodsNum]").val();
+	        remarksPath=$(trPath).find("input[name=remarksPath]").val();
+	        ajaxInsertGodownDetail(orderIdPath,goodsIdPath,goodsNumPath,remarksPath);
+		});			
+	    };
 	
-	if($('#tbody-result').html() != "" || $('#tbody-result').html() != null || $('#tbody-result').html() != tbNothing){
-		$('#tbody-result tr').each(function() {
-	        $(this).find("td").each(function() {
-	        		
-	        		if ($(this).index() == "0") {
-	    	        	goodsIdPath = parseInt($(this).text());
-	    	        }
-	    	        if ($(this).index() == "6") {
-	    	        	goodsNumPath = parseInt($(this).children("input").val());
-	    	        }
-	    	        if ($(this).index() == "8") {
-	    	        	remarksPath = $(this).children("input").val();
-	    	        }
-	        });			
-	        
-	        ajaxInsertSellDetail(orderIdPath,goodsIdPath,goodsNumPath,remarksPath);
-	    });
-	}
 	
 }
 
-function ajaxInsertSellDetail(orderId,goodsId,goodsNum,remarks){
-	layui.use('layer', function(){
-		  var layer = layui.layer;
-
+function ajaxInsertGodownDetail(orderId,goodsId,goodsNum,remarks){
 	  $.ajax({
 	  	type : "POST",
 	  	url : "<%=basePath%>godownEntry/ajaxInsertOrderDetail",
@@ -214,76 +187,49 @@ function ajaxInsertSellDetail(orderId,goodsId,goodsNum,remarks){
 	  	success : function(data) {
 	
 	  		if(data.resultMsg == "success") {		
-	  			
+
 	  		} else {
-	  			layer.msg(data.resultMsg,{time: 2000});
+	  			 layer.msg(data.resultMsg,{time: 2000}); 
 	  		}
 	  	},
 	  	error : function(xhr,status,err) {
-	  		layer.msg('插入错误'+err,{time: 2000});
+	  		layer.msg('系统错误'+err,{time: 2000});
 	  	}
 	  	
 	  });
-	  });
+
 }
 </script>
 
-<script type="text/javascript">
-function deleteRows(obj){
-	layui.use('layer', function(){
-		  var layer = layui.layer;
-		  var defaultTbody = "<tr onclick='selectGoodsBySupplier()'><td colspan='10' style='text-align: center;' ><i class='layui-icon' style='font-size: 20px; color: #FF0000;'>&#xe60b</i><a>请点击按钮添加商品</a></td></tr>";
-		  
-		  layer.confirm('是否删除此商品', {icon: 0,title:'提示', 
-			  btn: ['确定','取消'] //按钮
-			}, function(){
-			  if(rowsPath > 1){
-				  $(obj).parents("tr").remove();
-				  rowsPath--;
-				  tbTotal();
-			  }else{
-				  $("#tbody-result").html(defaultTbody);
-				  rowsPath--;
-				  tbTotal();
-			  }
-			  layer.msg('删除成功', {time: 1000});
-			});
-	});
-}
-</script>
 
 <script type="text/javascript">	
-function trTotal(obj){
-	var path = $(obj).val();
-	var price = $(obj).parent("td").prev().text();
-	$(obj).parent("td").next().children("input").val(parseFloat(path*price).toFixed(1));
-	
-	tbTotal();
-};
+$(document).ready(function(){
+	  $("input").change(function(){
+		  tbTotal();
+	  });
+	});
 
 function tbTotal(){
 	
 	var tbTotalNumPath = 0;
 	var tbTotalPath = 0.0;
-	var tbNothing = "<tr onclick='selectGoodsBySupplier()'><td colspan='10' style='text-align: center;' ><i class='layui-icon' style='font-size: 20px; color: #FF0000;'>&#xe60b</i><a>请点击按钮添加商品</a></td></tr>";
+	$("input:checkbox[name=box]:checked").each(function() {
+		tbTotalNumPath += parseInt($(this).parents("tr").find("input[name=goodsNum]").val());
+		tbTotalPath += parseFloat($(this).parents("tr").find("input[name=goodsTotal]").val());
+		});
+	$("#goodsNum").val(tbTotalNumPath);
+	$("#goodsMoney").val(tbTotalPath.toFixed(1));
 	
-	if($('#tbody-result').html() != "" || $('#tbody-result').html() != null || $('#tbody-result').html() != tbNothing){
-		$('#tbody-result tr').find('td').each(function() {
-	        if ($(this).index() == "6") {
-	        	tbTotalNumPath += parseInt($(this).children("input").val());
-	        }
-	        if ($(this).index() == "7") {
-	        	tbTotalPath += parseFloat($(this).children("input").val());
-	        }
-	    });
-		
-		$("#goodsNum").val(tbTotalNumPath);
-		$("#goodsMoney").val(tbTotalPath.toFixed(1));
-	} else {
-		$("#goodsNum").val(0);
-		$("#goodsMoney").val(0.0);
-	}
-	
+}
+</script>
+
+<script type="text/javascript">
+function countGoodsTotal(obj){
+	var goodsTr = $(obj).parents("tr");
+	var goodsNum = $(goodsTr).find("input[name=goodsNum]").val();
+	var buyingPrice = $(goodsTr).find("td[name=buyingPrice]").text();
+	$(goodsTr).find("input[name=goodsTotal]").val(parseFloat(goodsNum * buyingPrice).toFixed(1));
+	tbTotal();
 }
 </script>
 </body>

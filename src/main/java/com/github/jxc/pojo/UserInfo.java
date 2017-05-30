@@ -30,6 +30,12 @@ public class UserInfo {
     private Date createdAt;
 
     private Date updatedAt;
+    
+    private UserAccount userAccount;
+    
+    private Role role;
+    
+    private Department department;
 
     public Integer getUserInfoId() {
         return userInfoId;
@@ -142,4 +148,28 @@ public class UserInfo {
     public void setUpdatedAt(Date updatedAt) {
         this.updatedAt = updatedAt;
     }
+
+	public UserAccount getUserAccount() {
+		return userAccount;
+	}
+
+	public void setUserAccount(UserAccount userAccount) {
+		this.userAccount = userAccount;
+	}
+
+	public Role getRole() {
+		return role;
+	}
+
+	public void setRole(Role role) {
+		this.role = role;
+	}
+
+	public Department getDepartment() {
+		return department;
+	}
+
+	public void setDepartment(Department department) {
+		this.department = department;
+	}
 }

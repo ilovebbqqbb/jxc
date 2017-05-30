@@ -18,10 +18,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.fastjson.JSON;
 import com.github.jxc.pojo.Department;
+import com.github.jxc.pojo.PowerManage;
+import com.github.jxc.pojo.PowerManageKey;
 import com.github.jxc.pojo.Role;
 import com.github.jxc.pojo.UserAccount;
 import com.github.jxc.pojo.UserInfo;
 import com.github.jxc.service.DepartmentService;
+import com.github.jxc.service.PowerManageService;
 import com.github.jxc.service.RoleService;
 import com.github.jxc.service.UserAccountService;
 import com.github.jxc.service.UserInfoService;
@@ -43,6 +46,9 @@ public class UserController {
 	@Resource
 	private DepartmentService departmentService;
 	
+	@Resource
+	private PowerManageService powerManageService;
+	
 	@RequestMapping("login")
 	@ResponseBody
 	public Map<String,String> userLogin(HttpServletRequest request,HttpServletResponse response,UserAccount userAccount) {
@@ -55,7 +61,7 @@ public class UserController {
 					if(userAccount.getPassword().equals(existAccount.getPassword())) {
 						resultMap.put("resultMsg", "success");
 						HttpSession session=request.getSession();
-						session.setAttribute(Constant.USER_LOGIN_SESSION_KEY, userAccount);
+						session.setAttribute(Constant.USER_LOGIN_SESSION_KEY, existAccount);
 						 
 					} else {
 						resultMap.put("resultMsg", "您输入的密码不正确");
@@ -71,6 +77,28 @@ public class UserController {
 			resultMap.put("resultMsg", "系统错误!!!");
 		}
 		return resultMap;
+	}
+	@RequestMapping("systemIntroduction")
+	public String systemIntroduction(){
+		return "introduction";
+	}
+	@RequestMapping("logout")
+	public String logout(HttpServletRequest request){
+		HttpSession session=request.getSession();
+		session.removeAttribute(Constant.USER_LOGIN_SESSION_KEY);
+		return "redirect:/common/toIndex";
+	}
+	@RequestMapping("selectUser")
+	public String selectUser(HttpServletRequest request,Model model){
+		try {
+			HttpSession session=request.getSession();
+			UserAccount ua= (UserAccount)session.getAttribute(Constant.USER_LOGIN_SESSION_KEY);
+			UserInfo ui=userInfoService.selectByPrimaryKey(ua.getUserInfoId()) ;
+			model.addAttribute("u", ui);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return "showUser";
 	}
 	
 	@RequestMapping("toRole")
@@ -106,26 +134,22 @@ public class UserController {
 		return dataMap;
 	}
 	
-	@RequestMapping("deleteRoleById")
-	public String deleteRoleById(Integer id){
-		try {
-			roleService.deleteByPrimaryKey(id);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return "redirect: toRole";
-	}
-	
 	@RequestMapping("addRole")
 	@ResponseBody
 	public Map<String,String> addRole(Role role){
 		Map<String,String> dataMap = new HashMap<String,String>();
+		Role r=new Role();
 		try {
-			int i = roleService.insertSelective(role);
-			if(i>0){
-				dataMap.put("resultMsg","success");
+			r=roleService.selectByName(role.getRoleName());
+			if(r==null){
+				int i = roleService.insertSelective(role);
+				if(i>0){
+					dataMap.put("resultMsg","success");
+				}else{
+					dataMap.put("resultMsg","添加失败");
+				}
 			}else{
-				dataMap.put("resultMsg","添加失败");
+				dataMap.put("resultMsg","角色名已存在");
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -172,17 +196,16 @@ public class UserController {
 		String entryTime = request.getParameter("entry");
 		String birthday = request.getParameter("birth");
 		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		try {
-			userInfo.setBirthday(df.parse(birthday));
+			userInfo.setBirthday(sdf.parse(birthday));
 			userInfo.setEntryTime(df.parse(entryTime));
 			int i = userInfoService.insertSelective(userInfo);
 			int j = 0;
 			if(i > 0) {
-				
 				userAccount.setUserInfoId(userInfo.getUserInfoId());
 				j = userAccountService.insertSelective(userAccount);
 			}
-			
 			if(j <= 0 && userInfo.getUserInfoId() != null) {
 				userInfoService.deleteByPrimaryKey(userInfo.getUserInfoId());
 			}
@@ -200,13 +223,12 @@ public class UserController {
 		return dataMap;
 	}
 	
-	@RequestMapping("deleteUserById")
+	@RequestMapping("deleteRoleById")
 	@ResponseBody
-	public Map<String,String> deleteUserById(Integer userInfoId){
+	public Map<String,String> deleteUserById(Integer roleId,HttpServletRequest request){
 		Map<String,String> dataMap = new HashMap<String,String>();
 		try {
-			userInfoService.deleteByPrimaryKey(userInfoId);
-			userAccountService.deleteByUserInfoId(userInfoId);
+			roleService.deleteByPrimaryKey(roleId);
 			dataMap.put("resultMsg","success" );
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -244,15 +266,97 @@ public class UserController {
 		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		try {
+			if(userInfo.getUserInfoId().equals(0)||useAccount.getUserAccountId().equals(0)){
+				dataMap.put("resultMsg","请选择用户修改！！！");
+			}else{
 			userInfo.setBirthday(sdf.parse(birthday));
 			userInfo.setEntryTime(df.parse(entryTime));
 		    userAccountService.updateByPrimaryKeySelective(useAccount);
 		    userInfoService.updateByPrimaryKeySelective(userInfo);
 		    dataMap.put("resultMsg","success");
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 			dataMap.put("resultMsg","修改失败");
 		}
 		return dataMap;
+	}
+	@RequestMapping("updateUser")
+	@ResponseBody
+	public Map<String,String> updateUser(UserAccount userAccount){
+		Map<String,String> dataMap = new HashMap<String,String>();
+		try {
+			userAccountService.updateByPrimaryKeySelective(userAccount);
+			dataMap.put("resultMsg","success");
+		} catch (Exception e) {
+			e.printStackTrace();
+			dataMap.put("resultMsg","修改失败");
+		}
+		return dataMap;
+	}
+	@RequestMapping("toupdateUser")
+	public String toupdateUser(HttpServletRequest request,Model model){
+		try {
+			HttpSession session=request.getSession();
+			UserAccount ua= (UserAccount)session.getAttribute(Constant.USER_LOGIN_SESSION_KEY);
+			UserInfo ui=userInfoService.selectByPrimaryKey(ua.getUserInfoId()) ;
+			model.addAttribute("u", ui);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return "updateUserAccount";
+	}
+	
+	@RequestMapping("toPower")
+	public String toPower(Model model){
+		try {
+			List<PowerManage> pList=powerManageService.selectAllPowerManage();
+			List<Role> rList=roleService.selectAllRoles();
+			model.addAttribute("rList", rList);
+			model.addAttribute("pList", pList);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return "power";
+	}
+	@RequestMapping("addPower")
+	@ResponseBody
+	public Map<String,String> addPower(Integer roleId,Integer powerId){
+		Map<String,String> resultMsg = new HashMap<String,String>();
+		PowerManage p=new PowerManage();
+		PowerManageKey p1=new PowerManageKey();
+		try {
+			p.setRoleId(roleId);
+			p.setPowerId(powerId);
+			p1.setRoleId(roleId);
+			p1.setPowerId(powerId);
+			PowerManage p2= powerManageService.selectByPrimaryKey(p1);
+			if(p2==null){
+				powerManageService.insertSelective(p);
+				resultMsg.put("resultMsg","success");
+			}else{
+				resultMsg.put("resultMsg","改角色已拥有此权限");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			resultMsg.put("resultMsg","分配失败");
+		}
+	    return resultMsg;
+	}
+	@RequestMapping("deletePower")
+	@ResponseBody
+	public  Map<String,String> deletePower(Integer roleId,Integer powerId){
+		Map<String,String> resultMsg = new HashMap<String,String>();
+		PowerManageKey p=new PowerManageKey();
+		try {
+			p.setRoleId(roleId);
+			p.setPowerId(powerId);
+			powerManageService.deleteByPrimaryKey(p);
+			resultMsg.put("resultMsg","success");
+		} catch (Exception e) {
+			e.printStackTrace();
+			resultMsg.put("resultMsg","删除失败");
+		}
+		return resultMsg;
 	}
 }

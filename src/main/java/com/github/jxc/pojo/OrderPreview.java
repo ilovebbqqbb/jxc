@@ -27,7 +27,33 @@ public class OrderPreview {
     
     private Warehouse warehouse;
     
+    private Warehouse anotherWarehouse;
+    
     private Supplier supplier;
+    
+    private String beLossOrderId;
+    
+    private Integer beEntryWarehouseId;
+    
+    private UserAccount userAccount;
+    
+    public String getBeLossOrderId() {
+		return beLossOrderId;
+	}
+
+	public void setBeLossOrderId(String beLossOrderId) {
+		this.beLossOrderId = beLossOrderId;
+	}
+
+	public Integer getBeEntryWarehouseId() {
+		return beEntryWarehouseId;
+	}
+
+	public void setBeEntryWarehouseId(Integer beEntryWarehouseId) {
+		this.beEntryWarehouseId = beEntryWarehouseId;
+	}
+
+	
     
     public Supplier getSupplier() {
 		return supplier;
@@ -131,5 +157,21 @@ public class OrderPreview {
 
 	public void setWarehouse(Warehouse warehouse) {
 		this.warehouse = warehouse;
+	}
+
+	public Warehouse getAnotherWarehouse() {
+		return anotherWarehouse;
+	}
+
+	public void setAnotherWarehouse(Warehouse anotherWarehouse) {
+		this.anotherWarehouse = anotherWarehouse;
+	}
+
+	public UserAccount getUserAccount() {
+		return userAccount;
+	}
+
+	public void setUserAccount(UserAccount userAccount) {
+		this.userAccount = userAccount;
 	}
 }

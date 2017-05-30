@@ -6,6 +6,26 @@ public class PowerManage extends PowerManageKey {
     private Date createdAt;
 
     private Date updatedAt;
+    
+	private Power power;
+    
+    private Role role;
+    
+    public Power getPower() {
+		return power;
+	}
+
+	public void setPower(Power power) {
+		this.power = power;
+	}
+
+	public Role getRole() {
+		return role;
+	}
+
+	public void setRole(Role role) {
+		this.role = role;
+	}
 
     public Date getCreatedAt() {
         return createdAt;

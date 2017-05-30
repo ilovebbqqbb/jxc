@@ -42,7 +42,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     select 
     <include refid="Base_Column_List" />
     from tb_goods
-    where SupplierId = #{supplierid,jdbcType=VARCHAR}
+    where SupplierId = #{supplierid,jdbcType=INTEGER}
     </select>
     <select id="selectByGoodsIdAndSupplierId" parameterType="com.github.jxc.pojo.Goods" resultMap="BaseResultMap">
     select 

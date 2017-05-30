@@ -50,4 +50,41 @@ public class OrderPreviewServiceImpl implements OrderPreviewService{
 		return this.orderPreviewDao.selectAllEntry();
 	}
 
+	@Override
+	public List<OrderPreview> selectAllLoss() {
+		return this.orderPreviewDao.selectAllLoss();
+	}
+
+	@Override
+	public OrderPreview selectByBeLossOrderId(String beLossOrderId) {
+		return this.orderPreviewDao.selectByBeLossOrderId(beLossOrderId);
+	}
+
+	@Override
+	public List<OrderPreview> selectAllReturn() {
+		return this.orderPreviewDao.selectAllReturn();
+	}
+
+	@Override
+	public List<OrderPreview> selectEntryManage() {
+		return this.orderPreviewDao.selectEntryManage();
+	}
+
+	@Override
+	public List<OrderPreview> selectByWarehouseIdAndSupplierId(
+			Integer warehouseId,Integer supplierId) {
+		return this.orderPreviewDao.selectByWarehouseIdAndSupplierId(warehouseId, supplierId);
+	}
+
+	@Override
+	public List<OrderPreview> selectAllAllot() {
+		return this.orderPreviewDao.selectAllAllot();
+	}
+
+	@Override
+	public List<OrderPreview> selectAllWaitReturn() {
+		return this.orderPreviewDao.selectAllWaitReturn();
+	}
+
+
 }

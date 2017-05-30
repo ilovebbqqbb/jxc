@@ -27,6 +27,11 @@
 			<result column="GoodsSource" property="goodsSource" jdbcType="VARCHAR"/>
 			<result column="Details" property="details" jdbcType="VARCHAR"/>
 		</association>
+		<association property="stockDetail" javaType="com.github.jxc.pojo.StockDetail">
+		    <id column="warehouse_id" jdbcType="INTEGER" property="warehouseId" />
+		    <id column="goods_id" jdbcType="INTEGER" property="goodsId" />
+		    <result column="goods_stock" jdbcType="INTEGER" property="goodsStock" />
+  	    </association>
   </resultMap>
   <sql id="Base_Column_List">
     order_detail_id, order_id, goods_id, goods_num, remarks

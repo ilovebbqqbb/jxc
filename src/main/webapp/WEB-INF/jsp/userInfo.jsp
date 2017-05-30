@@ -8,14 +8,10 @@
 	<script type="text/javascript" src="../jxc/js/jquery-3.2.0.min.js" charset="utf-8"></script>
     <script type="text/javascript" src="../jxc/js/layui/layui.js" charset="utf-8"></script>
 <title>用户管理</title>
-	<!-- <style> 
-	.layui-form-item {float:left; display:inline;} 
-	</style>  -->
 </head>
 
 <body>
-	用户管理
-	<hr size="4" width="100%" noshade color="#000000" />
+	<blockquote class="layui-elem-quote">用户管理</blockquote>
 	<table class="layui-table">
 		<colgroup>
 			<col width="150">
@@ -42,21 +38,23 @@
 					<td>${userInfo.department.departName }</td>
 					<td>${userInfo.role.roleName }</td>
 					<td>${userInfo.phoneNumber }</td>
-					<th>
-						<input class="layui-btn" type="button" value="删除" onclick="deleteUser(${userInfo.userInfoId})">
-						&nbsp; 
-						<input class="layui-btn" type="button" value="编辑" onclick="selectUser(${userInfo.userInfoId})">
-					    &nbsp;
-						内容权限&nbsp;
-					</th>
+					<td>
+						<div class="layui-btn-group">
+							<button class="layui-btn" onclick="selectUser(${userInfo.userInfoId})">修改</button>
+							<button class="layui-btn  layui-btn-normal" onclick="deleteUser(${userInfo.userInfoId})"><i class="layui-icon"></i> 删除</button>
+  			    		</div>
+					</td>
 				</tr>
 			</c:forEach>
 		</tbody>
 	</table>
 	<br>
-	<br> 添加/修改用户
-	<hr size="4" width="100%" noshade color="#000000" />
-	<form id="formData">
+	<br> 
+	
+	<fieldset class="layui-elem-field layui-field-title">
+		<legend id="lalala" >添加/修改用户</legend>
+	</fieldset>
+	<div id="formData" style="display:none">
 		<div class="layui-form" style="width:30%">
 			<div class="layui-form-item">
 				<label class="layui-form-label">用户名</label>
@@ -158,29 +156,30 @@
 			<br><br>
 				<div class="layui-inline" >
 					<label class="layui-form-label">入职时间</label> 
+					
 					<input
 						class="layui-input" id="entryTime" placeholder="请选择入职时间"
-						onclick="layui.laydate({elem: this, istime: true, format: 'YYYY-MM-DD hh:mm:ss'})">
+						onclick="layui.laydate({elem: this, istime: true, format: 'YYYY-MM-DD hh:mm:ss'})" style="margin-left: 110px">
 				</div>
 				<div class="layui-inline">
 					<label class="layui-form-label">出生日期</label> 
 					<input
-						class="layui-input" id="birthday" placeholder="请选择出生日期"
-						onclick="layui.laydate({elem: this, istime: true, format: 'YYYY-MM-DD'})">
+						class="layui-input" id="birthday" placeholder="请选择出生日期" 
+						onclick="layui.laydate({elem: this, istime: true, format: 'YYYY-MM-DD'})" style="margin-left: 110px">
 				</div>
 		
 			
 			<div>
 				<br><br>
 				&nbsp;&nbsp;&nbsp;&nbsp;
-				<input class="layui-btn" type="button" value="修改" onclick="updateUser()">
-				&nbsp;&nbsp;
 				<input class="layui-btn" type="button" value="添加" onclick="addUser()">
+				&nbsp;&nbsp;
+				<input class="layui-btn" type="button" value="修改" onclick="updateUser()">
 			</div>
 		</div>
-	</form>
+	</div>
 	<script type="text/javascript">
-		layui.use([ 'form', 'layedit', 'laydate' ],
+		layui.use([ 'form', 'layedit', 'laydate','layer' ],
 			function() {
 				var form = layui.form(), 
 					layer = layui.layer, 
@@ -245,12 +244,11 @@
 			$.ajax({
               	type : "POST",
               	url : "<%=basePath%>user/addUser",
-              	data : {"petName":petName,"password":password,"userName":userName,"sex":sex,"departmentId":departmentId,"roleId":roleId,"phoneNumber":phoneNumber,"email":email,"job":job,"salary":salary,"entryTime":entryTime,"birthday":birthday,"degree":degree},
+              	data : {"petName":petName,"password":password,"userName":userName,"sex":sex,"departmentId":departmentId,"roleId":roleId,"phoneNumber":phoneNumber,"email":email,"job":job,"salary":salary,"entry":entryTime,"birth":birthday,"degree":degree},
               	success : function(data) {
               		if(data.resultMsg == "success") {
-              			alert("添加成功");
+              			layer.msg('添加成功',{time: 2000});		
               			location.reload();
-              			//var roleData = JSON.parse(data.data);
               		} else {
               			layer.msg(data.resultMsg);
               		}
@@ -261,40 +259,35 @@
               	
               });
 		    } 
-		function deleteUser(id) {
-			 var userInfoId = $("#userInfoId").val();
-			 var petName = $("#petName").val();
- 			 var password = $("#password").val();	
- 			 var userName = $("#userName").val();	
- 			 var sex = $("#sex").val();	
- 			 var departmentId = $("#departmentId").val();	
- 			 var roleId = $("#roleId").val();	
- 			 var phoneNumber = $("#phoneNumber").val();	
- 			 var email = $("#email").val();	
- 			 var job = $("#job").val();	
- 			 var salary = $("#salary").val();	
- 			 var degree = $("#degree").val();	
- 			 var entryTime = $("#entryTime").val();	
- 			 console.log(typeof(entryTime));
- 			 var birthday = $("#birthday").val();
-			 $.ajax({
-            	type : "POST",
-            	url : "<%=basePath%>user/deleteUserById",
-            	data : {"userInfoId":id},
-            	success : function(data) {
-            		if(data.resultMsg == "success") {
-            			alert("删除成功");
-            			location.reload();
-            		} else {
-            			alert(data.resultMsg);
-            		}
-            	},
-            	error : function(xhr,status,err) {
-            		alert("请求错误"+err);
-            	}
-            	
-            })
-    	} 
+		
+		function deleteUser(userInfoId){
+	 		layui.use('layer', function(){
+	 			var layer = layui.layer;
+	 			layer.confirm('是否删除此用户', {icon: 0,title:'提示', btn: ['确定','取消'] }, function(){
+	 				  
+	 					$.ajax({
+	 					  	
+	 						type : "POST",
+	 					  	url : "http://localhost:8080/jxc/user/deleteRoleById",
+	 					  	data : {"userInfoId":userInfoId},
+	 					  	success : function(data) {
+	 					
+	 					  		if(data.resultMsg == "success") {		
+	 					  			layer.msg('删除成功',{time: 2000},function(){window.location.reload();});
+	 					  		} else {
+	 					  			layer.msg(data.resultMsg,{time: 2000},function(){window.location.reload();});
+	 					  		}
+	 					  	},
+	 					  	error : function(xhr,status,err) {
+	 					  		layer.msg('删除失败'+err,{time: 2000},function(){window.location.reload();});
+	 					  	}
+	 					  	
+	 					});  
+	 			});
+	 		
+	 		});
+	 	}
+	  
 		var uiId=0;
 		var uaId=0;
 		
@@ -337,28 +330,14 @@
             			 console.log(data.datas);
             			
  					}else{
-						alert(data.resultMsg);
+						layer.msg(data.resultMsg,{time: 2000});	
 					}
 				},
 				error : function(xhr,status,err) {
-					alert("请求错误"+err);
+					layer.msg('请求错误',{time: 2000});
 				}
 			})
-			/* function bianhuan(yuansuId,morenId){
-				var yuansu = document.getElementById(yuansuId);
-				var valuePath = 0;
-				var textPath = "";
-				var htmlPath = "";
-				$(yuansu).find("option").each(function(){
-					if($(this).val() == morenId){
-						valuePath = $(this).val();
-						textPath = $(this).text();
-						htmlPath = "<option value=" + valuePath + " selected >" + textPath + "</option>";
-						$(this).remove();
-						$(yuansu).append(htmlPath);
-					}
-				});
-			} */
+			
 		});
 		}
 		function updateUser(obj){
@@ -387,7 +366,7 @@
             	data : {"userInfoId":userInfoId,"userAccountId":userAccountId,"petName":petName,"password":password,"userName":userName,"sex":sex,"departmentId":departmentId,"roleId":roleId,"phoneNumber":phoneNumber,"email":email,"job":job,"salary":salary,"entry":entryTime,"birth":birthday,"degree":degree},
             	success : function(data) {
             		if(data.resultMsg == "success") {
-            			alert("修改成功");
+            			layer.msg('修改成功',{time: 2000});	
             			location.reload();
             		} else {
             			layer.msg(data.resultMsg);
@@ -397,9 +376,18 @@
             		layer.msg("请求错误"+err);
             	}
             	
-            })
+            });
 		}
-		
+		  $(function(){  
+		        $("#lalala").click(function( e ){  
+		            e.preventDefault();  
+		            if ($("#formData").is(":hidden") ){  
+		                $("#formData").show("normal");  
+		            }else{  
+		                $("#formData").hide("slow");  
+		            }  
+		        });  
+		    });  
 	</script>
 
 </body>
