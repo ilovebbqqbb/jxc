@@ -9,11 +9,12 @@ public interface StockDetailDao {
 	
 	int updateByPrimaryKeySelective(StockDetail stockDetail);
 	
-	int insertSelective(StockDetail stockDetail);
-	
-	StockDetail selectByPrimaryKey(StockDetailKey stockDetailKey);
-	
 	List<StockDetail> selectByWarehouseId(Integer warehouseId);
 	
 	List<StockDetail> selectAllStock();
+
+	StockDetail selectByPrimaryKey(StockDetailKey stockDetailKey);
+	
+	int insertSelective(StockDetail stockDetail);
+
 }

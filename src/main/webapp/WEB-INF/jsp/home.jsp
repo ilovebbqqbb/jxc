@@ -19,7 +19,7 @@
 			    var element = layui.element();
 				
 			});
-			var contentWidth = $(".layui-nav-tree").width();
+			var contentWidth  = $(".layui-nav-tree").width();
 			$("#content").css({"margin-left": contentWidth});
 			//$(".layui-header").css({"margin-left":$(".layui-nav-tree").width()});
 			$(".layui-nav-tree").css({"margin-top" :$(".layui-header").height()});
@@ -54,6 +54,7 @@
 			</div>
 			
 		</div>
+
 		<div id="left1" style="float: left" class="site" >
 			<ul class="layui-nav layui-nav-tree layui-nav-side" lay-filter="test">
 				 <li class="layui-nav-item layui-nav-itemed">

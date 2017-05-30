@@ -21,6 +21,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			<result column="Manufacturer" property="manufacturer" jdbcType="VARCHAR"/>
 			<result column="GoodsSource" property="goodsSource" jdbcType="VARCHAR"/>
 			<result column="Details" property="details" jdbcType="VARCHAR"/>
+			<association property="stockDetail" javaType="com.github.jxc.pojo.StockDetail">
+			    <id column="warehouse_id" jdbcType="INTEGER" property="warehouseId" />
+			    <id column="goods_id" jdbcType="INTEGER" property="goodsId" />
+			    <result column="goods_stock" jdbcType="INTEGER" property="goodsStock" />
+  	    	</association>
 	</resultMap>
 	<sql id="Base_Column_List">
 		GoodsId,GoodsName,GoodsBarcode,GoodsTypeName,BrandName,BuyingPrice,SupplyPrice,SalePrice,GoodsDate,Uint,Spec,GoodsStatus,GoodsPic,Manufacturer,GoodsSource,Details
@@ -38,6 +43,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		from tb_goods
 		where GoodsId = #{goodsId,jdbcType=INTEGER}
 	</select>
+	
+	<select id="selectByPrimaryKeyAndWarehouseId" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+		select *
+		from tb_goods g,stock_detail sd
+		where g.GoodsId = #{0}
+		and g.GoodsId = sd.goods_id
+		and sd.warehouse_id = #{1}
+	</select>
+	
 	<select id="selectBySupplierId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
@@ -52,5 +66,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     and
     GoodsId = #{goodsId,jdbcType=VARCHAR}
     </select>
-
+	
+	<select id="selectByWarehouseId" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+		select *
+		from tb_goods g,stock_detail sd
+		where g.GoodsId = sd.goods_id
+		and sd.warehouse_id = #{warehouseId,jdbcType=INTEGER}
+	</select>
 </mapper>

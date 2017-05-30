@@ -13,7 +13,7 @@
     	<label class="layui-form-label"></label>
     	<div style="margin-top:20px">
       	<input id="goodsId" style="width: 380px;float:left" type="text" name="goodsId" required  lay-verify="required" placeholder="请输入商品编号或条形码" autocomplete="off" class="layui-input">
-    	<button id="searchButton" style="margin-left: 10px" class="layui-btn" onclick="searchGoods()">查找</button>
+    	<button id="searchButton" style="margin-left: 10px" class="layui-btn" onclick="searchGoods(${warehouseId})">查找</button>
     	</div>
     </div>
     <div class="layui-form-item" style="margin:auto 20px auto 20px">
@@ -56,7 +56,7 @@
 <script type="text/javascript" src="../jxc/js/layui/layui.js" charset="utf-8"></script>
 
 <script type="text/javascript">
-function searchGoods(){
+function searchGoods(warehouseId){
 	var goodsId = $("#goodsId").val();  
     var goodsTbody = window.document.getElementById("goods-tbody-result");
     
@@ -66,7 +66,7 @@ function searchGoods(){
     $.ajax({  
         type: "post",       
         url: "<%=basePath%>sell/iframeSearchAddGoods",  
-        data: {"goodsId": goodsId}, 
+        data: {"goodsId": goodsId,"warehouseId":warehouseId}, 
         success: function (result){
         	
         	if(result.resultMsg == "success") {

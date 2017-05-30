@@ -13,4 +13,8 @@ public interface GoodsService {
     List<Goods> selectBySupplierId(Integer supplierid);
     
     Goods selectByGoodsIdAndSupplierId(Goods goods);
+    
+    List<Goods> selectByWarehouseId(Integer warehouseId);
+    
+    Goods selectByPrimaryKeyAndWarehouseId(Integer goodsId,Integer warehouseId);
 }

@@ -9,10 +9,12 @@ public interface StockDetailService {
 
 	int updateByPrimaryKeySelective(StockDetail stockDetail);
 	
+
 	int insertSelective(StockDetail stockDetail);
 	
 	StockDetail selectByPrimaryKey(StockDetailKey stockDetailKey);
 	
 	List<StockDetail> selectByWarehouseId(Integer warehouseId);
 	List<StockDetail> selectAllStock();
+
 }

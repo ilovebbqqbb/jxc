@@ -25,6 +25,7 @@ import com.github.jxc.pojo.SellDetail;
 import com.github.jxc.pojo.SellPreview;
 import com.github.jxc.pojo.SellStatistics;
 import com.github.jxc.pojo.StockDetail;
+import com.github.jxc.pojo.StockDetailKey;
 import com.github.jxc.pojo.Store;
 import com.github.jxc.pojo.StoreDetail;
 import com.github.jxc.pojo.StoreDetailKey;
@@ -91,8 +92,6 @@ public class SellController {
 					model.addAttribute("storeList", storeList);
 					model.addAttribute("warehouseList", warehouseList);
 					model.addAttribute("randomId", str);
-					
-					
 				}
 			}
 		} catch(Exception e) {
@@ -102,14 +101,15 @@ public class SellController {
 		return "addNewSell";
 	}
 	
-	//列出所有商品
+	//列出所选仓库所有商品
 	@RequestMapping("iframeAddGoods")
-	public String iframeAddGoods(HttpServletRequest request,HttpServletResponse response,Model model){
+	public String iframeAddGoods(HttpServletRequest request,HttpServletResponse response,Model model,Integer warehouseId){
 		
 		try{
-			List<Goods> goodsList = goodsService.selectAll();
+			List<Goods> goodsList = goodsService.selectByWarehouseId(warehouseId);
 			if(goodsList != null) {
 				
+				model.addAttribute("warehouseId", warehouseId);
 				model.addAttribute("goodsList", goodsList);
 			}
 		} catch(Exception e) {
@@ -122,10 +122,10 @@ public class SellController {
 	//商品编号查询商品
 	@RequestMapping("iframeSearchAddGoods")
 	@ResponseBody
-	public Map<String,String> iframeSearchAddGoods(HttpServletRequest httpServletRequest,HttpServletResponse httpServletResponse,Integer goodsId){
+	public Map<String,String> iframeSearchAddGoods(HttpServletRequest httpServletRequest,HttpServletResponse httpServletResponse,Integer goodsId,Integer warehouseId){
 		Map<String,String> resultMap = new HashMap<String, String>();
 		
-		Goods goodsTemp = goodsService.selectByPrimaryKey(goodsId);
+		Goods goodsTemp = goodsService.selectByPrimaryKeyAndWarehouseId(goodsId,warehouseId);
 		if(goodsTemp != null){
 			String json = JSON.toJSONString(goodsTemp);
 			resultMap.put("data",json);
@@ -561,14 +561,130 @@ public class SellController {
 		return "iframeShowCheckReturn";
 	}
 	
-	//商家管理退货单
+	//商家退货
+	@RequestMapping("prepareReturn")
+	public String prepareReturn(HttpServletRequest request,HttpServletResponse response,Model model) {
+		
+		try{
+			List<ReturnPreview> returnList = returnPreviewService.selectByStatus("审核通过，等待商店退货");
+			if(returnList != null) {
+				model.addAttribute("returnList", returnList);
+			}
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		
+		return "prepareReturn";
+	}
 	
+	//小窗商家退货
+	@RequestMapping("iframeShowPrepareReturn")
+	public String iframeShowPrepareReturn(HttpServletRequest request,HttpServletResponse response,Model model,String returnId){
+		
+		try{
+			ReturnPreview returnPreview = returnPreviewService.selectByPrimaryKey(returnId);
+			List<ReturnDetail> detailList = returnDetailService.selectByStoreIdAndReturnId(returnPreview);
+			if(detailList != null) {
+				
+				model.addAttribute("returnPreview", returnPreview);
+				model.addAttribute("detailList", detailList);
+			}
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		
+		return "iframeShowPrepareReturn";
+	}
+
+	//商家发货
+	@RequestMapping("sendReturn")
+	public String sendReturn(HttpServletRequest request,HttpServletResponse response,Model model) {
+		
+
+		try{
+			List<ReturnPreview> returnList = returnPreviewService.selectByNotStatus("审核通过，等待商店退货");
+			if(returnList != null) {
+				model.addAttribute("returnList", returnList);
+			}
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		
+		return "sendReturn";
+	}
+	
+	//小窗商家发货
+	@RequestMapping("iframeShowSendReturn")
+	public String iframeShowSendReturn(HttpServletRequest request,HttpServletResponse response,Model model,String returnId){
+		
+		try{
+			List<ReturnDetail> detailList = returnDetailService.selectByReturnId(returnId);
+			ReturnPreview returnPreview = returnPreviewService.selectByPrimaryKey(returnId);
+			if(detailList != null) {
+				
+				model.addAttribute("returnPreview", returnPreview);
+				model.addAttribute("detailList", detailList);
+			}
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		
+		return "iframeShowSendReturn";
+	}
 	
 	//总部收取退货
+	@RequestMapping("receiptReturn")
+	public String receiptReturn(HttpServletRequest request,HttpServletResponse response,Model model) {
+		
+		try{
+			List<ReturnPreview> returnList = returnPreviewService.selectByNotStatus("商家已下单，尚未审核");
+			if(returnList != null) {
+				
+				model.addAttribute("returnList", returnList);
+			}
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		
+		return "receiptReturn";
+	}
 	
+	//小窗总部收货
+	@RequestMapping("iframeShowReceiptReturn")
+	public String iframeShowReceiptReturn(HttpServletRequest request,HttpServletResponse response,Model model,String returnId){
+		
+		try{
+			List<ReturnDetail> detailList = returnDetailService.selectByReturnId(returnId);
+			ReturnPreview returnPreview = returnPreviewService.selectByPrimaryKey(returnId);
+			if(detailList != null) {
+				
+				model.addAttribute("returnPreview", returnPreview);
+				model.addAttribute("detailList", detailList);
+			}
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		
+		return "iframeShowReceiptReturn";
+	}
 	
 	//异步删除退货单
-	
+	@RequestMapping("ajaxDeleteReturn")
+	@ResponseBody
+	public Map<String,String> ajaxDeleteReturn(String returnId,HttpServletRequest request,HttpServletResponse response){
+		
+		Map<String,String> resultMap = new HashMap<String, String>();
+		
+		try {
+			returnPreviewService.deleteByPrimartKey(returnId);
+			returnDetailService.deleteByReturnId(returnId);
+			resultMap.put("resultMsg", "success");
+		} catch (Exception e) {
+			e.printStackTrace();
+			resultMap.put("resultMsg", "系统错误!!!");
+		}
+		return resultMap;
+	}
 	
 	//异步更新退货单状态（1：审核；2：商店退货；3：总部收货）
 	@RequestMapping("ajaxUpdateReturn")
@@ -589,43 +705,43 @@ public class SellController {
 				returnPreviewService.updateByPrimaryKeySelective(returnPath);
 				resultMap.put("resultMsg", "success");
 				break;
-			/*case 2:
-				sellStatus = "已发货，请注意签收";
-				List<SellDetail> sellDetailList_2 = sellDetailService.selectByWarehouseIdAndSellId(sellPath);
-				for (SellDetail sellDetail : sellDetailList_2){
-					StockDetail stockDetail = new StockDetail();
-					stockDetail.setWarehouseId(sellPath.getWarehouseId());
-					stockDetail.setGoodsId(sellDetail.getGoodsId());
-					stockDetail.setGoodsStock(sellDetail.getStockDetail().getGoodsStock() - sellDetail.getGoodsNum());
-					stockDetailService.updateByPrimaryKeySelective(stockDetail);
+			case 2:
+				returnStatus = "已发货，请注意签收";
+				List<ReturnDetail> returnDetailList_2 = returnDetailService.selectByStoreIdAndReturnId(returnPath);
+				for (ReturnDetail returnDetail : returnDetailList_2){
+					StoreDetail storeDetail = new StoreDetail();
+					storeDetail.setStoreId(returnPath.getStoreId());
+					storeDetail.setGoodsId(returnDetail.getGoodsId());
+					storeDetail.setGoodsStock(returnDetail.getStoreDetail().getGoodsStock() - returnDetail.getGoodsNum());
+					storeDetailService.updateByPrimaryKeySelective(storeDetail);
 				}
-				sellPath.setSellStatus(sellStatus);
-				sellPreviewService.updateByPrimaryKeySelective(sellPath);
+				returnPath.setReturnStatus(returnStatus);
+				returnPreviewService.updateByPrimaryKeySelective(returnPath);
 				resultMap.put("resultMsg", "success");
 				break;
 			case 3:
-				sellStatus = "确认收货，订单已完成";
-				List<SellDetail> sellDetailList_3 = sellDetailService.selectBySellId(sellId);
-				for (SellDetail sellDetail : sellDetailList_3){
-					StoreDetailKey storeDetailKey = new StoreDetailKey();
-					storeDetailKey.setStoreId(sellPath.getStoreId());
-					storeDetailKey.setGoodsId(sellDetail.getGoodsId());
-					StoreDetail storeDetail = storeDetailService.selectByPrimaryKey(storeDetailKey);
-					if (storeDetail == null){
-						StoreDetail newStoreDetail = new StoreDetail();
-						newStoreDetail.setStoreId(sellPath.getStoreId());
-						newStoreDetail.setGoodsId(sellDetail.getGoodsId());
-						newStoreDetail.setGoodsStock(sellDetail.getGoodsNum());
-						storeDetailService.insertSelective(newStoreDetail);
+				returnStatus = "确认收货，订单已完成";
+				List<ReturnDetail> returnDetailList_3 = returnDetailService.selectByReturnId(returnId);
+				for (ReturnDetail returnDetail : returnDetailList_3){
+					StockDetailKey stockDetailKey = new StockDetailKey();
+					stockDetailKey.setWarehouseId(returnPath.getWarehouseId());
+					stockDetailKey.setGoodsId(returnDetail.getGoodsId());
+					StockDetail stockDetail = stockDetailService.selectByPrimaryKey(stockDetailKey);
+					if (stockDetail == null){
+						StockDetail newStockDetail = new StockDetail();
+						newStockDetail.setWarehouseId(returnPath.getWarehouseId());
+						newStockDetail.setGoodsId(returnDetail.getGoodsId());
+						newStockDetail.setGoodsStock(returnDetail.getGoodsNum());
+						stockDetailService.insertSelective(newStockDetail);
 					} else {
-						storeDetail.setGoodsStock(storeDetail.getGoodsStock() + sellDetail.getGoodsNum());
-						storeDetailService.updateByPrimaryKeySelective(storeDetail);
+						stockDetail.setGoodsStock(stockDetail.getGoodsStock() + returnDetail.getGoodsNum());
+						stockDetailService.updateByPrimaryKeySelective(stockDetail);
 					}
 				}				
-				sellPath.setSellStatus(sellStatus);
-				sellPreviewService.updateByPrimaryKeySelective(sellPath);
+				returnPath.setReturnStatus(returnStatus);
+				returnPreviewService.updateByPrimaryKeySelective(returnPath);
 				resultMap.put("resultMsg", "success");
-				break;*/
+				break;
 			}
 			
 

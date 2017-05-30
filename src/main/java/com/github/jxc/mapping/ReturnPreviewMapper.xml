@@ -118,4 +118,16 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		</set>
 		where return_id = #{returnId,jdbcType=VARCHAR}
 	</update>
+	
+	<delete id="deleteByPrimartKey" parameterType="java.lang.String">
+		delete from return_preview
+		where return_id = #{returnId,jdbcType=VARCHAR}
+	</delete>
+	
+	<select id="selectByNotStatus" resultMap="BaseResultMap" parameterType="java.lang.String">
+		select *
+		from return_preview rp ,warehouse w ,store s
+		where rp.return_status != #{returnStatus,jdbcType=VARCHAR} and rp.warehouse_id = w.warehouse_id and rp.store_id = s.store_id
+		order by return_time desc
+	</select>
 </mapper>
