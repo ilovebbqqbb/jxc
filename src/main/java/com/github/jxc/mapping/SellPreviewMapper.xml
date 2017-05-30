@@ -147,4 +147,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		where sp.sell_id = #{sellId,jdbcType=VARCHAR} and sp.warehouse_id = w.warehouse_id and sp.store_id = s.store_id
 	</select>
 	
+	<select id="selectByTime" resultMap="BaseResultMap" parameterType="com.github.jxc.pojo.SellStatisticsTimeKey">
+		select *
+		from sell_preview sp,warehouse w,store s
+		where sp.store_id = #{storeId,jdbcType=INTEGER}
+		  and sp.store_id = s.store_id
+		  and sp.warehouse_id = w.warehouse_id
+		  and sp.sell_time between #{startTime,jdbcType=TIMESTAMP} and #{endTime,jdbcType=TIMESTAMP}
+		order by sell_time desc
+	</select>
 </mapper>

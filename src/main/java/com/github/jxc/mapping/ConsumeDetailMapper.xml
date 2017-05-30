@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.github.jxc.dao.ConsumeDetailDao">
+  <resultMap id="BaseResultMap" type="com.github.jxc.pojo.ConsumeDetail">
+    <id column="consume_detail_id" jdbcType="INTEGER" property="consumeDetailId" />
+    <result column="consume_id" jdbcType="VARCHAR" property="consumeId" />
+    <result column="goods_id" jdbcType="INTEGER" property="goodsId" />
+    <result column="goods_num" jdbcType="INTEGER" property="goodsNum" />
+    <result column="remarks" jdbcType="VARCHAR" property="remarks" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    consume_detail_id, consume_id, goods_id, goods_num, remarks
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from consume_detail
+    where consume_detail_id = #{consumeDetailId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from consume_detail
+    where consume_detail_id = #{consumeDetailId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.github.jxc.pojo.ConsumeDetail">
+    insert into consume_detail (consume_detail_id, consume_id, goods_id, 
+      goods_num, remarks)
+    values (#{consumeDetailId,jdbcType=INTEGER}, #{consumeId,jdbcType=VARCHAR}, #{goodsId,jdbcType=INTEGER}, 
+      #{goodsNum,jdbcType=INTEGER}, #{remarks,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.github.jxc.pojo.ConsumeDetail">
+    insert into consume_detail
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="consumeDetailId != null">
+        consume_detail_id,
+      </if>
+      <if test="consumeId != null">
+        consume_id,
+      </if>
+      <if test="goodsId != null">
+        goods_id,
+      </if>
+      <if test="goodsNum != null">
+        goods_num,
+      </if>
+      <if test="remarks != null">
+        remarks,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="consumeDetailId != null">
+        #{consumeDetailId,jdbcType=INTEGER},
+      </if>
+      <if test="consumeId != null">
+        #{consumeId,jdbcType=VARCHAR},
+      </if>
+      <if test="goodsId != null">
+        #{goodsId,jdbcType=INTEGER},
+      </if>
+      <if test="goodsNum != null">
+        #{goodsNum,jdbcType=INTEGER},
+      </if>
+      <if test="remarks != null">
+        #{remarks,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.github.jxc.pojo.ConsumeDetail">
+    update consume_detail
+    <set>
+      <if test="consumeId != null">
+        consume_id = #{consumeId,jdbcType=VARCHAR},
+      </if>
+      <if test="goodsId != null">
+        goods_id = #{goodsId,jdbcType=INTEGER},
+      </if>
+      <if test="goodsNum != null">
+        goods_num = #{goodsNum,jdbcType=INTEGER},
+      </if>
+      <if test="remarks != null">
+        remarks = #{remarks,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where consume_detail_id = #{consumeDetailId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.github.jxc.pojo.ConsumeDetail">
+    update consume_detail
+    set consume_id = #{consumeId,jdbcType=VARCHAR},
+      goods_id = #{goodsId,jdbcType=INTEGER},
+      goods_num = #{goodsNum,jdbcType=INTEGER},
+      remarks = #{remarks,jdbcType=VARCHAR}
+    where consume_detail_id = #{consumeDetailId,jdbcType=INTEGER}
+  </update>
+</mapper>

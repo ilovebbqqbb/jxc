@@ -1,7 +1,9 @@
 package com.github.jxc.dao;
 
 import java.util.List;
+
 import com.github.jxc.pojo.SellPreview;
+import com.github.jxc.pojo.SellStatisticsTimeKey;
 
 public interface SellPreviewDao {
 
@@ -21,4 +23,5 @@ public interface SellPreviewDao {
 	
 	SellPreview selectByPrimaryKey(String sellId);	
 	
+	List<SellPreview> selectByTime(SellStatisticsTimeKey sellStatisticsTimeKey);
 }

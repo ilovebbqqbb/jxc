@@ -3,6 +3,7 @@ package com.github.jxc.service;
 import java.util.List;
 
 import com.github.jxc.pojo.SellPreview;
+import com.github.jxc.pojo.SellStatisticsTimeKey;
 
 public interface SellPreviewService {
 	
@@ -20,5 +21,7 @@ public interface SellPreviewService {
 	
 	List<SellPreview> selectByStoreId(Integer storeId);
 	
-	SellPreview selectByPrimaryKey(String sellId);	
+	SellPreview selectByPrimaryKey(String sellId);
+	
+	List<SellPreview> selectByTime(SellStatisticsTimeKey sellStatisticsTimeKey);
 }

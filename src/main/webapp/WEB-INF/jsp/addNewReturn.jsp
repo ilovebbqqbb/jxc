@@ -152,10 +152,37 @@ function checkRemarks(){
 		if(stop){
 			return false;
 		} else {
-			addReturn();
+			checkNum();
 		}
 	}
 		
+}
+
+function checkNum(){
+	var tbNothing = "<tr><td colspan='10' style='text-align: center;'><i class='layui-icon' style='font-size: 20px; color: #FF0000;''>&#xe60b</i>请点击按钮添加商品</td></tr>";
+	var stop = false;
+	if($('#tbody-result').html() != "" || $('#tbody-result').html() != null || $('#tbody-result').html() != tbNothing){
+		$('#tbody-result tr').each(function() {
+	        $(this).find("td").each(function() {
+	    	        if ($(this).index() == "6") {
+	    	        	if($(this).children("input").val() == null || $(this).children("input").val() == "" || $(this).children("input").val() == "0"){
+	    	        		$(this).children("input").focus();
+	    	        		layer.tips('请输入退货数量', $(this).children("input"), {time: 3000});
+	    	        		stop = true;
+	    	        		return false;
+	    	        	}
+	    	        }
+	        });
+	        if(stop){
+	        	return false;
+	        }
+	    });
+		if(stop){
+			return false;
+		} else {
+			addReturn();
+		}
+	}
 }
 </script>
 

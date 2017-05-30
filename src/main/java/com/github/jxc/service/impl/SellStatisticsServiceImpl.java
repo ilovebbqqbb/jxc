@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.github.jxc.dao.SellStatisticsDao;
 import com.github.jxc.pojo.SellStatistics;
+import com.github.jxc.pojo.SellStatisticsTimeKey;
 import com.github.jxc.service.SellStatisticsService;
 
 
@@ -23,5 +24,9 @@ public class SellStatisticsServiceImpl implements SellStatisticsService {
 	
 	public List<SellStatistics> selectAll(){
 		return sellStatisticsDao.selectAll();
+	}
+	
+	public SellStatistics selectByTime(SellStatisticsTimeKey sellStatisticsTimeKey){
+		return sellStatisticsDao.selectByTime(sellStatisticsTimeKey);
 	}
 }

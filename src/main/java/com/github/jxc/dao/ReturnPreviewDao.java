@@ -3,6 +3,7 @@ package com.github.jxc.dao;
 import java.util.List;
 
 import com.github.jxc.pojo.ReturnPreview;
+import com.github.jxc.pojo.SellStatisticsTimeKey;
 
 public interface ReturnPreviewDao {
 	
@@ -17,4 +18,8 @@ public interface ReturnPreviewDao {
 	int deleteByPrimartKey(String returnId);
 	
 	List<ReturnPreview> selectByNotStatus(String returnStatus);
+	
+	List<ReturnPreview> selectByStoreId(Integer storeId);
+	
+	List<ReturnPreview> selectByTime(SellStatisticsTimeKey sellStatisticsTimeKey);
 }

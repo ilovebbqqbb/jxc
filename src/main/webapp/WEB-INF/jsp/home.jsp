@@ -98,6 +98,23 @@
 					      <dd><a href="javascript:contentLoad('sell/receiptReturn');">退货单列表（总部）</a></dd>
 					  	</dl>
 						</li>
+						<li class="layui-nav-item">
+					  	<a href="javascript:;">差异报告单管理</a>
+						<dl class="layui-nav-child">
+						  <dd><a href="javascript:contentLoad('sell/addNewDifference');">添加差异报告单</a></dd>
+						  <dd><a href="javascript:contentLoad('sell/checkDifference');">审核差异报告单</a></dd>
+					      <dd><a href="javascript:contentLoad('sell/prepareDifference');">仓库备货</a></dd>
+					      <dd><a href="javascript:contentLoad('sell/sendDifference');">仓库发货</a></dd>
+					      <dd><a href="javascript:contentLoad('sell/receiptDifference');">管理差异报告单</a></dd>
+					  	</dl>
+						</li>
+						<li class="layui-nav-item">
+					  	<a href="javascript:;">销售统计</a>
+						<dl class="layui-nav-child">
+						  <dd><a href="javascript:contentLoad('sell/sellStatistics');">商店销售统计</a></dd>
+						  <dd><a href="javascript:contentLoad('sell/goodsStatistics');">商品销售统计</a></dd>
+					  	</dl>
+						</li>
 				</ul>
 				
 		</div>
