@@ -18,19 +18,26 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.fastjson.JSON;
+import com.github.jxc.pojo.DifferenceDetail;
+import com.github.jxc.pojo.DifferencePreview;
 import com.github.jxc.pojo.Goods;
+import com.github.jxc.pojo.GoodsStatistics;
 import com.github.jxc.pojo.ReturnDetail;
 import com.github.jxc.pojo.ReturnPreview;
 import com.github.jxc.pojo.SellDetail;
 import com.github.jxc.pojo.SellPreview;
 import com.github.jxc.pojo.SellStatistics;
+import com.github.jxc.pojo.SellStatisticsTimeKey;
 import com.github.jxc.pojo.StockDetail;
 import com.github.jxc.pojo.StockDetailKey;
 import com.github.jxc.pojo.Store;
 import com.github.jxc.pojo.StoreDetail;
 import com.github.jxc.pojo.StoreDetailKey;
 import com.github.jxc.pojo.Warehouse;
+import com.github.jxc.service.DifferenceDetailService;
+import com.github.jxc.service.DifferencePreviewService;
 import com.github.jxc.service.GoodsService;
+import com.github.jxc.service.GoodsStatisticsService;
 import com.github.jxc.service.ReturnDetailService;
 import com.github.jxc.service.ReturnPreviewService;
 import com.github.jxc.service.SellDetailService;
@@ -65,6 +72,12 @@ public class SellController {
 	private ReturnPreviewService returnPreviewService;
 	@Resource
 	private ReturnDetailService returnDetailService;
+	@Resource
+	private DifferencePreviewService differencePreviewService;
+	@Resource
+	private DifferenceDetailService differenceDetailService;
+	@Resource
+	private GoodsStatisticsService goodsStatisticsService;
 	
 	//销售单总菜单
 	@RequestMapping("sellMain")
@@ -429,7 +442,7 @@ public class SellController {
 			for (int i = 0; i < 4; i++) {
 				str += rd.nextInt(10);		
 			}
-		}while(sellPreviewService.selectByPrimaryKey(str) != null);
+		}while(returnPreviewService.selectByPrimaryKey(str) != null);
 		try{
 			List<Store> storeList = storeService.selectAll();
 			List<Warehouse> warehouseList = warehouseService.selectAll();
@@ -755,25 +768,323 @@ public class SellController {
 	
 	//差异报告功能
 	//新增差异报告单；更新实际库存
+	@RequestMapping("addNewDifference")
+	public String addNewDifference(HttpServletRequest request,HttpServletResponse response,Model model) {
+		Random rd = new Random();  
+		SimpleDateFormat sdf =   new SimpleDateFormat( "yyyyMMdd" );
+		String str = sdf.format(new Date());
+		do{
+			for (int i = 0; i < 4; i++) {
+				str += rd.nextInt(10);		
+			}
+		}while(differencePreviewService.selectByPrimaryKey(str) != null);
+		try{
+			List<Store> storeList = storeService.selectAll();
+			List<Warehouse> warehouseList = warehouseService.selectAll();
+			if(storeList != null) {
+				if(warehouseList != null) {
+					model.addAttribute("storeList", storeList);
+					model.addAttribute("warehouseList", warehouseList);
+					model.addAttribute("randomId", str);
+				}
+			}
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		
+		return "addNewDifference";
+	}
 	
+	//异步写入差异报告单到数据库
+	@RequestMapping("ajaxInsertNewDifference")
+	@ResponseBody
+	public Map<String,String> ajaxInsertNewDifference(HttpServletRequest httpServletRequest,HttpServletResponse httpServletResponse,DifferencePreview differencePreview) {
+		
+		Map<String,String> resultMap = new HashMap<String, String>();
+		try {
+			if(differencePreview != null && !StringUtils.isEmpty(differencePreview.getWarehouseId())){
+				if(!StringUtils.isEmpty(differencePreview.getStoreId())){
+					if(!StringUtils.isEmpty(differencePreview.getDifferenceNum())){
+						if(!StringUtils.isEmpty(differencePreview.getDifferenceMoney())){
+							if(!StringUtils.isEmpty(differencePreview.getOperater())){
+								differencePreview.setDifferenceStatus("商家已下单，尚未审核");
+								differencePreviewService.insertSelective(differencePreview);
+								resultMap.put("resultMsg", "success");
+							} else {
+								resultMap.put("resultMsg", "请输入经办人编号");
+							}
+						} else {
+							resultMap.put("resultMsg", "请输入商品金额");
+						}
+					} else {
+						resultMap.put("resultMsg", "请输入商品数量");
+					}
+				} else {
+					resultMap.put("resultMsg", "请输入商店编号");
+				}
+			} else {
+				resultMap.put("resultMsg", "请输入仓库编号");
+			}
+		} catch(Exception e) {
+			e.printStackTrace();
+			resultMap.put("resultMsg", "系统错误!!!");
+		}
+		
+		return resultMap;
+	}
+	
+	//异步写入退货单详情到数据库
+	@RequestMapping("ajaxInsertDifferenceDetail")
+	@ResponseBody
+	public Map<String,String> ajaxInsertDifferenceDetail(HttpServletRequest httpServletRequest,HttpServletResponse httpServletResponse,DifferenceDetail differenceDetail){
+		Map<String,String> resultMap = new HashMap<String, String>();
+		try{
+			//更新实际库存
+			Integer storeId = Integer.valueOf(httpServletRequest.getParameter("storeId"));
+			StoreDetail storeDetailPath = new StoreDetail();
+			StoreDetailKey storeDetailKeyPath = new StoreDetailKey();
+			storeDetailKeyPath.setStoreId(storeId);
+			storeDetailKeyPath.setGoodsId(differenceDetail.getGoodsId());
+			storeDetailPath = storeDetailService.selectByPrimaryKey(storeDetailKeyPath);
+			storeDetailPath.setGoodsStock(storeDetailPath.getGoodsStock() - differenceDetail.getGoodsNum());
+			storeDetailService.updateByPrimaryKeySelective(storeDetailPath);
+			//写入详情至数据库
+			differenceDetailService.insertSelective(differenceDetail);
+			resultMap.put("resultMsg","success");
+		} catch(Exception e){
+			e.printStackTrace();
+			resultMap.put("resultMsg","系统错误");
+		}
+		
+		return resultMap;
+	}
 	
 	//审核差异报告单
+	@RequestMapping("checkDifference")
+	public String checkDifference(HttpServletRequest request,HttpServletResponse response,Model model) {		
+		
+		try{
+			List<DifferencePreview> differenceList = differencePreviewService.selectByStatus("商家已下单，尚未审核");
+			if(differenceList != null) {
+				model.addAttribute("differenceList", differenceList);
+			}
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		
+		return "checkDifference";
+	}
 	
+	//小窗审核差异报告单
+	@RequestMapping("iframeShowCheckDifference")
+	public String iframeShowCheckDifference(HttpServletRequest request,HttpServletResponse response,Model model,String differenceId){
+		
+		try{
+			List<DifferenceDetail> detailList = differenceDetailService.selectByDifferenceId(differenceId);
+			DifferencePreview differencePreview = differencePreviewService.selectByPrimaryKey(differenceId);
+			if(detailList != null) {
+				
+				model.addAttribute("differencePreview", differencePreview);
+				model.addAttribute("detailList", detailList);
+			}
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		
+		return "iframeShowCheckDifference";
+	}
 	
-	//总部库房备货
+	//库房备货差异
+	@RequestMapping("prepareDifference")
+	public String prepareDifference(HttpServletRequest request,HttpServletResponse response,Model model) {
+		
+		try{
+			List<DifferencePreview> differenceList = differencePreviewService.selectByStatus("审核通过，库房备货中");
+			if(differenceList != null) {
+				model.addAttribute("differenceList", differenceList);
+			}
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		
+		return "prepareDifference";
+	}
 	
+	//小窗库房备货差异
+	@RequestMapping("iframeShowPrepareDifference")
+	public String iframeShowPrepareDifference(HttpServletRequest request,HttpServletResponse response,Model model,String differenceId){
+		
+		try{
+			DifferencePreview differencePreview = differencePreviewService.selectByPrimaryKey(differenceId);
+			List<DifferenceDetail> detailList = differenceDetailService.selectByWarehouseIdAndDifferenceId(differencePreview);
+			if(detailList != null) {
+				
+				model.addAttribute("differencePreview", differencePreview);
+				model.addAttribute("detailList", detailList);
+			}
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		
+		return "iframeShowPrepareDifference";
+	}
 	
-	//库房发货
+	//库房发货差异
+	@RequestMapping("sendDifference")
+	public String sendDifference(HttpServletRequest request,HttpServletResponse response,Model model) {
+		
+
+		try{
+			List<DifferencePreview> differenceList = differencePreviewService.selectByTwoStatus("已发货，请注意签收","确认收货，订单已完成");
+			if(differenceList != null) {
+				model.addAttribute("differenceList", differenceList);
+			}
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		
+		return "sendDifference";
+	}
 	
+	//小窗库房发货差异
+	@RequestMapping("iframeShowSendDifference")
+	public String iframeShowSendDifference(HttpServletRequest request,HttpServletResponse response,Model model,String differenceId){
+		
+		try{
+			List<DifferenceDetail> detailList = differenceDetailService.selectByDifferenceId(differenceId);
+			DifferencePreview differencePreview = differencePreviewService.selectByPrimaryKey(differenceId);
+			if(detailList != null) {
+				
+				model.addAttribute("differencePreview", differencePreview);
+				model.addAttribute("detailList", detailList);
+			}
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		
+		return "iframeShowSendDifference";
+	}
 	
-	//商家收货
+	//商家收货差异
+	@RequestMapping("receiptDifference")
+	public String receiptDifference(HttpServletRequest request,HttpServletResponse response,Model model) {
+		
+		try{
+			List<DifferencePreview> differenceList = differencePreviewService.selectAll();
+			if(differenceList != null) {
+				
+				model.addAttribute("differenceList", differenceList);
+			}
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		
+		return "receiptDifference";
+	}
 	
+	//小窗商家收货差异
+	@RequestMapping("iframeShowReceiptDifference")
+	public String iframeShowReceiptDifference(HttpServletRequest request,HttpServletResponse response,Model model,String differenceId){
+		
+		try{
+			List<DifferenceDetail> detailList = differenceDetailService.selectByDifferenceId(differenceId);
+			DifferencePreview differencePreview = differencePreviewService.selectByPrimaryKey(differenceId);
+			if(detailList != null) {
+				
+				model.addAttribute("differencePreview", differencePreview);
+				model.addAttribute("detailList", detailList);
+			}
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		
+		return "iframeShowReceiptDifference";
+	}	
 	
 	//异步删除差异报告单
-	
+	@RequestMapping("ajaxDeleteDifference")
+	@ResponseBody
+	public Map<String,String> ajaxDeleteDifference(String differenceId,HttpServletRequest request,HttpServletResponse response){
+		
+		Map<String,String> resultMap = new HashMap<String, String>();
+		
+		try {
+			differencePreviewService.deleteByPrimartKey(differenceId);
+			differenceDetailService.deleteByDifferenceId(differenceId);
+			resultMap.put("resultMsg", "success");
+		} catch (Exception e) {
+			e.printStackTrace();
+			resultMap.put("resultMsg", "系统错误!!!");
+		}
+		return resultMap;
+	}
 	
 	//异步更新差异报告单状态（1：审核；2：发货；3：收货）
-	
+	@RequestMapping("ajaxUpdateDifference")
+	@ResponseBody
+	public Map<String,String> ajaxUpdateDifference(String differenceId,Integer updateType,
+			HttpServletRequest request, HttpServletResponse response){
+		
+		Map<String,String> resultMap = new HashMap<String, String>();		
+		
+		try {
+			String differenceStatus = "状态异常";
+			DifferencePreview differencePath = differencePreviewService.selectByPrimaryKey(differenceId);
+			
+			switch(updateType){
+			case 1:
+				differenceStatus = "审核通过，库房备货中";
+				differencePath.setDifferenceStatus(differenceStatus);
+				differencePreviewService.updateByPrimaryKeySelective(differencePath);
+				resultMap.put("resultMsg", "success");
+				break;
+			case 2:
+				differenceStatus = "已发货，请注意签收";
+				List<DifferenceDetail> differenceDetailList_2 = differenceDetailService.selectByWarehouseIdAndDifferenceId(differencePath);
+				for (DifferenceDetail differenceDetail : differenceDetailList_2){
+					StockDetail stockDetail = new StockDetail();
+					stockDetail.setWarehouseId(differencePath.getWarehouseId());
+					stockDetail.setGoodsId(differenceDetail.getGoodsId());
+					stockDetail.setGoodsStock(differenceDetail.getStockDetail().getGoodsStock() - differenceDetail.getGoodsNum());
+					stockDetailService.updateByPrimaryKeySelective(stockDetail);
+				}
+				differencePath.setDifferenceStatus(differenceStatus);
+				differencePreviewService.updateByPrimaryKeySelective(differencePath);
+				resultMap.put("resultMsg", "success");
+				break;
+			case 3:
+				differenceStatus = "确认收货，订单已完成";
+				List<DifferenceDetail> differenceDetailList_3 = differenceDetailService.selectByDifferenceId(differenceId);
+				for (DifferenceDetail differenceDetail : differenceDetailList_3){
+					StoreDetailKey storeDetailKey = new StoreDetailKey();
+					storeDetailKey.setStoreId(differencePath.getStoreId());
+					storeDetailKey.setGoodsId(differenceDetail.getGoodsId());
+					StoreDetail storeDetail = storeDetailService.selectByPrimaryKey(storeDetailKey);
+					if (storeDetail == null){
+						StoreDetail newStoreDetail = new StoreDetail();
+						newStoreDetail.setStoreId(differencePath.getStoreId());
+						newStoreDetail.setGoodsId(differenceDetail.getGoodsId());
+						newStoreDetail.setGoodsStock(differenceDetail.getGoodsNum());
+						storeDetailService.insertSelective(newStoreDetail);
+					} else {
+						storeDetail.setGoodsStock(storeDetail.getGoodsStock() + differenceDetail.getGoodsNum());
+						storeDetailService.updateByPrimaryKeySelective(storeDetail);
+					}
+				}				
+				differencePath.setDifferenceStatus(differenceStatus);
+				differencePreviewService.updateByPrimaryKeySelective(differencePath);
+				resultMap.put("resultMsg", "success");
+				break;
+			}
+			
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			resultMap.put("resultMsg", "系统错误!!!");
+		}
+		
+		return resultMap;
+	}
 	
 	//销售统计功能
 	//销售总统计
@@ -798,6 +1109,16 @@ public class SellController {
 			List<SellPreview> sellList = sellPreviewService.selectByStoreId(storeId);
 			model.addAttribute("sellStatistics",sellStatistics);
 			model.addAttribute("sellList",sellList);
+			model.addAttribute("sellListSize", sellList.size());
+			List<ReturnPreview> returnList = returnPreviewService.selectByStoreId(storeId);
+			if(returnList.size() == 0){
+				model.addAttribute("returnType","false");
+				model.addAttribute("returnListSize", 0);
+			}else{
+				model.addAttribute("returnType","true");
+				model.addAttribute("returnList",returnList);
+				model.addAttribute("returnListSize", returnList.size());
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -805,15 +1126,77 @@ public class SellController {
 		return "showStoreStatistics";
 	}
 	
-	//商品销售统计
-
-	
-
+	//统计时间段内的销售情况
+	@RequestMapping("ajaxSearchByTime")
+	@ResponseBody
+	public Map<String,String> ajaxSearchByTime(Integer storeId,String startTimePath,String endTimePath,HttpServletRequest request,HttpServletResponse response){
 		
-
-	
-	@RequestMapping("test")
-	public String test(HttpServletRequest request,HttpServletResponse response,Model model) {
-		return "msgTest";
+		Map<String,String> resultMap = new HashMap<String, String>();
+		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");		
+		try {
+			SellStatisticsTimeKey sellStatisticsTimeKey = new SellStatisticsTimeKey();
+			sellStatisticsTimeKey.setStoreId(storeId);
+			sellStatisticsTimeKey.setStartTime(df.parse(startTimePath));
+			sellStatisticsTimeKey.setEndTime(df.parse(endTimePath));
+			SellStatistics sellStatistics = sellStatisticsService.selectByTime(sellStatisticsTimeKey);
+			List<SellPreview> sellList = sellPreviewService.selectByTime(sellStatisticsTimeKey);
+			List<ReturnPreview> returnList = returnPreviewService.selectByTime(sellStatisticsTimeKey);
+			String jsonSellStatistics = JSON.toJSONString(sellStatistics);
+			resultMap.put("jsonSellStatistics", jsonSellStatistics);
+			if(sellList.size() == 0){
+				resultMap.put("sellSize", "0");
+			}else{
+				resultMap.put("sellSize", Integer.toString(sellList.size()));
+				String jsonSellList = JSON.toJSONString(sellList);
+				resultMap.put("jsonSellList", jsonSellList);
+			}
+			if(returnList.size() == 0){
+				resultMap.put("returnSize", "0");
+			}else{
+				resultMap.put("returnSize", Integer.toString(returnList.size()));
+				String jsonReturnList = JSON.toJSONString(returnList);			
+				resultMap.put("jsonReturnList", jsonReturnList);
+			}
+			resultMap.put("resultMsg", "success");
+		} catch (Exception e) {
+			e.printStackTrace();
+			resultMap.put("resultMsg", "系统错误!!!");
+		}
+		return resultMap;
 	}
+	
+	//商品销售统计
+	@RequestMapping("goodsStatistics")
+	public String goodsStatistics(HttpServletRequest request,HttpServletResponse response,Model model){
+		
+		try {
+			List<GoodsStatistics> goodsStatisticsList = goodsStatisticsService.selectAll();
+			model.addAttribute("goodsStatisticsList",goodsStatisticsList);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return "goodsStatistics";
+	}
+	
+	//统计时间段内的商品销售情况
+	@RequestMapping("ajaxSearchGoodsByTime")
+	@ResponseBody
+	public Map<String,String> ajaxSearchGoodsByTime(String startTimePath,String endTimePath,HttpServletRequest request,HttpServletResponse response){
+		
+		Map<String,String> resultMap = new HashMap<String, String>();
+		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");		
+		try {
+			Date startTime = df.parse(startTimePath);
+			Date endTime = df.parse(endTimePath);
+			List<GoodsStatistics> goodsStatisticsList = goodsStatisticsService.selectByTimeKey(startTime, endTime);
+			String jsonGoodsStatisticsList = JSON.toJSONString(goodsStatisticsList);
+			resultMap.put("jsonGoodsStatisticsList", jsonGoodsStatisticsList);
+			resultMap.put("resultMsg", "success");
+		} catch (Exception e) {
+			e.printStackTrace();
+			resultMap.put("resultMsg", "系统错误!!!");
+		}
+		return resultMap;
+	}
+	
 }

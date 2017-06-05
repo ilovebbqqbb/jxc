@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.github.jxc.dao.SellPreviewDao;
 import com.github.jxc.pojo.SellPreview;
+import com.github.jxc.pojo.SellStatisticsTimeKey;
 import com.github.jxc.service.SellPreviewService;
 
 @Service("SellPreviewService")
@@ -46,5 +47,9 @@ public class SellPreviewServiceImpl implements SellPreviewService {
 	
 	public SellPreview selectByPrimaryKey(String sellId){
 		return this.sellPreviewDao.selectByPrimaryKey(sellId);
+	}
+	
+	public List<SellPreview> selectByTime(SellStatisticsTimeKey sellStatisticsTimeKey){
+		return this.sellPreviewDao.selectByTime(sellStatisticsTimeKey);
 	}
 }

@@ -138,7 +138,7 @@ function returnToParent(i){
 				"<td>" + supplyPrice + "</td>" +
 				"<td><input style='margin:auto auto auto auto;height:30px;width:50px' value='1' onkeyup='trTotal(this)' class='layui-input'></td>"+
 				"<td><input style='margin:auto auto auto auto;height:30px;width:50px' readonly='readonly' value='" + supplyPrice + "' class='layui-input'></td>"+
-				"<td><input style='margin:auto auto auto 10px;height:30px;width:200px' placeholder='退货原因' class='layui-input'></td>"+
+				"<td><input style='margin:auto auto auto 10px;height:30px;width:200px' placeholder='请输入...' class='layui-input'></td>"+
 				"<td><button class='layui-btn layui-btn-small layui-btn-danger' onclick='deleteRows(this)'>删除</button></td>" + "</tr>";
 		    
 				if(parent.rowsPath > 0){

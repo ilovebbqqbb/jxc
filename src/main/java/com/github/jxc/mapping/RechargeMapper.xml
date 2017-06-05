@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.github.jxc.dao.RechargeDao">
+  <resultMap id="BaseResultMap" type="com.github.jxc.pojo.Recharge">
+    <id column="recharge_id" jdbcType="INTEGER" property="rechargeId" />
+    <result column="member_id" jdbcType="INTEGER" property="memberId" />
+    <result column="recharge_num" jdbcType="REAL" property="rechargeNum" />
+    <result column="recharge_time" jdbcType="TIMESTAMP" property="rechargeTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    recharge_id, member_id, recharge_num, recharge_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from recharge
+    where recharge_id = #{rechargeId,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from recharge
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from recharge
+    where recharge_id = #{rechargeId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.github.jxc.pojo.Recharge">
+    insert into recharge (recharge_id, member_id, recharge_num, 
+      recharge_time)
+    values (#{rechargeId,jdbcType=INTEGER}, #{memberId,jdbcType=INTEGER}, #{rechargeNum,jdbcType=REAL}, 
+      #{rechargeTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.github.jxc.pojo.Recharge">
+    insert into recharge
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="rechargeId != null">
+        recharge_id,
+      </if>
+      <if test="memberId != null">
+        member_id,
+      </if>
+      <if test="rechargeNum != null">
+        recharge_num,
+      </if>
+      <if test="rechargeTime == null">
+        recharge_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="rechargeId != null">
+        #{rechargeId,jdbcType=INTEGER},
+      </if>
+      <if test="memberId != null">
+        #{memberId,jdbcType=INTEGER},
+      </if>
+      <if test="rechargeNum != null">
+        #{rechargeNum,jdbcType=REAL},
+      </if>
+      <if test="rechargeTime == null">
+        sysdate(),
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.github.jxc.pojo.Recharge">
+    update recharge
+    <set>
+      <if test="memberId != null">
+        member_id = #{memberId,jdbcType=INTEGER},
+      </if>
+      <if test="rechargeNum != null">
+        recharge_num = #{rechargeNum,jdbcType=REAL},
+      </if>
+      <if test="rechargeTime != null">
+        recharge_time = #{rechargeTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where recharge_id = #{rechargeId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.github.jxc.pojo.Recharge">
+    update recharge
+    set member_id = #{memberId,jdbcType=INTEGER},
+      recharge_num = #{rechargeNum,jdbcType=REAL},
+      recharge_time = #{rechargeTime,jdbcType=TIMESTAMP}
+    where recharge_id = #{rechargeId,jdbcType=INTEGER}
+  </update>
+</mapper>

@@ -10,7 +10,6 @@
 </head>
 <body>
 	<div class="layui-form-item">
-    	<label class="layui-form-label"></label>
     	<div style="margin-top:20px">
       	<input id="goodsId" style="width: 380px;float:left" type="text" name="goodsId" required  lay-verify="required" placeholder="请输入商品编号或条形码" autocomplete="off" class="layui-input">
     	<button id="searchButton" style="margin-left: 10px" class="layui-btn" onclick="searchGoods(${warehouseId})">查找</button>
@@ -62,7 +61,9 @@ function searchGoods(warehouseId){
     
     layui.use('layer', function(){
 		  var layer = layui.layer;
-    
+    if(goodsId == "" || goodsId == null){
+    	window.location.reload();
+    }else{
     $.ajax({  
         type: "post",       
         url: "<%=basePath%>sell/iframeSearchAddGoods",  
@@ -93,6 +94,7 @@ function searchGoods(warehouseId){
     		layer.msg('查询错误'+err,{time: 2000});
     	}
     });
+    }
     });
 }
 </script>

@@ -130,4 +130,23 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		where rp.return_status != #{returnStatus,jdbcType=VARCHAR} and rp.warehouse_id = w.warehouse_id and rp.store_id = s.store_id
 		order by return_time desc
 	</select>
+	
+	<select id="selectByStoreId" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+		select *
+		from return_preview rp,warehouse w,store s
+		where rp.store_id = #{storeId,jdbcType=INTEGER}
+		  and rp.store_id = s.store_id
+		  and rp.warehouse_id = w.warehouse_id
+		order by return_time desc
+	</select>
+	
+	<select id="selectByTime" resultMap="BaseResultMap" parameterType="com.github.jxc.pojo.SellStatisticsTimeKey">
+		select *
+		from return_preview rp,warehouse w,store s
+		where rp.store_id = #{storeId,jdbcType=INTEGER}
+		  and rp.store_id = s.store_id
+		  and rp.warehouse_id = w.warehouse_id
+		  and rp.return_time between #{startTime,jdbcType=TIMESTAMP} and #{endTime,jdbcType=TIMESTAMP}
+		order by return_time desc
+	</select>
 </mapper>

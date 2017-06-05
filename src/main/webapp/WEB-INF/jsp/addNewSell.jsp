@@ -94,7 +94,7 @@
 </div>
   <div class="layui-form-item">
     <div class="layui-input-block">
-      <button id="submitButton" class="layui-btn" onclick="addSell()">下单</button>
+      <button id="submitButton" class="layui-btn" onclick="checkNum()">下单</button>
       <button type="reset" class="layui-btn layui-btn-primary">重置</button>
     </div>
   </div>
@@ -138,7 +138,34 @@ function addGoods(){
 </script>
 
 <script type="text/javascript">
-	
+function checkNum(){
+	var tbNothing = "<tr><td colspan='10' style='text-align: center;'><i class='layui-icon' style='font-size: 20px; color: #FF0000;''>&#xe60b</i>请点击按钮添加商品</td></tr>";
+	var stop = false;
+	if($('#tbody-result').html() != "" || $('#tbody-result').html() != null || $('#tbody-result').html() != tbNothing){
+		$('#tbody-result tr').each(function() {
+	        $(this).find("td").each(function() {
+	    	        if ($(this).index() == "6") {
+	    	        	if($(this).children("input").val() == null || $(this).children("input").val() == "" || $(this).children("input").val() == "0"){
+	    	        		$(this).children("input").focus();
+	    	        		layer.tips('请输入退货数量', $(this).children("input"), {time: 3000});
+	    	        		stop = true;
+	    	        		return false;
+	    	        	}
+	    	        }
+	        });
+	        if(stop){
+	        	return false;
+	        }
+	    });
+		if(stop){
+			return false;
+		} else {
+			addSell();
+		}
+	}
+}
+
+
 function addSell() {
 	var sellId = $("#sellId").text();
 	var warehouseId = $("#warehouseId").val();

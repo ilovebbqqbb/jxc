@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper   
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.github.jxc.dao.DifferencePreviewDao">
+	<resultMap type="com.github.jxc.pojo.DifferencePreview" id="BaseResultMap">
+		<id column="difference_id" property="differenceId" jdbcType="VARCHAR" />
+		<result column="difference_time" property="differenceTime" jdbcType="TIMESTAMP"/>
+		<result column="warehouse_id" property="warehouseId" jdbcType="INTEGER"/>
+		<result column="store_id" property="storeId" jdbcType="INTEGER"/>
+		<result column="difference_num" property="differenceNum" jdbcType="INTEGER"/>
+		<result column="difference_money" property="differenceMoney" jdbcType="FLOAT"/>
+		<result column="operater" property="operater" jdbcType="INTEGER"/>
+		<result column="difference_status" property="differenceStatus" jdbcType="VARCHAR"/>
+		<association property="warehouse" javaType="com.github.jxc.pojo.Warehouse">
+			<id column="warehouse_id" property="warehouseId" jdbcType="INTEGER"/>
+			<result column="warehouse_name" property="warehouseName" jdbcType="VARCHAR"/>
+			<result column="linkman" property="linkman" jdbcType="VARCHAR"/>
+			<result column="phone_number" property="phoneNumber" jdbcType="VARCHAR"/>
+			<result column="warehouse_address" property="warehouseAddress" jdbcType="VARCHAR"/>
+			<result column="stock_min" property="stockMin" jdbcType="VARCHAR"/>
+			<result column="stock_max" property="stockMax" jdbcType="VARCHAR"/>
+			<result column="created_at" property="createdAt" jdbcType="TIMESTAMP"/>
+			<result column="updated_at" property="updatedAt" jdbcType="TIMESTAMP"/>
+		</association>
+		<association property="store" javaType="com.github.jxc.pojo.Store">
+			<id column="store_id" property="storeId" jdbcType="INTEGER"/>
+			<result column="store_name" property="storeName" jdbcType="VARCHAR"/>
+			<result column="linkman" property="linkman" jdbcType="VARCHAR"/>
+			<result column="phone_number" property="phoneNumber" jdbcType="VARCHAR"/>
+			<result column="store_address" property="storeAddress" jdbcType="VARCHAR"/>
+			<result column="stock_min" property="stockMin" jdbcType="VARCHAR"/>
+			<result column="stock_max" property="stockMax" jdbcType="VARCHAR"/>
+			<result column="created_at" property="createdAt" jdbcType="TIMESTAMP"/>
+			<result column="updated_at" property="updatedAt" jdbcType="TIMESTAMP"/>
+		</association>
+	</resultMap>
+	<sql id="Base_Column_List">
+		difference_id,difference_time,warehouse_id,store_id,difference_num,difference_money,operater,difference_status
+	</sql>
+	
+	<insert id="insertSelective" parameterType="com.github.jxc.pojo.DifferencePreview">
+		insert into difference_preview
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+	     <if test="differenceId != null">
+	     	difference_id,
+	     </if>
+	     <if test="differenceTime == null">
+	       difference_time,
+	     </if>
+	     <if test="warehouseId != null">
+	       warehouse_id,
+	     </if>	     
+	     <if test="storeId != null">
+	       store_id,
+	     </if>
+	     <if test="differenceNum != null">
+	       difference_num,
+	     </if>
+	     <if test="differenceMoney != null">
+	       difference_money,
+	     </if>
+	     <if test="operater != null">
+	       operater,
+	     </if>
+	     <if test="differenceStatus != null">
+	       difference_status,
+	     </if>
+	   </trim>
+	   <trim prefix="values (" suffix=")" suffixOverrides=",">
+	     <if test="differenceId != null">
+	       #{differenceId,jdbcType=VARCHAR},
+	     </if>
+	     <if test="differenceTime == null">
+	       sysdate(),
+	     </if>
+	     <if test="warehouseId != null">
+	       #{warehouseId,jdbcType=INTEGER},
+	     </if>	     
+	     <if test="storeId != null">
+	       #{storeId,jdbcType=INTEGER},
+	     </if>
+	     <if test="differenceNum != null">
+	       #{differenceNum,jdbcType=INTEGER},
+	     </if>
+	     <if test="differenceMoney != null">
+	       #{differenceMoney,jdbcType=FLOAT},
+	     </if>
+	     <if test="operater != null">
+	       #{operater,jdbcType=INTEGER},
+	     </if>
+	     <if test="differenceStatus != null">
+	       #{differenceStatus,jdbcType=VARCHAR},
+	     </if>
+	   </trim>
+	</insert>
+	
+	<select id="selectByStatus" resultMap="BaseResultMap" parameterType="java.lang.String">
+		select *
+		from difference_preview dp ,warehouse w ,store s
+		where dp.difference_status = #{differenceStatus,jdbcType=VARCHAR} and dp.warehouse_id = w.warehouse_id and dp.store_id = s.store_id
+		order by difference_time desc
+	</select>
+	
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String">
+		select *
+		from difference_preview dp, warehouse w, store s
+		where dp.difference_id = #{differenceId,jdbcType=VARCHAR} and dp.warehouse_id = w.warehouse_id and dp.store_id = s.store_id
+	</select>
+	
+	<update id="updateByPrimaryKeySelective" parameterType="com.github.jxc.pojo.DifferencePreview">
+		update difference_preview
+		<set>
+		 <if test="differenceStatus != null">
+	       difference_status = #{differenceStatus,jdbcType=VARCHAR}
+	     </if>	     
+		</set>
+		where difference_id = #{differenceId,jdbcType=VARCHAR}
+	</update>
+	
+	<delete id="deleteByPrimartKey" parameterType="java.lang.String">
+		delete from difference_preview
+		where difference_id = #{differenceId,jdbcType=VARCHAR}
+	</delete>
+	
+	<select id="selectByNotStatus" resultMap="BaseResultMap" parameterType="java.lang.String">
+		select *
+		from difference_preview dp ,warehouse w ,store s
+		where dp.difference_status != #{differenceStatus,jdbcType=VARCHAR} and dp.warehouse_id = w.warehouse_id and dp.store_id = s.store_id
+		order by difference_time desc
+	</select>
+	
+	<select id="selectAll" resultMap="BaseResultMap">
+		select *		
+		from difference_preview dp ,warehouse w ,store s
+		where  dp.warehouse_id = w.warehouse_id and dp.store_id = s.store_id
+		order by difference_time desc
+	</select>
+	
+	<select id="selectByTwoStatus" resultMap="BaseResultMap" parameterType="java.lang.String">
+		select *
+		from difference_preview dp ,warehouse w ,store s
+		where dp.difference_status = (#{0} OR #{1}) and dp.warehouse_id = w.warehouse_id and dp.store_id = s.store_id
+		order by difference_time desc
+	</select>
+</mapper>

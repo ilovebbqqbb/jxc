@@ -1,9 +1,12 @@
 package com.github.jxc.pojo;
 
 public class SellStatistics {
+	
 	Integer storeId;
 	Integer sellNumStatistics;
 	float sellMoneyStatistics;
+	Integer returnNumStatistics;
+	float returnMoneyStatistics;
 	Store store;
 	
 	public Store getStore() {
@@ -30,5 +33,16 @@ public class SellStatistics {
 	public void setSellMoneyStatistics(float sellMoneyStatistics) {
 		this.sellMoneyStatistics = sellMoneyStatistics;
 	}
-	
+	public Integer getReturnNumStatistics() {
+		return returnNumStatistics;
+	}
+	public void setReturnNumStatistics(Integer returnNumStatistics) {
+		this.returnNumStatistics = returnNumStatistics;
+	}
+	public float getReturnMoneyStatistics() {
+		return returnMoneyStatistics;
+	}
+	public void setReturnMoneyStatistics(float returnMoneyStatistics) {
+		this.returnMoneyStatistics = returnMoneyStatistics;
+	}
 }

@@ -54,7 +54,6 @@
 			</div>
 			
 		</div>
-
 		<div id="left1" style="float: left" class="site" >
 			<ul class="layui-nav layui-nav-tree layui-nav-side" lay-filter="test">
 				 <li class="layui-nav-item layui-nav-itemed">

@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.github.jxc.dao.CardTypeDao">
+  <resultMap id="BaseResultMap" type="com.github.jxc.pojo.CardType">
+    <id column="card_type_id" jdbcType="INTEGER" property="cardTypeId" />
+    <result column="card_type_name" jdbcType="VARCHAR" property="cardTypeName" />
+    <result column="discount" jdbcType="INTEGER" property="discount" />
+    <result column="point_rule" jdbcType="REAL" property="pointRule" />
+    <result column="default_money" jdbcType="REAL" property="defaultMoney" />
+    <result column="level_up" jdbcType="INTEGER" property="levelUp" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    card_type_id, card_type_name, discount, point_rule, default_money, level_up
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from card_type
+    where card_type_id = #{cardTypeId,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from card_type
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from card_type
+    where card_type_id = #{cardTypeId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.github.jxc.pojo.CardType">
+    insert into card_type (card_type_id, card_type_name, discount, 
+      point_rule, default_money, level_up
+      )
+    values (#{cardTypeId,jdbcType=INTEGER}, #{cardTypeName,jdbcType=VARCHAR}, #{discount,jdbcType=INTEGER}, 
+      #{pointRule,jdbcType=REAL}, #{defaultMoney,jdbcType=REAL}, #{levelUp,jdbcType=INTEGER}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.github.jxc.pojo.CardType">
+    insert into card_type
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="cardTypeId != null">
+        card_type_id,
+      </if>
+      <if test="cardTypeName != null">
+        card_type_name,
+      </if>
+      <if test="discount != null">
+        discount,
+      </if>
+      <if test="pointRule != null">
+        point_rule,
+      </if>
+      <if test="defaultMoney != null">
+        default_money,
+      </if>
+      <if test="levelUp != null">
+        level_up,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="cardTypeId != null">
+        #{cardTypeId,jdbcType=INTEGER},
+      </if>
+      <if test="cardTypeName != null">
+        #{cardTypeName,jdbcType=VARCHAR},
+      </if>
+      <if test="discount != null">
+        #{discount,jdbcType=INTEGER},
+      </if>
+      <if test="pointRule != null">
+        #{pointRule,jdbcType=REAL},
+      </if>
+      <if test="defaultMoney != null">
+        #{defaultMoney,jdbcType=REAL},
+      </if>
+      <if test="levelUp != null">
+        #{levelUp,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.github.jxc.pojo.CardType">
+    update card_type
+    <set>
+      <if test="cardTypeName != null">
+        card_type_name = #{cardTypeName,jdbcType=VARCHAR},
+      </if>
+      <if test="discount != null">
+        discount = #{discount,jdbcType=INTEGER},
+      </if>
+      <if test="pointRule != null">
+        point_rule = #{pointRule,jdbcType=REAL},
+      </if>
+      <if test="defaultMoney != null">
+        default_money = #{defaultMoney,jdbcType=REAL},
+      </if>
+      <if test="levelUp != null">
+        level_up = #{levelUp,jdbcType=INTEGER},
+      </if>
+    </set>
+    where card_type_id = #{cardTypeId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.github.jxc.pojo.CardType">
+    update card_type
+    set card_type_name = #{cardTypeName,jdbcType=VARCHAR},
+      discount = #{discount,jdbcType=INTEGER},
+      point_rule = #{pointRule,jdbcType=REAL},
+      default_money = #{defaultMoney,jdbcType=REAL},
+      level_up = #{levelUp,jdbcType=INTEGER}
+    where card_type_id = #{cardTypeId,jdbcType=INTEGER}
+  </update>
+</mapper>
