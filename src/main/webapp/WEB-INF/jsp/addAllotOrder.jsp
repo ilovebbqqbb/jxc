@@ -184,14 +184,13 @@ function addAllot() {
 	
     		if(data.resultMsg == "success") {
     			InsertSellDetail();
-    			layer.msg('下单成功',{time: 2000});		
-				window.open("<%=basePath%>allotOrder/toAllotOrder","_self");		
+    			layer.msg('下单成功',{time: 2000},function(){window.open("<%=basePath%>allotOrder/toAllotOrder","_self");});
     		} else {
-    		 	layer.msg(data.resultMsg,{time: 2000});
+    			layer.msg(data.resultMsg,{time: 2000});
     		}
     	},
     	error : function(xhr,status,err) {
-    		layer.msg('系统错误'+err,{time: 2000}); 
+    		layer.msg('请求错误' + err, {time : 2000});
     	}
     	
     });

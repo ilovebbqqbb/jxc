@@ -225,10 +225,25 @@ public class UserController {
 	
 	@RequestMapping("deleteRoleById")
 	@ResponseBody
-	public Map<String,String> deleteUserById(Integer roleId,HttpServletRequest request){
+	public Map<String,String> deleteRoleById(Integer roleId,HttpServletRequest request){
 		Map<String,String> dataMap = new HashMap<String,String>();
 		try {
 			roleService.deleteByPrimaryKey(roleId);
+			dataMap.put("resultMsg","success" );
+		} catch (Exception e) {
+			e.printStackTrace();
+			dataMap.put("resultMsg","删除失败" );
+		}
+		return dataMap;
+		
+	}
+	@RequestMapping("deleteUserById")
+	@ResponseBody
+	public Map<String,String> deleteUserById(Integer userInfoId){
+		Map<String,String> dataMap = new HashMap<String,String>();
+		try {
+			userInfoService.deleteByPrimaryKey(userInfoId);
+			userAccountService.deleteByUserInfoId(userInfoId);
 			dataMap.put("resultMsg","success" );
 		} catch (Exception e) {
 			e.printStackTrace();

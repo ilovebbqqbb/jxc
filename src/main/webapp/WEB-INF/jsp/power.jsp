@@ -107,7 +107,7 @@
 	});
 
 	 function createPowerManage() { 
-		  
+		 $("#formData").show("normal");  
 	    var roleId = $("#roleId").val();
 		var powerId = $("#powerId").val();
 		$.ajax({
@@ -116,14 +116,14 @@
         	data : {"roleId":roleId,"powerId":powerId},
         	success : function(data) {
         		if(data.resultMsg == "success") {
-        			layer.msg('分配成功',{time: 2000});	
-        			location.reload();
+        			 $("#formData").hide("fast");  
+        			layer.msg('分配成功',{time: 2000},function(){window.location.reload();});
         		} else {
-        			layer.msg(data.resultMsg);
+        			layer.msg(data.resultMsg,{time: 2000});
         		}
         	},
         	error : function(xhr,status,err) {
-        		layer.msg("请求错误"+err);
+        		layer.msg('请求错误'+err,{time: 2000});
         	}
         	
         })
@@ -144,14 +144,13 @@
 					        	data : {"roleId":roleId,"powerId":powerId},
 					        	success : function(data) {
 					        		if(data.resultMsg == "success") {
-					        			layer.msg('删除成功',{time: 2000});	
-					        			location.reload();
+					        			layer.msg('删除成功',{time: 2000},function(){window.location.reload();});
 					        		} else {
-					        			layer.msg(data.resultMsg);
+					        			layer.msg(data.resultMsg,{time: 2000},function(){window.location.reload();});
 					        		}
 					        	},
 					        	error : function(xhr,status,err) {
-					        		layer.msg("请求错误"+err);
+					        		layer.msg('请求错误' + err, {time : 2000}, function() {window.location.reload();});
 					        	}
 					        	
 					        });

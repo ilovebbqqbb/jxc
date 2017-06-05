@@ -27,13 +27,7 @@
 						class="layui-input">
 				</div>
 			</div>
-			<div class="layui-form-item">
-				<label class="layui-form-label">密码</label>
-				<div class="layui-input-block">
-					<input type="text" id="password" autocomplete="off" value="${u.userAccount.password }" readonly="readonly"
-						class="layui-input">
-				</div>
-			</div>
+		
 			<div class="layui-form-item">
 				<label class="layui-form-label">姓名</label>
 				<div class="layui-input-block">
@@ -66,27 +60,6 @@
 				<label class="layui-form-label">联系电话</label>
 				<div class="layui-input-block">
 					<input type="text" id="phoneNumber" autocomplete="off" value="${u.phoneNumber }" readonly="readonly"
-						class="layui-input">
-				</div>
-			</div>
-			<div class="layui-form-item">
-				<label class="layui-form-label">邮箱</label>
-				<div class="layui-input-block">
-					<input type="text" id="phoneNumber" autocomplete="off" value="${u.email }" readonly="readonly"
-						class="layui-input">
-				</div>
-			</div>
-			<div class="layui-form-item">
-				<label class="layui-form-label">职务</label>
-				<div class="layui-input-block">
-					<input type="text" id="phoneNumber" autocomplete="off" value="${u.job }" readonly="readonly"
-						class="layui-input">
-				</div>
-			</div>
-			<div class="layui-form-item">
-				<label class="layui-form-label">薪资</label>
-				<div class="layui-input-block">
-					<input type="text" id="phoneNumber" autocomplete="off" value="${u.salary }" readonly="readonly"
 						class="layui-input">
 				</div>
 			</div>

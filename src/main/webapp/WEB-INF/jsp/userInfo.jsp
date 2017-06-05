@@ -64,9 +64,16 @@
 				</div>
 			</div>
 			<div class="layui-form-item">
-				<label class="layui-form-label">密码</label>
+				<label class="layui-form-label">请输入密码</label>
 				<div class="layui-input-block">
-					<input type="password" id="password" autocomplete="off" 
+					<input type="password" id="password1" autocomplete="off" 
+						class="layui-input">
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">请再次输入密码</label>
+				<div class="layui-input-block">
+					<input type="password" id="password2" autocomplete="off" 
 						class="layui-input">
 				</div>
 			</div>
@@ -115,25 +122,6 @@
 				<label class="layui-form-label">联系电话</label>
 				<div class="layui-input-block">
 					<input type="text" id="phoneNumber" autocomplete="off"
-						class="layui-input">
-				</div>
-			</div>
-			<div class="layui-form-item">
-				<label class="layui-form-label">邮箱</label>
-				<div class="layui-input-block">
-					<input type="text" id="email" autocomplete="off" class="layui-input">
-				</div>
-			</div>
-			<div class="layui-form-item">
-				<label class="layui-form-label">职务</label>
-				<div class="layui-input-block">
-					<input type="text" id="job" autocomplete="off" class="layui-input">
-				</div>
-			</div>
-			<div class="layui-form-item">
-				<label class="layui-form-label">薪资</label>
-				<div class="layui-input-block">
-					<input type="text" id="salary" autocomplete="off"
 						class="layui-input">
 				</div>
 			</div>
@@ -226,38 +214,40 @@
 			});
 		 
 		function addUser() { 
+			
 			 var petName = $("#petName").val();
- 			 var password = $("#password").val();	
+ 			 var password1 = $("#password1").val();	
+ 			 var password2 = $("#password2").val();	
  			 var userName = $("#userName").val();	
  			 var sex = $("#sex").val();	
  			 var departmentId = $("#departmentId").val();	
  			 var roleId = $("#roleId").val();	
  			 var phoneNumber = $("#phoneNumber").val();	
- 			 var email = $("#email").val();	
- 			 var job = $("#job").val();	
- 			 var salary = $("#salary").val();	
  			 var degree = $("#degree").val();	
  			 var entryTime = $("#entryTime").val();	
- 			 console.log(typeof(entryTime));
  			 var birthday = $("#birthday").val();
  			 var formData = $("#formData").serialize();
+ 			 if(password1!=password2){
+				 layer.msg('请核对密码!',{time: 2000});
+			 }else{
 			$.ajax({
               	type : "POST",
               	url : "<%=basePath%>user/addUser",
-              	data : {"petName":petName,"password":password,"userName":userName,"sex":sex,"departmentId":departmentId,"roleId":roleId,"phoneNumber":phoneNumber,"email":email,"job":job,"salary":salary,"entry":entryTime,"birth":birthday,"degree":degree},
+              	data : {"petName":petName,"password":password1,"userName":userName,"sex":sex,"departmentId":departmentId,"roleId":roleId,"phoneNumber":phoneNumber,"entry":entryTime,"birth":birthday,"degree":degree},
               	success : function(data) {
               		if(data.resultMsg == "success") {
-              			layer.msg('添加成功',{time: 2000});		
-              			location.reload();
+              			 $("#formData").hide("fast");  
+              			layer.msg('添加成功',{time: 2000},function(){window.location.reload();});
               		} else {
-              			layer.msg(data.resultMsg);
+              			layer.msg(data.resultMsg,{time: 2000});
               		}
               	},
               	error : function(xhr,status,err) {
-              		layer.msg("请求错误"+err);
+              		layer.msg('请求错误' + err, {time : 2000});
               	}
               	
               });
+			}
 		    } 
 		
 		function deleteUser(userInfoId){
@@ -268,18 +258,18 @@
 	 					$.ajax({
 	 					  	
 	 						type : "POST",
-	 					  	url : "http://localhost:8080/jxc/user/deleteRoleById",
+	 					  	url : "http://localhost:8080/jxc/user/deleteUserById",
 	 					  	data : {"userInfoId":userInfoId},
 	 					  	success : function(data) {
 	 					
 	 					  		if(data.resultMsg == "success") {		
 	 					  			layer.msg('删除成功',{time: 2000},function(){window.location.reload();});
 	 					  		} else {
-	 					  			layer.msg(data.resultMsg,{time: 2000},function(){window.location.reload();});
+	 					  			layer.msg(data.resultMsg,{time: 2000});
 	 					  		}
 	 					  	},
 	 					  	error : function(xhr,status,err) {
-	 					  		layer.msg('删除失败'+err,{time: 2000},function(){window.location.reload();});
+	 					  		layer.msg('请求错误' + err, {time : 2000});
 	 					  	}
 	 					  	
 	 					});  
@@ -292,6 +282,7 @@
 		var uaId=0;
 		
 		function selectUser(id){
+			$("#formData").show("normal");  
 			uiId=id;
 			console.log(id);
 			layui.use(['form','laydate'],
@@ -308,7 +299,8 @@
 					if(data.resultMsg=="success"){
 						 var UserAccountData = JSON.parse(data.data);
 						 $("#petName").val(UserAccountData.petName);
-             			 $("#password").val(UserAccountData.password);
+             			 $("#password1").val(UserAccountData.password);
+             			 $("#password2").val(UserAccountData.password);
              			 uaId=UserAccountData.userAccountId;
              			 $("#userAccountId").val(UserAccountData.userAccountId);
             			 console.log(data.data);
@@ -319,9 +311,6 @@
             			 $("#departmentId").val(UserInfoData.departmentId);
             			 $("#roleId").val(UserInfoData.roleId);
             			 $("#phoneNumber").val(UserInfoData.phoneNumber);
-            			 $("#email").val(UserInfoData.email);
-            			 $("#job").val(UserInfoData.job);
-            			 $("#salary").val(UserInfoData.salary);
             			 $("#degree").val(UserInfoData.degree);
             			 $("#entryTime").val(laydate.now(UserInfoData.entryTime,'YYYY-MM-DD hh:mm:ss'));
             			 $("#birthday").val(laydate.now(UserInfoData.birthday));
@@ -330,18 +319,17 @@
             			 console.log(data.datas);
             			
  					}else{
-						layer.msg(data.resultMsg,{time: 2000});	
+ 						layer.msg(data.resultMsg,{time: 2000});
 					}
 				},
 				error : function(xhr,status,err) {
-					layer.msg('请求错误',{time: 2000});
+					layer.msg('请求错误' + err, {time : 2000});
 				}
 			})
 			
 		});
 		}
 		function updateUser(obj){
-			
 			 var userAccountId=uaId;
 			 var userInfoId=uiId;
 			 console.log(userAccountId);
@@ -353,9 +341,6 @@
  			 var departmentId = $("#departmentId").val();	
  			 var roleId = $("#roleId").val();	
  			 var phoneNumber = $("#phoneNumber").val();	
- 			 var email = $("#email").val();	
- 			 var job = $("#job").val();	
- 			 var salary = $("#salary").val();	
  			 var degree = $("#degree").val();	
  			 var entryTime = $("#entryTime").val();	
  			 console.log(typeof(entryTime));
@@ -363,17 +348,17 @@
  		     $.ajax({
             	type : "POST",
             	url : "<%=basePath%>user/updateUserById",
-            	data : {"userInfoId":userInfoId,"userAccountId":userAccountId,"petName":petName,"password":password,"userName":userName,"sex":sex,"departmentId":departmentId,"roleId":roleId,"phoneNumber":phoneNumber,"email":email,"job":job,"salary":salary,"entry":entryTime,"birth":birthday,"degree":degree},
+            	data : {"userInfoId":userInfoId,"userAccountId":userAccountId,"petName":petName,"password":password,"userName":userName,"sex":sex,"departmentId":departmentId,"roleId":roleId,"phoneNumber":phoneNumber,"entry":entryTime,"birth":birthday,"degree":degree},
             	success : function(data) {
             		if(data.resultMsg == "success") {
-            			layer.msg('修改成功',{time: 2000});	
-            			location.reload();
+            			 $("#formData").hide("fast");  
+            			 layer.msg('删除成功',{time: 2000},function(){window.location.reload();});
             		} else {
-            			layer.msg(data.resultMsg);
+            			layer.msg(data.resultMsg,{time: 2000});
             		}
             	},
             	error : function(xhr,status,err) {
-            		layer.msg("请求错误"+err);
+            		layer.msg('请求错误' + err, {time : 2000});
             	}
             	
             });

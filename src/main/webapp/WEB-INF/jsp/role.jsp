@@ -29,14 +29,14 @@
                 	data : {"roleType":roleType,"roleName":roleName},
                 	success : function(data) {
                 		if(data.resultMsg == "success") {
-                			layer.msg('添加成功',{time: 2000});	
-                			location.reload();
+                			 $("#formData").hide("fast");  
+                			layer.msg('添加成功',{time: 2000},function(){window.location.reload();});
                 		} else {
-                			layer.msg(data.resultMsg);
+                			layer.msg(data.resultMsg,{time: 2000});
                 		}
                 	},
                 	error : function(xhr,status,err) {
-                		layer.msg("请求错误"+err);
+                		layer.msg('请求错误' + err, {time : 2000});
                 	}
                 	
                 })
@@ -57,14 +57,13 @@
                 	data : {"roleId":id,"roleType":roleType,"roleName":roleName},
                 	success : function(data) {
                 		if(data.resultMsg == "success") {
-                			layer.msg('修改成功',{time: 2000});		
-                			location.reload();
+                			 $("#formData").hide("fast");  
+                			layer.msg('修改成功',{time: 2000},function(){window.location.reload();});
                 		} else {
-                			layer.msg(data.resultMsg);
-                		}
+                			layer.msg(data.resultMsg,{time: 2000});                		}
                 	},
                 	error : function(xhr,status,err) {
-                		layer.msg("请求错误"+err);
+                		layer.msg('请求错误' + err, {time : 2000});
                 	}
                 	
                 })
@@ -92,12 +91,13 @@
 								alterId = id;
 								form.render('select');
 								console.log(data.data);
+								$("#formData").show("normal");
 							} else {
-								layer.msg(data.resultMsg);
+								layer.msg(data.resultMsg,{time: 2000});
 							}
 						},
 						error : function(xhr, status, err) {
-							layer.msg("请求错误" + err);
+							layer.msg('请求错误' + err, {time : 2000});
 						}
 
 				})
@@ -136,15 +136,11 @@
 							if (data.resultMsg == "success") {
 								layer.msg('删除成功', {time : 2000}, function() {window.location.reload();});
 							} else {
-								layer.msg(data.resultMsg, {time : 2000}, function() {window.location.reload();});
+								layer.msg(data.resultMsg, {time : 2000});
 							}
 						},
 						error : function(xhr, status, err) {
-							layer.msg('删除失败' + err, {
-								time : 2000
-							}, function() {
-								window.location.reload();
-							});
+							layer.msg('请求错误' + err, {time : 2000});
 						}
 
 					});

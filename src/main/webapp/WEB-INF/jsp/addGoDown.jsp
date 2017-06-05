@@ -146,7 +146,7 @@ function addGoDown() {
     	success : function(data) {
     		if(data.resultMsg == "success") {
     			InsertGodownDetail();
-				layer.msg('下单成功',{time: 2000},function(){window.open("<%=basePath%>godownEntry/toGodownEntry","_self");});
+    			layer.msg('下单成功',{time: 2000},function(){window.open("<%=basePath%>godownEntry/toGodownEntry","_self");});
     		} else {
     		 	layer.msg(data.resultMsg,{time: 2000});
     		}
@@ -187,7 +187,7 @@ function ajaxInsertGodownDetail(orderId,goodsId,goodsNum,remarks){
 	  	success : function(data) {
 	
 	  		if(data.resultMsg == "success") {		
-
+	  			layer.msg('下单成功',{time: 2000});
 	  		} else {
 	  			 layer.msg(data.resultMsg,{time: 2000}); 
 	  		}

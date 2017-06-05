@@ -25,12 +25,6 @@
 					<input type="text" name="departName" id="departName" lay-verify="name" autocomplete="off" placeholder="请输入名称" class="layui-input"  value="${dt.departName }">
 				</div>
 	  	 	</div>
-	  		<div class="layui-form-item">
-			    <label class="layui-form-label">英文名称</label>
-				<div class="layui-input-block">
-					<input type="text" name="departmentEnglishName" id="departmentEnglishName" lay-verify="englishname" autocomplete="off" placeholder="请输入英文名称" class="layui-input" value="${dt.departmentEnglishName }" >
-				</div>
-	  	 	</div>
 	  	 	<div class="layui-form-item">
    				<label class="layui-form-label">*负责人</label>
    				<div class="layui-input-block">
@@ -100,7 +94,6 @@
 		function updatDepart() { 
 				    
 				     var departName = $("#departName").val();
-				  	 var departmentEnglishName = $("#departmentEnglishName").val();	
 					 var parentId=$("#parentId option:selected").val();
 					 var head=$("#head option:selected").val();
 					 var telephoneNumber = $("#telephoneNumber").val();	
@@ -110,16 +103,16 @@
 					$.ajax({
 		             	type : "POST",
 		             	url : "<%=basePath%>department/updateDepart",
-		             	data : {"departmentId":departmentId,"departName":departName,"departmentEnglishName":departmentEnglishName,"parentId":parentId,"head":head,"telephoneNumber":telephoneNumber,"address":address,"detail":detail},
+		             	data : {"departmentId":departmentId,"departName":departName,"parentId":parentId,"head":head,"telephoneNumber":telephoneNumber,"address":address,"detail":detail},
 		             	success : function(data) {
-		             		if(data.resultMap == "success") {
+		             		if(data.resultMsg == "success") {
 		             			layer.msg('修改成功',{time: 2000},function(){window.open("<%=basePath%>department/toDepartment","_self");});
 		             		} else {
-		             			layer.msg(data.resultMap);
+		             			layer.msg(data.resultMsg,{time: 2000});
 		             		}
 		             	},
 		             	error : function(xhr,status,err) {
-		             		layer.msg("请求错误"+err);
+		             		layer.msg('请求错误'+err,{time: 2000});
 		             	}
 		          });
 			}

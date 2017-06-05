@@ -87,11 +87,11 @@
 		                		if(data.resultMsg == "success") {
 		                			layer.msg('添加成功',{time: 2000},function(){window.open("<%=basePath%>warehouse/toWarehouse","_self");});
 		                		} else {
-		                			layer.msg(data.resultMsg);
+		                			layer.msg(data.resultMsg,{time: 2000});
 		                		}
 		                	},
 		                	error : function(xhr,status,err) {
-		                		layer.msg("请求错误"+err);
+		                		layer.msg('请求错误'+err,{time: 2000});
 		                	}
 		                })
 					}

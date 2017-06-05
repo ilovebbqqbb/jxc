@@ -48,14 +48,13 @@
 	              	data : {"orderId":orderId},
 	              	success : function(data) {
 	              		if(data.resultMsg == "success") {
-	              			layer.msg('商品成功入库',{time: 2000});
-	              			location.reload();
+	              			layer.msg('商品成功入库',{time: 2000},function(){window.location.reload();});
 	              		} else {
 	              			layer.msg(data.resultMsg,{time: 2000});
 	              		}
 	              	},
 	              	error : function(xhr,status,err) {
-	              		layer.msg("请求错误"+err,{time: 2000});
+	              		layer.msg('请求错误'+err,{time: 2000});
 	              	}
 	              	
 	              });
@@ -77,11 +76,11 @@
 							  		if(data.resultMsg == "success") {		
 							  			layer.msg('删除成功',{time: 2000},function(){window.location.reload();});
 							  		} else {
-							  			layer.msg(data.resultMsg,{time: 2000},function(){window.location.reload();});
+							  			layer.msg(data.resultMsg,{time: 2000});
 							  		}
 							  	},
 							  	error : function(xhr,status,err) {
-							  		layer.msg('系统错误'+err,{time: 2000},function(){window.location.reload();});
+							  		layer.msg('系统错误'+err,{time: 2000});
 							  	}
 							  	
 							});  

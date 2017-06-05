@@ -23,7 +23,7 @@
 			$("#content").css({"margin-left": contentWidth});
 			//$(".layui-header").css({"margin-left":$(".layui-nav-tree").width()});
 			$(".layui-nav-tree").css({"margin-top" :$(".layui-header").height()});
-			$(".layui-main").css({"margin-left" : $("#logoDiv").width() + 50 + "px"}); 
+			$(".layui-main").css({"margin-left" : $("#logoDiv").width() -50 + "px"}); 
 			
 		});
 	</script>
@@ -32,8 +32,8 @@
 <body>
 	<div class="layui-layout layui-layout-admin">
 		<div class="layui-header">
-			<div id="logoDiv" style="float: left">
-				<a class="logo" href="#">进销存管理系统</a>
+			<div id="logoDiv" style="float: left;font-size:large;color: #ffffff;text-align: center;padding-top:20px;padding-left:23px;font-weight: bolder;font-family: sans-serif;">
+				<span>仓库管理系统</span>
 			</div>
 			<div style="float: left" class="layui-main" >
 				<ul class="layui-nav to-menu">
