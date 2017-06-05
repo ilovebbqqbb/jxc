@@ -89,7 +89,7 @@
     </div>
   </div>  
   <div class="layui-form-item" >
-    <label class="layui-form-label">商品金额</label>
+    <label class="layui-form-label">商品金额（元）</label>
     <div class="layui-input-block">
       <input id="goodsMoney" type="text" name="goodsMoney" value="0.0" readonly="readonly" autocomplete="off" class="layui-input" style="width: 200px">
     </div>
